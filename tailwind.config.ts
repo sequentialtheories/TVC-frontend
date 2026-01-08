@@ -57,6 +57,31 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Custom DeFi theme colors
+        purple: {
+          glow: "hsl(var(--purple-glow))",
+        },
+        emerald: {
+          glow: "hsl(var(--emerald-glow))",
+        },
+        cyan: {
+          glow: "hsl(var(--cyan-glow))",
+        },
+        orange: {
+          glow: "hsl(var(--orange-glow))",
+        },
+        pink: {
+          glow: "hsl(var(--pink-glow))",
+        },
+        indigo: {
+          glow: "hsl(var(--indigo-glow))",
+        },
+        strand: {
+          1: "hsl(var(--strand-1))",
+          2: "hsl(var(--strand-2))",
+          3: "hsl(var(--strand-3))",
+          btc: "hsl(var(--strand-btc))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -65,25 +90,27 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { boxShadow: "0 0 20px hsl(270 60% 55% / 0.4), 0 0 40px hsl(160 60% 45% / 0.2)" },
+          "50%": { boxShadow: "0 0 40px hsl(270 60% 55% / 0.6), 0 0 60px hsl(160 60% 45% / 0.4)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        float: "float 6s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 3s ease-in-out infinite",
       },
     },
   },
