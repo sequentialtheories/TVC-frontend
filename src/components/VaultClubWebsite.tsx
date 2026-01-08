@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Database, User, Users, TrendingUp, X, Bitcoin, DollarSign, Zap, Shield, ArrowLeft, Wallet, Home, Share2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import type { Session } from '@supabase/supabase-js';
 
 // Type declarations
 interface VaultStats {
@@ -267,8 +269,39 @@ const VaultClubWebsite = () => {
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
   const [authConfirmPassword, setAuthConfirmPassword] = useState('');
+  const [session, setSession] = useState<Session | null>(null);
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authError, setAuthError] = useState('');
+  const [authSuccess, setAuthSuccess] = useState('');
 
 
+
+  // Auth state listener
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        if (session?.user) {
+          setWalletConnected(true);
+          setWalletAddress(session.user.email || session.user.id.slice(0, 10));
+          setShowAuthModal(false);
+        } else {
+          setWalletConnected(false);
+          setWalletAddress('');
+        }
+      }
+    );
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session?.user) {
+        setWalletConnected(true);
+        setWalletAddress(session.user.email || session.user.id.slice(0, 10));
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   // Handle URL-based contract joining
   useEffect(() => {
@@ -659,28 +692,60 @@ const VaultClubWebsite = () => {
     setShowAuthModal(true);
   };
 
-  const handleAuthSubmit = () => {
+  const handleAuthSubmit = async () => {
     if (authMode === 'signup' && authPassword !== authConfirmPassword) {
-      alert('Passwords do not match!');
+      setAuthError('Passwords do not match!');
       return;
     }
     
     if (!authEmail || !authPassword) {
-      alert('Please fill in all fields');
+      setAuthError('Please fill in all fields');
       return;
     }
-    
-    // Simulate successful authentication
-    const mockAddress = `0x${Math.random().toString(16).substr(2, 40)}`;
-    setWalletConnected(true);
-    setWalletAddress(mockAddress);
+
+    setAuthLoading(true);
+    setAuthError('');
+    setAuthSuccess('');
+
+    try {
+      if (authMode === 'signup') {
+        const { error } = await supabase.auth.signUp({
+          email: authEmail,
+          password: authPassword,
+          options: {
+            emailRedirectTo: `${window.location.origin}/`
+          }
+        });
+        
+        if (error) throw error;
+        setAuthSuccess('Check your email for confirmation link!');
+        setAuthEmail('');
+        setAuthPassword('');
+        setAuthConfirmPassword('');
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: authEmail,
+          password: authPassword,
+        });
+        
+        if (error) throw error;
+        setVaultBalance("0");
+        setAuthEmail('');
+        setAuthPassword('');
+        setAuthConfirmPassword('');
+      }
+    } catch (error: any) {
+      setAuthError(error.message || 'Authentication failed');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setWalletConnected(false);
+    setWalletAddress('');
     setVaultBalance("0");
-    setShowAuthModal(false);
-    
-    // Reset form
-    setAuthEmail('');
-    setAuthPassword('');
-    setAuthConfirmPassword('');
   };
 
   const getContractColor = (subclub) => {
@@ -979,7 +1044,7 @@ Your contract is now live and ready for members to join!`);
               <select 
                 value={clubCreationData.maxMembers}
                 onChange={(e) => setClubCreationData(prev => ({...prev, maxMembers: Number(e.target.value)}))}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg text-black"
               >
                 <option value={1}>1 Member</option>
                 <option value={2}>2 Members</option>
@@ -999,7 +1064,7 @@ Your contract is now live and ready for members to join!`);
               <select 
                 value={clubCreationData.lockupPeriod}
                 onChange={(e) => setClubCreationData(prev => ({...prev, lockupPeriod: Number(e.target.value)}))}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg text-black"
               >
                 {clubCreationData.isChargedContract ? (
                   // Charged contract options (1-12 months)
@@ -1052,7 +1117,7 @@ Your contract is now live and ready for members to join!`);
               <select 
                 value={clubCreationData.rigorLevel}
                 onChange={(e) => setClubCreationData(prev => ({...prev, rigorLevel: e.target.value}))}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg text-black"
               >
                 <option value="light">Light</option>
                 <option value="medium">Medium</option>
@@ -1099,7 +1164,7 @@ Your contract is now live and ready for members to join!`);
                                 newSchedule[index] = { ...period, yearStart: Number(e.target.value) };
                                 setClubCreationData(prev => ({...prev, customSchedule: newSchedule}));
                               }}
-                              className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                              className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black"
                             />
                           </div>
                           <div>
@@ -1114,7 +1179,7 @@ Your contract is now live and ready for members to join!`);
                                 newSchedule[index] = { ...period, yearEnd: Number(e.target.value) };
                                 setClubCreationData(prev => ({...prev, customSchedule: newSchedule}));
                               }}
-                              className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                              className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black"
                             />
                           </div>
                           <div>
@@ -1131,7 +1196,7 @@ Your contract is now live and ready for members to join!`);
                                 setClubCreationData(prev => ({...prev, customSchedule: newSchedule}));
                               }}
                               onFocus={(e) => e.target.style.outline = 'none'}
-                              className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                              className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black"
                               style={{ outline: 'none' }}
                             />
                           </div>
@@ -2842,11 +2907,24 @@ Your contract is now live and ready for members to join!`);
                 </div>
               )}
               
+              {authError && (
+                <div className="p-3 bg-red-100 border border-red-300 rounded-lg text-red-700 text-sm">
+                  {authError}
+                </div>
+              )}
+              
+              {authSuccess && (
+                <div className="p-3 bg-green-100 border border-green-300 rounded-lg text-green-700 text-sm">
+                  {authSuccess}
+                </div>
+              )}
+              
               <button
                 onClick={handleAuthSubmit}
-                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-xl"
+                disabled={authLoading}
+                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {authMode === 'login' ? 'Log In' : 'Create Account'}
+                {authLoading ? 'Please wait...' : (authMode === 'login' ? 'Log In' : 'Create Account')}
               </button>
               
               <div className="text-center">
@@ -2856,6 +2934,8 @@ Your contract is now live and ready for members to join!`);
                     setAuthEmail('');
                     setAuthPassword('');
                     setAuthConfirmPassword('');
+                    setAuthError('');
+                    setAuthSuccess('');
                   }}
                   className="text-sm text-purple-600 hover:text-purple-700 font-medium"
                 >
