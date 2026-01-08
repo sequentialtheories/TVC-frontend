@@ -1428,7 +1428,7 @@ Your contract is now live and ready for members to join!`);
                       <div className="font-semibold text-slate-200">
                         {subclub.lockupPeriod} {subclub.isChargedContract ? 'Month' : 'Year'} Contract - {subclub.rigorLevel.charAt(0).toUpperCase() + subclub.rigorLevel.slice(1)} Rigor
                       </div>
-                      <div className="text-sm text-slate-400 font-mono">
+                      <div className="text-sm text-slate-300 font-mono">
                         {subclub.contractAddress.slice(0, 8)}...{subclub.contractAddress.slice(-6)}
                       </div>
                     </div>
@@ -1451,7 +1451,7 @@ Your contract is now live and ready for members to join!`);
                   </div>
                   
                   <div className="flex justify-between text-xs text-slate-400">
-                    <span>Started: {startDate.toLocaleDateString()}</span>
+                    <span className="text-slate-300">Started: {startDate.toLocaleDateString()}</span>
                     <span className="text-emerald-400">
                       {progress >= 100 
                         ? 'Contract Complete!' 
@@ -1460,7 +1460,7 @@ Your contract is now live and ready for members to join!`);
                           : `${remainingDays}d remaining`
                       }
                     </span>
-                    <span>Ends: {endDate.toLocaleDateString()}</span>
+                    <span className="text-slate-300">Ends: {endDate.toLocaleDateString()}</span>
                   </div>
                 </div>
               );
@@ -1474,8 +1474,8 @@ Your contract is now live and ready for members to join!`);
         club.creator === walletAddress || (club.members && club.members.includes(walletAddress))
       ).length > 0 && !selectedContract && (
         <div className="text-center mb-8">
-          <div className="text-slate-600 font-medium">Select a contract above to access strand details</div>
-          <div className="text-sm text-slate-500">Click on any progress bar to focus on that contract</div>
+          <div className="text-slate-700 font-medium">Select a contract above to access strand details</div>
+          <div className="text-sm text-slate-600">Click on any progress bar to focus on that contract</div>
         </div>
       )}
 
@@ -1568,20 +1568,20 @@ Your contract is now live and ready for members to join!`);
           <h2 className="text-xl font-bold text-slate-800 mb-4">System Metrics</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
-              <div className="text-2xl font-bold text-indigo-600 tabular-nums">{vaultStats.totalMembers || 0}</div>
-              <div className="text-sm text-slate-600">Active Members</div>
+              <div className="text-2xl font-bold text-indigo-500 tabular-nums drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]" style={{ textShadow: '0 0 1px white, 0 0 2px white' }}>{vaultStats.totalMembers || 0}</div>
+              <div className="text-sm text-slate-700">Active Members</div>
             </div>
             <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
-              <div className="text-2xl font-bold text-green-600 tabular-nums">${parseFloat(vaultStats.totalDeposits || "0").toFixed(0)}</div>
-              <div className="text-sm text-slate-600">Total Deposits</div>
+              <div className="text-2xl font-bold text-green-500 tabular-nums drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]" style={{ textShadow: '0 0 1px white, 0 0 2px white' }}>${parseFloat(vaultStats.totalDeposits || "0").toFixed(0)}</div>
+              <div className="text-sm text-slate-700">Total Deposits</div>
             </div>
             <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
-              <div className="text-2xl font-bold text-purple-600 tabular-nums">{vaultStats.systemHealth || 100}%</div>
-              <div className="text-sm text-slate-600">System Health</div>
+              <div className="text-2xl font-bold text-purple-500 tabular-nums drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]" style={{ textShadow: '0 0 1px white, 0 0 2px white' }}>{vaultStats.systemHealth || 100}%</div>
+              <div className="text-sm text-slate-700">System Health</div>
             </div>
             <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
-              <div className="text-2xl font-bold text-orange-600 tabular-nums">{vaultStats.transactions || 0}</div>
-              <div className="text-sm text-slate-600">Transactions</div>
+              <div className="text-2xl font-bold text-orange-500 tabular-nums drop-shadow-[0_0_8px_rgba(249,115,22,0.5)]" style={{ textShadow: '0 0 1px white, 0 0 2px white' }}>{vaultStats.transactions || 0}</div>
+              <div className="text-sm text-slate-700">Transactions</div>
             </div>
           </div>
         </div>
@@ -1590,8 +1590,8 @@ Your contract is now live and ready for members to join!`);
           <h2 className="text-xl font-bold text-slate-800 mb-4">Live Market Data</h2>
           <div className="grid grid-cols-4 gap-4">
             <div className="p-4 bg-white/10 rounded-lg">
-              <div className="text-sm text-slate-600">AAVE USDC Lending Rate</div>
-              <div className="text-2xl font-bold text-purple-600">{aaveRates.liquidityRate.toFixed(2)}%</div>
+              <div className="text-sm text-slate-700">AAVE USDC Lending Rate</div>
+              <div className="text-2xl font-bold text-purple-500">{aaveRates.liquidityRate.toFixed(2)}%</div>
               
               {/* AAVE USDC mini chart */}
               <div className="h-16 bg-gradient-to-r from-purple-50 to-purple-100 rounded mt-2 p-1">
@@ -1607,8 +1607,8 @@ Your contract is now live and ready for members to join!`);
             </div>
             
             <div className="p-4 bg-white/10 rounded-lg">
-              <div className="text-sm text-slate-600">AAVE Lending Rate</div>
-              <div className="text-2xl font-bold text-indigo-600">8.00%</div>
+              <div className="text-sm text-slate-700">AAVE Lending Rate</div>
+              <div className="text-2xl font-bold text-indigo-500">8.00%</div>
               
               {/* AAVE Lending mini chart */}
               <div className="h-16 bg-gradient-to-r from-indigo-50 to-indigo-100 rounded mt-2 p-1">
@@ -1624,8 +1624,8 @@ Your contract is now live and ready for members to join!`);
             </div>
             
             <div className="p-4 bg-white/10 rounded-lg">
-              <div className="text-sm text-slate-600">QuickSwap LP Farms APY</div>
-              <div className="text-2xl font-bold text-cyan-600">{quickSwapAPY.toFixed(2)}%</div>
+              <div className="text-sm text-slate-700">QuickSwap LP Farms APY</div>
+              <div className="text-2xl font-bold text-cyan-500">{quickSwapAPY.toFixed(2)}%</div>
               
               {/* QuickSwap mini chart */}
               <div className="h-16 bg-gradient-to-r from-cyan-50 to-cyan-100 rounded mt-2 p-1">
@@ -1642,10 +1642,10 @@ Your contract is now live and ready for members to join!`);
             
             <div className="p-4 bg-white/10 rounded-lg">
               <div className="flex justify-between items-start mb-2">
-                <div className="text-sm text-slate-600">Bitcoin Price</div>
-                <div className="text-xs text-green-600 font-medium">+2.4%</div>
+                <div className="text-sm text-slate-700">Bitcoin Price</div>
+                <div className="text-xs text-green-500 font-medium">+2.4%</div>
               </div>
-              <div className="text-2xl font-bold text-orange-600">${btcPrice.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-orange-500">${btcPrice.toLocaleString()}</div>
               
               {/* Bitcoin mini chart */}
               <div className="h-16 bg-gradient-to-r from-orange-50 to-orange-100 rounded mt-2 p-1">
@@ -1664,7 +1664,7 @@ Your contract is now live and ready for members to join!`);
 
         <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
           <h2 className="text-xl font-bold text-slate-800 mb-4">Protocol Access & Resources</h2>
-          <div className="text-xs text-slate-600 mb-4">Direct links to DeFi protocols powering The Vault Club</div>
+          <div className="text-xs text-slate-700 mb-4">Direct links to DeFi protocols powering The Vault Club</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <a 
               href="https://app.spark.fi" 
@@ -1674,7 +1674,7 @@ Your contract is now live and ready for members to join!`);
             >
               <div>
                 <div className="font-semibold text-slate-800">Spark Protocol</div>
-                <div className="text-sm text-slate-600">Stablecoin Lending</div>
+                <div className="text-sm text-slate-700">Stablecoin Lending</div>
               </div>
               <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-700 rotate-45" />
             </a>
@@ -1687,7 +1687,7 @@ Your contract is now live and ready for members to join!`);
             >
               <div>
                 <div className="font-semibold text-slate-800">AAVE Polygon</div>
-                <div className="text-sm text-slate-600">V3 Lending Market</div>
+                <div className="text-sm text-slate-700">V3 Lending Market</div>
               </div>
               <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-700 rotate-45" />
             </a>
@@ -1700,7 +1700,7 @@ Your contract is now live and ready for members to join!`);
             >
               <div>
                 <div className="font-semibold text-slate-800">QuickSwap V3</div>
-                <div className="text-sm text-slate-600">Liquidity Pools</div>
+                <div className="text-sm text-slate-700">Liquidity Pools</div>
               </div>
               <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-700 rotate-45" />
             </a>
@@ -1712,7 +1712,7 @@ Your contract is now live and ready for members to join!`);
             >
               <div>
                 <div className="font-semibold text-slate-800">DeFiLlama</div>
-                <div className="text-sm text-slate-600">Live APY Data Source</div>
+                <div className="text-sm text-slate-700">Live APY Data Source</div>
               </div>
               <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-700 rotate-45" />
             </a>
@@ -1725,7 +1725,7 @@ Your contract is now live and ready for members to join!`);
             >
               <div>
                 <div className="font-semibold text-slate-800">CoinGecko</div>
-                <div className="text-sm text-slate-600">Bitcoin Price Data</div>
+                <div className="text-sm text-slate-700">Bitcoin Price Data</div>
               </div>
               <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-700 rotate-45" />
             </a>
@@ -1738,7 +1738,7 @@ Your contract is now live and ready for members to join!`);
             >
               <div>
                 <div className="font-semibold text-slate-800">Polygon Network</div>
-                <div className="text-sm text-slate-600">Layer 2 Infrastructure</div>
+                <div className="text-sm text-slate-700">Layer 2 Infrastructure</div>
               </div>
               <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-700 rotate-45" />
             </a>
