@@ -2570,7 +2570,7 @@ Your contract is now live and ready for members to join!`);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-800/30 to-slate-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-800/30 to-slate-900 relative overflow-x-hidden overflow-y-auto">
       {/* Animations are defined in index.css */}
       
       {/* Cyberpunk grid background */}
