@@ -928,15 +928,15 @@ Your contract is now live and ready for members to join!`);
 
   const CreateClubModal = () => {    
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl max-h-[90vh] overflow-hidden">
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-up" role="dialog" aria-modal="true" aria-labelledby="create-club-title">
+        <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl max-h-[90vh] overflow-hidden ring-1 ring-black/5">
           <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 rounded-t-2xl text-white">
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-xl font-bold">Create New SubClub Contract</h3>
+                <h3 id="create-club-title" className="text-xl font-bold">Create New SubClub Contract</h3>
                 <p className="text-white/80">Deploy smart contract with mega vault system</p>
               </div>
-              <button onClick={closeModal} className="text-white/80 hover:text-white">
+              <button onClick={closeModal} className="text-white/80 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10" aria-label="Close modal">
                 <X className="w-6 h-6" />
               </button>
             </div>
@@ -1296,18 +1296,18 @@ Your contract is now live and ready for members to join!`);
     if (!data) return null;
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl">
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-up" role="dialog" aria-modal="true" aria-labelledby="strand-modal-title">
+        <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl ring-1 ring-black/5">
           <div className={`bg-gradient-to-r ${data.color} p-6 rounded-t-2xl text-white`}>
             <div className="flex justify-between items-start">
               <div className="flex items-center space-x-3">
                 {data.icon}
                 <div>
-                  <h3 className="text-xl font-bold">{data.title}</h3>
+                  <h3 id="strand-modal-title" className="text-xl font-bold">{data.title}</h3>
                   <p className="text-white/80">{data.subtitle}</p>
                 </div>
               </div>
-              <button onClick={onClose} className="text-white/80 hover:text-white">
+              <button onClick={onClose} className="text-white/80 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10" aria-label="Close modal">
                 <X className="w-6 h-6" />
               </button>
             </div>
@@ -1564,23 +1564,23 @@ Your contract is now live and ready for members to join!`);
       </div>
       
       <div className="space-y-6">
-        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg card-hover">
           <h2 className="text-xl font-bold text-slate-800 mb-4">System Metrics</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-indigo-600">{vaultStats.totalMembers || 0}</div>
+            <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
+              <div className="text-2xl font-bold text-indigo-600 tabular-nums">{vaultStats.totalMembers || 0}</div>
               <div className="text-sm text-slate-600">Active Members</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">${parseFloat(vaultStats.totalDeposits || "0").toFixed(0)}</div>
+            <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
+              <div className="text-2xl font-bold text-green-600 tabular-nums">${parseFloat(vaultStats.totalDeposits || "0").toFixed(0)}</div>
               <div className="text-sm text-slate-600">Total Deposits</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">{vaultStats.systemHealth || 100}%</div>
+            <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
+              <div className="text-2xl font-bold text-purple-600 tabular-nums">{vaultStats.systemHealth || 100}%</div>
               <div className="text-sm text-slate-600">System Health</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-orange-600">{vaultStats.transactions || 0}</div>
+            <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
+              <div className="text-2xl font-bold text-orange-600 tabular-nums">{vaultStats.transactions || 0}</div>
               <div className="text-sm text-slate-600">Transactions</div>
             </div>
           </div>
@@ -2672,7 +2672,7 @@ Your contract is now live and ready for members to join!`);
       </header>
 
       {/* Mobile Bottom Navigation Bar */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-xl border-t border-purple-500/30 px-4 py-2 shadow-2xl shadow-purple-500/20">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-xl border-t border-purple-500/30 px-4 py-2 shadow-2xl shadow-purple-500/20 safe-area-pb" aria-label="Main navigation">
         <div className="flex justify-around items-center max-w-md mx-auto">
           <button 
             onClick={() => navigateTo('home')}
@@ -2785,16 +2785,16 @@ Your contract is now live and ready for members to join!`);
       
       {/* Auth Modal */}
       {showAuthModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-up" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+          <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl ring-1 ring-black/5">
             <div className="bg-gradient-to-r from-purple-500 to-indigo-600 p-6 rounded-t-2xl text-white">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-xl font-bold">{authMode === 'login' ? 'Log In' : 'Sign Up'}</h3>
+                  <h3 id="auth-modal-title" className="text-xl font-bold">{authMode === 'login' ? 'Log In' : 'Sign Up'}</h3>
                   <p className="text-white/80">Access The Vault Club.</p>
                   <p className="text-white/60 text-sm">(Sequence Theory, Inc. Credentials)</p>
                 </div>
-                <button onClick={() => setShowAuthModal(false)} className="text-white/80 hover:text-white">
+                <button onClick={() => setShowAuthModal(false)} className="text-white/80 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10" aria-label="Close modal">
                   <X className="w-6 h-6" />
                 </button>
               </div>
