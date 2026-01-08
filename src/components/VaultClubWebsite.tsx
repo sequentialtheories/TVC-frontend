@@ -1434,7 +1434,7 @@ Your contract is now live and ready for members to join!`);
                     </div>
                     <div className="text-right">
                       <div className="font-bold text-emerald-400">{progress.toFixed(1)}%</div>
-                      <div className="text-xs text-slate-500">Complete</div>
+                      <div className="text-xs text-slate-300">Complete</div>
                     </div>
                   </div>
                   
@@ -1450,7 +1450,7 @@ Your contract is now live and ready for members to join!`);
                     ></div>
                   </div>
                   
-                  <div className="flex justify-between text-xs text-slate-400">
+                  <div className="flex justify-between text-xs text-slate-300">
                     <span className="text-slate-300">Started: {startDate.toLocaleDateString()}</span>
                     <span className="text-emerald-400">
                       {progress >= 100 
@@ -1474,8 +1474,8 @@ Your contract is now live and ready for members to join!`);
         club.creator === walletAddress || (club.members && club.members.includes(walletAddress))
       ).length > 0 && !selectedContract && (
         <div className="text-center mb-8">
-          <div className="text-slate-700 font-medium">Select a contract above to access strand details</div>
-          <div className="text-sm text-slate-600">Click on any progress bar to focus on that contract</div>
+          <div className="text-white font-medium">Select a contract above to access strand details</div>
+          <div className="text-sm text-slate-300">Click on any progress bar to focus on that contract</div>
         </div>
       )}
 
@@ -1546,7 +1546,7 @@ Your contract is now live and ready for members to join!`);
             <Bitcoin className="w-8 h-8" />
             <div>
               <div className="font-bold text-lg">wBTC</div>
-              <div className={`text-sm ${selectedContract ? 'text-orange-100' : 'text-gray-500'}`}>Phase 2</div>
+              <div className={`text-sm ${selectedContract ? 'text-orange-100' : 'text-slate-300'}`}>Phase 2</div>
             </div>
           </div>
         </button>
@@ -1558,39 +1558,39 @@ Your contract is now live and ready for members to join!`);
     <div className="relative z-10 px-6 py-8 pb-32 md:pb-8">
       <div className="flex items-center mb-8">
         <button onClick={goHome} className="mr-4 p-2 hover:bg-gradient-to-br hover:from-indigo-100 hover:to-purple-100 rounded-full transition-all duration-300">
-          <ArrowLeft className="w-6 h-6 text-slate-700" />
+          <ArrowLeft className="w-6 h-6 text-slate-300" />
         </button>
-        <h1 className="text-3xl font-bold text-slate-800">Backend Dataset</h1>
+        <h1 className="text-3xl font-bold text-white">Backend Dataset</h1>
       </div>
       
       <div className="space-y-6">
         <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg card-hover">
-          <h2 className="text-xl font-bold text-slate-800 mb-4">System Metrics</h2>
+          <h2 className="text-xl font-bold text-white mb-4">System Metrics</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
               <div className="text-2xl font-bold text-indigo-500 tabular-nums drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]" style={{ textShadow: '0 0 1px white, 0 0 2px white' }}>{vaultStats.totalMembers || 0}</div>
-              <div className="text-sm text-slate-700">Active Members</div>
+              <div className="text-sm text-white">Active Members</div>
             </div>
             <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
               <div className="text-2xl font-bold text-green-500 tabular-nums drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]" style={{ textShadow: '0 0 1px white, 0 0 2px white' }}>${parseFloat(vaultStats.totalDeposits || "0").toFixed(0)}</div>
-              <div className="text-sm text-slate-700">Total Deposits</div>
+              <div className="text-sm text-white">Total Deposits</div>
             </div>
             <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
               <div className="text-2xl font-bold text-purple-500 tabular-nums drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]" style={{ textShadow: '0 0 1px white, 0 0 2px white' }}>{vaultStats.systemHealth || 100}%</div>
-              <div className="text-sm text-slate-700">System Health</div>
+              <div className="text-sm text-white">System Health</div>
             </div>
             <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
               <div className="text-2xl font-bold text-orange-500 tabular-nums drop-shadow-[0_0_8px_rgba(249,115,22,0.5)]" style={{ textShadow: '0 0 1px white, 0 0 2px white' }}>{vaultStats.transactions || 0}</div>
-              <div className="text-sm text-slate-700">Transactions</div>
+              <div className="text-sm text-white">Transactions</div>
             </div>
           </div>
         </div>
 
         <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-          <h2 className="text-xl font-bold text-slate-800 mb-4">Live Market Data</h2>
+          <h2 className="text-xl font-bold text-white mb-4">Live Market Data</h2>
           <div className="grid grid-cols-4 gap-4">
             <div className="p-4 bg-white/10 rounded-lg">
-              <div className="text-sm text-slate-700">AAVE USDC Lending Rate</div>
+              <div className="text-sm text-white">AAVE USDC Lending Rate</div>
               <div className="text-2xl font-bold text-purple-500">{aaveRates.liquidityRate.toFixed(2)}%</div>
               
               {/* AAVE USDC mini chart */}
@@ -1607,7 +1607,7 @@ Your contract is now live and ready for members to join!`);
             </div>
             
             <div className="p-4 bg-white/10 rounded-lg">
-              <div className="text-sm text-slate-700">AAVE Lending Rate</div>
+              <div className="text-sm text-white">AAVE Lending Rate</div>
               <div className="text-2xl font-bold text-indigo-500">8.00%</div>
               
               {/* AAVE Lending mini chart */}
@@ -1624,7 +1624,7 @@ Your contract is now live and ready for members to join!`);
             </div>
             
             <div className="p-4 bg-white/10 rounded-lg">
-              <div className="text-sm text-slate-700">QuickSwap LP Farms APY</div>
+              <div className="text-sm text-white">QuickSwap LP Farms APY</div>
               <div className="text-2xl font-bold text-cyan-500">{quickSwapAPY.toFixed(2)}%</div>
               
               {/* QuickSwap mini chart */}
@@ -1642,7 +1642,7 @@ Your contract is now live and ready for members to join!`);
             
             <div className="p-4 bg-white/10 rounded-lg">
               <div className="flex justify-between items-start mb-2">
-                <div className="text-sm text-slate-700">Bitcoin Price</div>
+                <div className="text-sm text-white">Bitcoin Price</div>
                 <div className="text-xs text-green-500 font-medium">+2.4%</div>
               </div>
               <div className="text-2xl font-bold text-orange-500">${btcPrice.toLocaleString()}</div>
@@ -1663,8 +1663,8 @@ Your contract is now live and ready for members to join!`);
         </div>
 
         <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-          <h2 className="text-xl font-bold text-slate-800 mb-4">Protocol Access & Resources</h2>
-          <div className="text-xs text-slate-700 mb-4">Direct links to DeFi protocols powering The Vault Club</div>
+          <h2 className="text-xl font-bold text-white mb-4">Protocol Access & Resources</h2>
+          <div className="text-xs text-slate-300 mb-4">Direct links to DeFi protocols powering The Vault Club</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <a 
               href="https://app.spark.fi" 
@@ -1673,10 +1673,10 @@ Your contract is now live and ready for members to join!`);
               className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
             >
               <div>
-                <div className="font-semibold text-slate-800">Spark Protocol</div>
-                <div className="text-sm text-slate-700">Stablecoin Lending</div>
+                <div className="font-semibold text-white">Spark Protocol</div>
+                <div className="text-sm text-slate-300">Stablecoin Lending</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-700 rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
             </a>
 
             <a 
@@ -1686,10 +1686,10 @@ Your contract is now live and ready for members to join!`);
               className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
             >
               <div>
-                <div className="font-semibold text-slate-800">AAVE Polygon</div>
-                <div className="text-sm text-slate-700">V3 Lending Market</div>
+                <div className="font-semibold text-white">AAVE Polygon</div>
+                <div className="text-sm text-slate-300">V3 Lending Market</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-700 rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
             </a>
 
             <a 
@@ -1699,10 +1699,10 @@ Your contract is now live and ready for members to join!`);
               className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
             >
               <div>
-                <div className="font-semibold text-slate-800">QuickSwap V3</div>
-                <div className="text-sm text-slate-700">Liquidity Pools</div>
+                <div className="font-semibold text-white">QuickSwap V3</div>
+                <div className="text-sm text-slate-300">Liquidity Pools</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-700 rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
             </a>
             <a 
               href="https://defillama.com/yields?chain=Polygon&project=quickswap-dex" 
@@ -1711,10 +1711,10 @@ Your contract is now live and ready for members to join!`);
               className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
             >
               <div>
-                <div className="font-semibold text-slate-800">DeFiLlama</div>
-                <div className="text-sm text-slate-700">Live APY Data Source</div>
+                <div className="font-semibold text-white">DeFiLlama</div>
+                <div className="text-sm text-slate-300">Live APY Data Source</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-700 rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
             </a>
 
             <a 
@@ -1724,10 +1724,10 @@ Your contract is now live and ready for members to join!`);
               className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
             >
               <div>
-                <div className="font-semibold text-slate-800">CoinGecko</div>
-                <div className="text-sm text-slate-700">Bitcoin Price Data</div>
+                <div className="font-semibold text-white">CoinGecko</div>
+                <div className="text-sm text-slate-300">Bitcoin Price Data</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-700 rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
             </a>
 
             <a 
@@ -1737,17 +1737,17 @@ Your contract is now live and ready for members to join!`);
               className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
             >
               <div>
-                <div className="font-semibold text-slate-800">Polygon Network</div>
-                <div className="text-sm text-slate-700">Layer 2 Infrastructure</div>
+                <div className="font-semibold text-white">Polygon Network</div>
+                <div className="text-sm text-slate-300">Layer 2 Infrastructure</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-700 rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
             </a>
           </div>
         </div>
 
         <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-          <h2 className="text-xl font-bold text-slate-800 mb-4">Educational Resources</h2>
-          <div className="text-xs text-slate-600 mb-4">Learn more about DeFi and cryptocurrency fundamentals</div>
+          <h2 className="text-xl font-bold text-white mb-4">Educational Resources</h2>
+          <div className="text-xs text-slate-300 mb-4">Learn more about DeFi and cryptocurrency fundamentals</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <a 
               href="https://www.coinbase.com/learn" 
@@ -1756,10 +1756,10 @@ Your contract is now live and ready for members to join!`);
               className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
             >
               <div>
-                <div className="font-semibold text-slate-800">Coinbase Learn</div>
-                <div className="text-sm text-slate-600">Crypto Education</div>
+                <div className="font-semibold text-white">Coinbase Learn</div>
+                <div className="text-sm text-slate-300">Crypto Education</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-700 rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
             </a>
 
             <a 
@@ -1769,10 +1769,10 @@ Your contract is now live and ready for members to join!`);
               className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
             >
               <div>
-                <div className="font-semibold text-slate-800">AAVE Documentation</div>
-                <div className="text-sm text-slate-600">Protocol Deep Dive</div>
+                <div className="font-semibold text-white">AAVE Documentation</div>
+                <div className="text-sm text-slate-300">Protocol Deep Dive</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-700 rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
             </a>
 
             <a 
@@ -1782,10 +1782,10 @@ Your contract is now live and ready for members to join!`);
               className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
             >
               <div>
-                <div className="font-semibold text-slate-800">Compound Interest</div>
-                <div className="text-sm text-slate-600">The Math Behind Growth</div>
+                <div className="font-semibold text-white">Compound Interest</div>
+                <div className="text-sm text-slate-300">The Math Behind Growth</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-slate-700 rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
             </a>
           </div>
         </div>
@@ -1797,20 +1797,20 @@ Your contract is now live and ready for members to join!`);
     <div className="relative z-10 px-6 py-8 pb-32 md:pb-8">
       <div className="flex items-center mb-8">
         <button onClick={goHome} className="mr-4 p-2 hover:bg-white/20 rounded-full transition-colors">
-          <ArrowLeft className="w-6 h-6 text-slate-700" />
+          <ArrowLeft className="w-6 h-6 text-slate-300" />
         </button>
-        <h1 className="text-3xl font-bold text-slate-800">Personal Wallet</h1>
+        <h1 className="text-3xl font-bold text-white">Personal Wallet</h1>
       </div>
       
       <div className="space-y-6">
         <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-slate-800">Wallet Connection</h2>
+            <h2 className="text-xl font-bold text-white">Wallet Connection</h2>
             <Wallet className="w-6 h-6 text-indigo-600" />
           </div>
           {!walletConnected ? (
             <div className="text-center py-8">
-              <div className="text-slate-500 mb-4">No wallet connected</div>
+              <div className="text-slate-300 mb-4">No wallet connected</div>
               <button 
                 onClick={handleConnectWallet}
                 className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105"
@@ -1824,7 +1824,7 @@ Your contract is now live and ready for members to join!`);
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                 <span className="font-medium">Connected: {walletAddress ? walletAddress.slice(0,6) + "..." + walletAddress.slice(-4) : "N/A"}</span>
               </div>
-              <div className="text-sm text-slate-600 mb-4">MetaMask • Polygon Network</div>
+              <div className="text-sm text-slate-300 mb-4">MetaMask • Polygon Network</div>
               
               <div className="flex justify-center space-x-3 mt-6">
                 <div className="text-center">
@@ -1845,7 +1845,7 @@ Your contract is now live and ready for members to join!`);
                     }
                   </button>
                   {calculateWeeklyDepositAmount() > 0 && (
-                    <div className="text-xs text-slate-500 mt-1">
+                    <div className="text-xs text-slate-300 mt-1">
                       Weekly amount based on your contracts (Debug: {deployedSubclubs.filter(club => 
                         club.members && club.members.includes(walletAddress)
                       ).length} contracts found)
@@ -1878,31 +1878,31 @@ Your contract is now live and ready for members to join!`);
         </div>
 
         <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-          <h2 className="text-xl font-bold text-slate-800 mb-4">Your Position</h2>
+          <h2 className="text-xl font-bold text-white mb-4">Your Position</h2>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="text-center p-4 bg-white/10 rounded-lg">
-              <div className="text-2xl font-bold text-slate-800">${parseFloat(vaultBalance).toFixed(2)}</div>
-              <div className="text-sm text-slate-600">Total Contributed</div>
+              <div className="text-2xl font-bold text-white">${parseFloat(vaultBalance).toFixed(2)}</div>
+              <div className="text-sm text-slate-300">Total Contributed</div>
             </div>
             <div className="text-center p-4 bg-white/10 rounded-lg">
-              <div className="text-2xl font-bold text-slate-800">
+              <div className="text-2xl font-bold text-white">
                 {parseFloat(vaultStats.totalDeposits || "0") > 0 && parseFloat(vaultBalance) > 0 
                   ? ((parseFloat(vaultBalance) / parseFloat(vaultStats.totalDeposits)) * 100).toFixed(1)
                   : 0}%
               </div>
-              <div className="text-sm text-slate-600">Ownership Share</div>
+              <div className="text-sm text-slate-300">Ownership Share</div>
             </div>
             <div className="text-center p-4 bg-white/10 rounded-lg">
-              <div className="text-2xl font-bold text-slate-800">${parseFloat(vaultBalance).toFixed(2)}</div>
-              <div className="text-sm text-slate-600">Current Value</div>
+              <div className="text-2xl font-bold text-white">${parseFloat(vaultBalance).toFixed(2)}</div>
+              <div className="text-sm text-slate-300">Current Value</div>
             </div>
           </div>
         </div>
 
         {walletConnected && (
           <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-            <h2 className="text-xl font-bold text-slate-800 mb-4">Recent Activity</h2>
-            <div className="text-center py-8 text-slate-500">
+            <h2 className="text-xl font-bold text-white mb-4">Recent Activity</h2>
+            <div className="text-center py-8 text-slate-300">
               {(vaultStats.transactions || 0) > 0 
                 ? `${vaultStats.transactions} transaction${vaultStats.transactions === 1 ? '' : 's'} recorded` 
                 : "No transactions yet - make your first deposit to get started"
@@ -1918,14 +1918,14 @@ Your contract is now live and ready for members to join!`);
     <div className="relative z-10 px-6 py-8 pb-32 md:pb-8">
       <div className="flex items-center mb-8">
         <button onClick={goHome} className="mr-4 p-2 hover:bg-white/20 rounded-full transition-colors">
-          <ArrowLeft className="w-6 h-6 text-slate-700" />
+          <ArrowLeft className="w-6 h-6 text-slate-300" />
         </button>
-        <h1 className="text-3xl font-bold text-slate-800">Group Information</h1>
+        <h1 className="text-3xl font-bold text-white">Group Information</h1>
       </div>
       
       <div className="space-y-6">
         <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-          <h2 className="text-xl font-bold text-slate-800 mb-4">Member Directory</h2>
+          <h2 className="text-xl font-bold text-white mb-4">Member Directory</h2>
           
           {walletConnected ? (
             <div className="space-y-6">
@@ -1933,24 +1933,24 @@ Your contract is now live and ready for members to join!`);
                 club.creator === walletAddress || (club.members && club.members.includes(walletAddress))
               ).map((subclub) => (
                 <div key={subclub.id} className={`p-4 bg-white/10 rounded-lg border-l-4 ${getContractColor(subclub)}`}>
-                  <h3 className="font-semibold text-slate-800 mb-3">
+                  <h3 className="font-semibold text-white mb-3">
                     {subclub.lockupPeriod} Year Lockup - {subclub.rigorLevel.charAt(0).toUpperCase() + subclub.rigorLevel.slice(1)} Rigor
                   </h3>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="p-3 bg-white/10 rounded-lg">
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <div className="font-semibold text-slate-800">Me ({walletAddress?.slice(0,6)}...{walletAddress?.slice(-4)})</div>
-                          <div className="text-sm text-slate-600">Penalties: 0/15</div>
+                          <div className="font-semibold text-white">Me ({walletAddress?.slice(0,6)}...{walletAddress?.slice(-4)})</div>
+                          <div className="text-sm text-slate-300">Penalties: 0/15</div>
                         </div>
                         <span className="text-xs px-2 py-1 rounded-full bg-green-100 text-green-800">
                           Active
                         </span>
                       </div>
-                      <div className="text-sm text-slate-500">
-                        Contributed: <span className="font-medium text-slate-700">${parseFloat(vaultBalance).toFixed(2)}</span>
+                      <div className="text-sm text-slate-300">
+                        Contributed: <span className="font-medium text-white">${parseFloat(vaultBalance).toFixed(2)}</span>
                       </div>
-                      <div className="text-xs text-slate-400 mt-1">
+                      <div className="text-xs text-slate-300 mt-1">
                         Role: {subclub.creator === walletAddress ? 'Owner' : 'Member'}
                       </div>
                     </div>
@@ -1960,14 +1960,14 @@ Your contract is now live and ready for members to join!`);
               {deployedSubclubs.filter(club => 
                 club.creator === walletAddress || (club.members && club.members.includes(walletAddress))
               ).length === 0 && (
-                <div className="text-center py-8 text-slate-500">
+                <div className="text-center py-8 text-slate-300">
                   <div className="font-medium">No contracts yet</div>
                   <div className="text-sm">Join a subclub to see member information</div>
                 </div>
               )}
             </div>
           ) : (
-            <div className="text-center py-8 text-slate-500">
+            <div className="text-center py-8 text-slate-300">
               Connect wallet to view member information
             </div>
           )}
@@ -2004,12 +2004,12 @@ Your contract is now live and ready for members to join!`);
                       <div className="font-semibold text-slate-800">
                         {subclub.lockupPeriod} {subclub.isChargedContract ? 'Month' : 'Year'} Lockup
                       </div>
-                      <div className="text-sm text-slate-600">
-                        Members: {subclub.currentMembers}/{subclub.maxMembers}
-                      </div>
-                      <div className="text-xs text-slate-500 mt-1">
-                        Contract: {subclub.contractAddress.slice(0, 8)}...{subclub.contractAddress.slice(-6)}
-                      </div>
+              <div className="text-sm text-slate-300">
+                Members: {subclub.currentMembers}/{subclub.maxMembers}
+              </div>
+              <div className="text-xs text-slate-300 mt-1">
+                Contract: {subclub.contractAddress.slice(0, 8)}...{subclub.contractAddress.slice(-6)}
+              </div>
                     </div>
                     <div className="flex flex-col items-end space-y-1">
                       <span className={`text-xs px-2 py-1 rounded-full ${
@@ -2028,10 +2028,10 @@ Your contract is now live and ready for members to join!`);
                       </span>
                     </div>
                   </div>
-                  <div className="text-sm text-slate-500">
-                    Rigor: <span className="font-medium text-slate-700 capitalize">{subclub.rigorLevel}</span>
+                  <div className="text-sm text-slate-300">
+                    Rigor: <span className="font-medium text-white capitalize">{subclub.rigorLevel}</span>
                   </div>
-                  <div className="text-xs text-slate-400 mt-2">
+                  <div className="text-xs text-slate-300 mt-2">
                     {subclub.creator === walletAddress ? 'Created' : 'Joined'}: {new Date(subclub.createdAt).toLocaleDateString()}
                   </div>
                   
@@ -2081,10 +2081,10 @@ Your contract is now live and ready for members to join!`);
           {/* Create Club Section */}
           <div className="text-center py-6 border-b border-white/20 mb-6">
             <div className="mb-4">
-              <div className="text-sm text-slate-600 mb-2">
+              <div className="text-sm text-slate-200 mb-2">
                 {deployedSubclubs.length === 0 ? "No contracts have been created yet" : `${deployedSubclubs.length} contract${deployedSubclubs.length === 1 ? '' : 's'} deployed`}
               </div>
-              <div className="text-xs text-slate-500">
+              <div className="text-xs text-slate-300">
                 {deployedSubclubs.length === 0 ? "Be the first to deploy a contract" : "Create another contract or join existing ones"}
               </div>
             </div>
@@ -2099,11 +2099,11 @@ Your contract is now live and ready for members to join!`);
           <div>
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-slate-800">Available Contracts</h3>
-              <div className="text-sm text-slate-500">{deployedSubclubs.filter(club => !club.isPrivate).length} public</div>
+              <div className="text-sm text-slate-300">{deployedSubclubs.filter(club => !club.isPrivate).length} public</div>
             </div>
             
             {deployedSubclubs.filter(club => !club.isPrivate).length === 0 ? (
-              <div className="text-center py-12 text-slate-500">
+              <div className="text-center py-12 text-slate-300">
                 <div className="text-gray-400 mb-2">
                   <Users className="w-12 h-12 mx-auto mb-3 opacity-50" />
                 </div>
@@ -2124,10 +2124,10 @@ Your contract is now live and ready for members to join!`);
                           <div className="font-semibold text-slate-800">
                             {subclub.lockupPeriod} {subclub.isChargedContract ? 'Month' : 'Year'} Lockup
                           </div>
-                          <div className="text-sm text-slate-600">
+                          <div className="text-sm text-slate-300">
                             Members: {subclub.currentMembers}/{subclub.maxMembers}
                           </div>
-                          <div className="text-xs text-slate-500 mt-1">
+                          <div className="text-xs text-slate-300 mt-1">
                             Contract: {subclub.contractAddress.slice(0, 8)}...{subclub.contractAddress.slice(-6)}
                           </div>
                         </div>
@@ -2157,13 +2157,13 @@ Your contract is now live and ready for members to join!`);
                           )}
                         </div>
                       </div>
-                      <div className="text-sm text-slate-500">
-                        Rigor: <span className="font-medium text-slate-700 capitalize">{subclub.rigorLevel}</span>
+                      <div className="text-sm text-slate-300">
+                        Rigor: <span className="font-medium text-white capitalize">{subclub.rigorLevel}</span>
                       </div>
-                      <div className="text-xs text-slate-400 mt-2">
+                      <div className="text-xs text-slate-300 mt-2">
                         Created: {new Date(subclub.createdAt).toLocaleDateString()}
                       </div>
-                      <div className="text-xs text-slate-400">
+                      <div className="text-xs text-slate-300">
                         Concludes: {new Date(new Date(subclub.createdAt).getTime() + (subclub.lockupPeriod * 365 * 24 * 60 * 60 * 1000)).toLocaleDateString()}
                       </div>
                     </div>
@@ -2184,18 +2184,18 @@ Your contract is now live and ready for members to join!`);
       <div className="relative z-10 px-6 py-8 pb-32 md:pb-8">
         <div className="flex items-center mb-8">
           <button onClick={goHome} className="mr-4 p-2 hover:bg-white/20 rounded-full transition-colors">
-            <ArrowLeft className="w-6 h-6 text-slate-700" />
+            <ArrowLeft className="w-6 h-6 text-slate-300" />
           </button>
-          <h1 className="text-3xl font-bold text-slate-800">Future Projections</h1>
+          <h1 className="text-3xl font-bold text-white">Future Projections</h1>
         </div>
         
         <div className="space-y-6">
           {/* Interactive Controls */}
           <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-            <h2 className="text-xl font-bold text-slate-800 mb-4">Simulation Parameters</h2>
+            <h2 className="text-xl font-bold text-white mb-4">Simulation Parameters</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-slate-300 mb-2">
                   Strand 1 APY (%) - Spark Protocol: {aaveRates.liquidityRate.toFixed(2)}%
                 </label>
                 <input
@@ -2206,7 +2206,7 @@ Your contract is now live and ready for members to join!`);
                   onChange={(e) => setApyStrand1(Number(e.target.value))}
                   className="w-full"
                 />
-                <div className="text-center text-slate-600 font-medium">{apyStrand1.toFixed(1)}%</div>
+                <div className="text-center text-slate-200 font-medium">{apyStrand1.toFixed(1)}%</div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -2220,7 +2220,7 @@ Your contract is now live and ready for members to join!`);
                   onChange={(e) => setApyStrand2(Number(e.target.value))}
                   className="w-full"
                 />
-                <div className="text-center text-slate-600 font-medium">{apyStrand2.toFixed(1)}%</div>
+                <div className="text-center text-slate-200 font-medium">{apyStrand2.toFixed(1)}%</div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -2234,7 +2234,7 @@ Your contract is now live and ready for members to join!`);
                   onChange={(e) => setApyStrand3(Number(e.target.value))}
                   className="w-full"
                 />
-                <div className="text-center text-slate-600 font-medium">{apyStrand3.toFixed(1)}%</div>
+                <div className="text-center text-slate-200 font-medium">{apyStrand3.toFixed(1)}%</div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -2250,7 +2250,7 @@ Your contract is now live and ready for members to join!`);
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white/50"
                   placeholder="Enter BTC price"
                 />
-                <div className="text-center text-slate-600 font-medium text-sm mt-1">${btcPrice.toLocaleString()}</div>
+                <div className="text-center text-slate-200 font-medium text-sm mt-1">${btcPrice.toLocaleString()}</div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Simulation Length</label>
@@ -2278,7 +2278,7 @@ Your contract is now live and ready for members to join!`);
                   <option value="20">20 years</option>
                   <option value="25">25 years</option>
                 </select>
-                <div className="text-center text-slate-600 font-medium text-sm mt-1">
+                <div className="text-center text-slate-200 font-medium text-sm mt-1">
                   {simulationYears < 1 
                     ? `${Math.round(simulationYears * 12)} month${Math.round(simulationYears * 12) === 1 ? '' : 's'}`
                     : `${simulationYears} year${simulationYears === 1 ? '' : 's'}`
@@ -2297,7 +2297,7 @@ Your contract is now live and ready for members to join!`);
                   <option value="heavy">Heavy</option>
                   <option value="custom">Custom</option>
                 </select>
-                <div className="text-center text-slate-600 font-medium text-sm mt-1">
+                <div className="text-center text-slate-200 font-medium text-sm mt-1">
                   {simulationRigor === 'light' && '$100-250/month scaling'}
                   {simulationRigor === 'medium' && '$50-250/week scaling'}
                   {simulationRigor === 'heavy' && '$100-400/week scaling'}
@@ -2307,7 +2307,7 @@ Your contract is now live and ready for members to join!`);
                 {/* Custom Amount Input */}
                 {simulationRigor === 'custom' && (
                   <div className="mt-3">
-                    <label className="block text-xs font-medium text-slate-600 mb-1">
+                    <label className="block text-xs font-medium text-slate-300 mb-1">
                       Weekly Deposit Amount ($)
                     </label>
                     <input
@@ -2319,7 +2319,7 @@ Your contract is now live and ready for members to join!`);
                       className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white/50 text-sm"
                       placeholder="Enter weekly amount"
                     />
-                    <div className="text-xs text-slate-500 mt-1">
+                    <div className="text-xs text-slate-300 mt-1">
                       Annual total: ${(customSimulationAmount * 52).toLocaleString()}
                     </div>
                   </div>
@@ -2335,7 +2335,7 @@ Your contract is now live and ready for members to join!`);
                   onChange={(e) => setVaultStats(prev => ({...prev, totalMembers: Number(e.target.value)}))}
                   className="w-full"
                 />
-                <div className="text-center text-slate-600 font-medium">{vaultStats.totalMembers || 1} members</div>
+                <div className="text-center text-slate-200 font-medium">{vaultStats.totalMembers || 1} members</div>
               </div>
             </div>
           </div>
@@ -2501,13 +2501,13 @@ Your contract is now live and ready for members to join!`);
                   <div className="text-lg font-bold text-red-600">
                     ${chartData.length > 0 && chartData[chartData.length - 1]?.cumulativeGasFees ? chartData[chartData.length - 1].cumulativeGasFees.toLocaleString() : '0'}
                   </div>
-                  <div className="text-sm text-slate-600">Total Gas Fees</div>
+                  <div className="text-sm text-slate-300">Total Gas Fees</div>
                 </div>
                 <div className="text-center p-3 bg-white/10 rounded-lg">
                   <div className="text-lg font-bold text-purple-600">
                     ${chartData.length > 0 && chartData[chartData.length - 1]?.cumulativeUtilityFees ? chartData[chartData.length - 1].cumulativeUtilityFees.toLocaleString() : '0'}
                   </div>
-                  <div className="text-sm text-slate-600">Total Utility Fees</div>
+                  <div className="text-sm text-slate-300">Total Utility Fees</div>
                 </div>
               </div>
             )}
@@ -2516,7 +2516,7 @@ Your contract is now live and ready for members to join!`);
           {/* Peak Strand Distribution */}
           <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
             <h2 className="text-xl font-bold text-slate-800 mb-4">Peak Strand Distribution</h2>
-            <div className="text-sm text-slate-600 mb-4">
+            <div className="text-sm text-slate-300 mb-4">
               Maximum strand values during Phase 1 before Phase 2 transition to wBTC
             </div>
             {chartData.length > 0 && (
@@ -2688,7 +2688,7 @@ Your contract is now live and ready for members to join!`);
             <span className={`text-xs font-medium mt-1 ${
               currentPage === 'home' 
                 ? 'text-emerald-400' 
-                : 'text-slate-500'
+                : 'text-slate-300'
             }`}>Home</span>
           </button>
           
@@ -2706,7 +2706,7 @@ Your contract is now live and ready for members to join!`);
             <span className={`text-xs font-medium mt-1 ${
               currentPage === 'personal' 
                 ? 'text-emerald-400' 
-                : 'text-slate-500'
+                : 'text-slate-300'
             }`}>Wallet</span>
           </button>
           
@@ -2724,7 +2724,7 @@ Your contract is now live and ready for members to join!`);
             <span className={`text-xs font-medium mt-1 ${
               currentPage === 'group' 
                 ? 'text-emerald-400' 
-                : 'text-slate-500'
+                : 'text-slate-300'
             }`}>Contracts</span>
           </button>
           
@@ -2742,7 +2742,7 @@ Your contract is now live and ready for members to join!`);
             <span className={`text-xs font-medium mt-1 ${
               currentPage === 'dataset' 
                 ? 'text-emerald-400' 
-                : 'text-slate-500'
+                : 'text-slate-300'
             }`}>Data</span>
           </button>
 
@@ -2760,7 +2760,7 @@ Your contract is now live and ready for members to join!`);
             <span className={`text-xs font-medium mt-1 ${
               currentPage === 'simulation' 
                 ? 'text-emerald-400' 
-                : 'text-slate-500'
+                : 'text-slate-300'
             }`}>Future</span>
           </button>
         </div>
