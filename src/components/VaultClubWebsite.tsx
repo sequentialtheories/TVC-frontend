@@ -2672,7 +2672,7 @@ Your contract is now live and ready for members to join!`);
       </header>
 
       {/* Mobile Bottom Navigation Bar */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-xl border-t border-purple-500/30 px-4 py-2 shadow-2xl shadow-purple-500/20 safe-area-pb" aria-label="Main navigation">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-xl border-t border-purple-500/30 px-4 py-2 shadow-2xl shadow-purple-500/20 safe-area-pb" aria-label="Main navigation">
         <div className="flex justify-around items-center max-w-md mx-auto">
           <button 
             onClick={() => navigateTo('home')}
