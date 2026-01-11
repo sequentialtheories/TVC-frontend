@@ -2751,7 +2751,7 @@ Your contract is now live and ready for members to join!`);
                 <div className="text-xl font-bold text-gradient-hero">
                   The Vault Club
                 </div>
-                <div className="text-xs text-secondary/80 font-medium tracking-wide">DeFi Investment Platform</div>
+                <div className="text-xs text-secondary/80 font-medium tracking-wide">Investment Contracts into Digital Assets</div>
               </div>
             </div>
           </div>
