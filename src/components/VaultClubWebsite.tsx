@@ -1560,9 +1560,21 @@ Your contract is now live and ready for members to join!`);
       )}
 
       {/* DNA Strand Visualization - Premium redesign */}
-      <div className="flex justify-center items-center gap-10 mb-16 animate-fade-up stagger-2">
+      <div className="relative flex justify-center items-center gap-10 mb-16 animate-fade-up stagger-2">
+        {/* Locked overlay when no contract selected */}
+        {!selectedContract && walletConnected && deployedSubclubs.filter(club => 
+          club.creator === walletAddress || (club.members && club.members.includes(walletAddress))
+        ).length > 0 && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center">
+            <div className="glass-card px-6 py-4 text-center animate-pulse-slow">
+              <div className="text-sm font-medium text-foreground mb-1">Select a Contract Above</div>
+              <div className="text-xs text-muted-foreground">Click on a contract progress bar to unlock</div>
+            </div>
+          </div>
+        )}
+        
         {/* Phase 1 - DNA Helix */}
-        <div className="relative">
+        <div className={`relative transition-all duration-300 ${!selectedContract ? 'opacity-40 pointer-events-none blur-[1px]' : ''}`}>
           <div className="w-40 h-72 relative">
             {/* Enhanced DNA SVG */}
             <svg viewBox="0 0 100 200" className="w-full h-full" style={{ overflow: 'visible' }}>
@@ -1582,7 +1594,8 @@ Your contract is now live and ready for members to join!`);
           {/* Strand Buttons - Premium pills */}
           <div className="absolute inset-0 flex flex-col justify-around items-center py-4">
             <button 
-              onClick={() => selectedContract ? setActiveStrand(1) : null}
+              type="button"
+              onClick={(e) => { e.preventDefault(); if (selectedContract) setActiveStrand(1); }}
               disabled={!selectedContract}
               className={`btn-strand text-white ${
                 selectedContract 
@@ -1593,7 +1606,8 @@ Your contract is now live and ready for members to join!`);
               Capital
             </button>
             <button 
-              onClick={() => selectedContract ? setActiveStrand(2) : null}
+              type="button"
+              onClick={(e) => { e.preventDefault(); if (selectedContract) setActiveStrand(2); }}
               disabled={!selectedContract}
               className={`btn-strand text-white ${
                 selectedContract 
@@ -1604,7 +1618,8 @@ Your contract is now live and ready for members to join!`);
               Yield
             </button>
             <button 
-              onClick={() => selectedContract ? setActiveStrand(3) : null}
+              type="button"
+              onClick={(e) => { e.preventDefault(); if (selectedContract) setActiveStrand(3); }}
               disabled={!selectedContract}
               className={`btn-strand text-white ${
                 selectedContract 
@@ -1619,12 +1634,13 @@ Your contract is now live and ready for members to join!`);
 
         {/* Phase 2 - wBTC Card */}
         <button 
-          onClick={() => selectedContract ? setActiveStrand(4) : null}
+          type="button"
+          onClick={(e) => { e.preventDefault(); if (selectedContract) setActiveStrand(4); }}
           disabled={!selectedContract}
           className={`glass-card-glow px-8 py-6 transition-all duration-400 ${
             selectedContract 
               ? 'hover:glow-orange cursor-pointer group'
-              : 'opacity-50 cursor-not-allowed'
+              : 'opacity-40 cursor-not-allowed blur-[1px]'
           }`}
         >
           <div className="flex items-center space-x-4">
