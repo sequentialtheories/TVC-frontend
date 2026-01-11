@@ -929,7 +929,7 @@ Your contract is now live and ready for members to join!`);
           <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 rounded-t-2xl text-white">
             <div className="flex justify-between items-start">
               <div>
-                <h3 id="create-club-title" className="text-xl font-bold">Create New SubClub Contract</h3>
+                <h3 id="create-club-title" className="text-xl font-bold">Create New Contract</h3>
                 <p className="text-white/80">Deploy smart contract with mega vault system</p>
               </div>
               <button onClick={closeModal} className="text-white/80 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10" aria-label="Close modal">
