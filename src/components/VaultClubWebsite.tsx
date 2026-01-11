@@ -3,6 +3,7 @@ import { Database, User, Users, TrendingUp, X, Bitcoin, DollarSign, Zap, Shield,
 import { supabase } from '@/integrations/supabase/client';
 import type { Session } from '@supabase/supabase-js';
 import { ThemeToggle } from './ThemeToggle';
+import BackgroundAnimations from './BackgroundAnimations';
 
 // Type declarations
 interface VaultStats {
@@ -2605,6 +2606,9 @@ Your contract is now live and ready for members to join!`);
         <div className="orb orb-2"></div>
         <div className="orb orb-3"></div>
       </div>
+      
+      {/* Enhanced background animations - spirals, particles, morphing blobs */}
+      <BackgroundAnimations />
       
       {/* Grid pattern overlay */}
       <div className="grid-pattern"></div>

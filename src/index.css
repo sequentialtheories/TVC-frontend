@@ -778,6 +778,193 @@
   animation: scan-line 12s linear infinite;
 }
 
+/* ========================================
+   PREMIUM BACKGROUND ANIMATIONS
+   ======================================== */
+
+/* Morphing blob animations */
+@keyframes blob-morph {
+  0%, 100% { 
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  25% { 
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    transform: translate(30px, -40px) rotate(90deg) scale(1.05);
+  }
+  50% { 
+    border-radius: 50% 60% 30% 60% / 30% 50% 70% 40%;
+    transform: translate(-20px, 30px) rotate(180deg) scale(0.95);
+  }
+  75% { 
+    border-radius: 40% 30% 60% 50% / 60% 40% 30% 70%;
+    transform: translate(25px, 15px) rotate(270deg) scale(1.02);
+  }
+}
+
+@keyframes blob-morph-reverse {
+  0%, 100% { 
+    border-radius: 40% 60% 70% 30% / 40% 70% 30% 60%;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  25% { 
+    border-radius: 70% 30% 40% 60% / 60% 40% 70% 30%;
+    transform: translate(-25px, 30px) rotate(-90deg) scale(0.98);
+  }
+  50% { 
+    border-radius: 30% 70% 60% 40% / 70% 30% 40% 60%;
+    transform: translate(15px, -25px) rotate(-180deg) scale(1.03);
+  }
+  75% { 
+    border-radius: 60% 40% 30% 70% / 30% 60% 60% 40%;
+    transform: translate(-30px, -10px) rotate(-270deg) scale(0.97);
+  }
+}
+
+/* Spiral rotation - very slow */
+@keyframes spiral-rotate {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.03); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes spiral-rotate-reverse {
+  0% { transform: rotate(360deg) scale(1); }
+  50% { transform: rotate(180deg) scale(0.97); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+/* Geometric drift */
+@keyframes geometric-drift {
+  0%, 100% { 
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.08;
+  }
+  33% { 
+    transform: translate(40px, -30px) rotate(120deg);
+    opacity: 0.12;
+  }
+  66% { 
+    transform: translate(-30px, 40px) rotate(240deg);
+    opacity: 0.06;
+  }
+}
+
+@keyframes geometric-drift-alt {
+  0%, 100% { 
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.06;
+  }
+  50% { 
+    transform: translate(-50px, 20px) rotate(180deg);
+    opacity: 0.10;
+  }
+}
+
+/* Line rotation */
+@keyframes line-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes line-rotate-reverse {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Gentle floating */
+@keyframes float-gentle {
+  0%, 100% { 
+    transform: translate(0, 0);
+    opacity: 0.3;
+  }
+  25% { 
+    transform: translate(15px, -20px);
+    opacity: 0.5;
+  }
+  50% { 
+    transform: translate(-10px, 10px);
+    opacity: 0.25;
+  }
+  75% { 
+    transform: translate(20px, 5px);
+    opacity: 0.4;
+  }
+}
+
+@keyframes float-gentle-alt {
+  0%, 100% { 
+    transform: translate(0, 0);
+    opacity: 0.25;
+  }
+  33% { 
+    transform: translate(-20px, 15px);
+    opacity: 0.45;
+  }
+  66% { 
+    transform: translate(10px, -15px);
+    opacity: 0.2;
+  }
+}
+
+/* Animation classes */
+.animate-blob-morph {
+  animation: blob-morph 50s ease-in-out infinite;
+}
+
+.animate-blob-morph-reverse {
+  animation: blob-morph-reverse 55s ease-in-out infinite;
+}
+
+.animate-spiral-rotate {
+  animation: spiral-rotate 120s linear infinite;
+}
+
+.animate-spiral-rotate-reverse {
+  animation: spiral-rotate-reverse 100s linear infinite;
+}
+
+.animate-geometric-drift {
+  animation: geometric-drift 45s ease-in-out infinite;
+}
+
+.animate-geometric-drift-alt {
+  animation: geometric-drift-alt 50s ease-in-out infinite;
+}
+
+.animate-line-rotate {
+  animation: line-rotate 90s linear infinite;
+}
+
+.animate-line-rotate-reverse {
+  animation: line-rotate-reverse 80s linear infinite;
+}
+
+.animate-float-gentle {
+  animation: float-gentle 30s ease-in-out infinite;
+}
+
+.animate-float-gentle-alt {
+  animation: float-gentle-alt 35s ease-in-out infinite;
+}
+
+/* Background animations container */
+.background-animations {
+  will-change: transform;
+}
+
+.background-animations .layer-far {
+  opacity: 0.8;
+}
+
+.background-animations .layer-mid {
+  opacity: 0.6;
+}
+
+.background-animations .layer-near {
+  opacity: 0.7;
+}
+
 /* Staggered animations */
 .stagger-1 { animation-delay: 0.1s; opacity: 0; }
 .stagger-2 { animation-delay: 0.2s; opacity: 0; }
