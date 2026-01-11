@@ -31,6 +31,7 @@ interface ClubCreationData {
   maxMembers: number;
   isPrivate: boolean;
   isChargedContract: boolean;
+  customDepositFrequency: 'daily' | 'weekly' | 'monthly';
   customWeeklyAmount: number;
   customSchedule: SchedulePeriod[];
 }
@@ -50,6 +51,7 @@ interface Subclub {
   totalDeposits: number;
   members: string[];
   borderColor: string;
+  customDepositFrequency?: 'daily' | 'weekly' | 'monthly';
   customWeeklyAmount?: number;
   customSchedule?: SchedulePeriod[];
   strand1Balance: string;
@@ -85,6 +87,18 @@ const rigorAmounts: Record<string, number> = {
   medium: 50,
   heavy: 100,
   custom: 0
+};
+
+const toWeeklyAmount = (amount: number, frequency: 'daily' | 'weekly' | 'monthly' = 'weekly') => {
+  if (frequency === 'daily') return amount * 7;
+  if (frequency === 'monthly') return amount * 12 / 52;
+  return amount;
+};
+
+const periodsPerYear = (frequency: 'daily' | 'weekly' | 'monthly' = 'weekly') => {
+  if (frequency === 'daily') return 365;
+  if (frequency === 'monthly') return 12;
+  return 52;
 };
 
 // Connect wallet and return address or null
@@ -218,13 +232,14 @@ const VaultClubWebsite = () => {
   const [depositAmount, setDepositAmount] = useState('');
 
   // Club creation states
-  const [clubCreationData, setClubCreationData] = useState({
+  const [clubCreationData, setClubCreationData] = useState<ClubCreationData>({
     lockupPeriod: 5,
     rigorLevel: 'medium',
     riskLevel: 'medium',
     maxMembers: 4,
     isPrivate: false,
     isChargedContract: false,
+    customDepositFrequency: 'weekly',
     customWeeklyAmount: 75,
     customSchedule: [{
       yearStart: 1,
@@ -597,14 +612,16 @@ const VaultClubWebsite = () => {
       }
       // For custom rigor, calculate based on custom schedule
       else if (subclub.rigorLevel === 'custom') {
+        const freq = subclub.customDepositFrequency || 'weekly';
         if (subclub.customSchedule) {
           const contractStartDate = new Date(subclub.createdAt).getTime();
           const now = Date.now();
           const yearsElapsed = (now - contractStartDate) / (365.25 * 24 * 60 * 60 * 1000);
           const currentPeriod = subclub.customSchedule.find(period => yearsElapsed >= period.yearStart - 1 && yearsElapsed < period.yearEnd);
-          amount = currentPeriod ? currentPeriod.amount : subclub.customWeeklyAmount || 0;
+          const rawAmount = currentPeriod ? currentPeriod.amount : subclub.customWeeklyAmount || 0;
+          amount = toWeeklyAmount(rawAmount, freq);
         } else {
-          amount = subclub.customWeeklyAmount || 0;
+          amount = toWeeklyAmount(subclub.customWeeklyAmount || 0, freq);
         }
       }
       // For heavy rigor, calculate based on contract age
@@ -782,14 +799,16 @@ const VaultClubWebsite = () => {
             }
             // For custom rigor, calculate based on custom schedule
             else if (club.rigorLevel === 'custom') {
+              const freq = club.customDepositFrequency || 'weekly';
               if (club.customSchedule) {
                 const contractStartDate = new Date(club.createdAt).getTime();
                 const now = Date.now();
                 const yearsElapsed = (now - contractStartDate) / (365.25 * 24 * 60 * 60 * 1000);
                 const currentPeriod = club.customSchedule.find(period => yearsElapsed >= period.yearStart - 1 && yearsElapsed < period.yearEnd);
-                contractWeeklyAmount = currentPeriod ? currentPeriod.amount : club.customWeeklyAmount || 0;
+                const rawAmount = currentPeriod ? currentPeriod.amount : club.customWeeklyAmount || 0;
+                contractWeeklyAmount = toWeeklyAmount(rawAmount, freq);
               } else {
-                contractWeeklyAmount = club.customWeeklyAmount || 0;
+                contractWeeklyAmount = toWeeklyAmount(club.customWeeklyAmount || 0, freq);
               }
             }
             // For heavy rigor, calculate based on contract age
@@ -901,6 +920,7 @@ const VaultClubWebsite = () => {
       members: [walletAddress],
       borderColor: randomColor,
       // Store the color with the contract
+      customDepositFrequency: clubCreationData.rigorLevel === 'custom' ? clubCreationData.customDepositFrequency : undefined,
       customWeeklyAmount: clubCreationData.rigorLevel === 'custom' ? clubCreationData.customWeeklyAmount : undefined,
       customSchedule: clubCreationData.rigorLevel === 'custom' ? clubCreationData.customSchedule : undefined,
       // Contract-specific strand balances
@@ -1081,10 +1101,26 @@ Your contract is now live and ready for members to join!`);
               
               {/* Custom Schedule Input */}
               {clubCreationData.rigorLevel === 'custom' && <div className="mt-4">
-                  <div className="flex justify-between items-center mb-3">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Custom Deposit Schedule
-                    </label>
+                  <div className="flex justify-between items-start gap-4 mb-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Custom Deposit Schedule</label>
+                      <div className="mt-2 flex gap-2">
+                        {(['daily', 'weekly', 'monthly'] as const).map(freq => (
+                          <button
+                            key={freq}
+                            type="button"
+                            onClick={() => setClubCreationData(prev => ({ ...prev, customDepositFrequency: freq }))}
+                            className={`px-3 py-1 rounded-md text-xs font-medium transition-colors capitalize ${
+                              clubCreationData.customDepositFrequency === freq
+                                ? 'bg-blue-100 text-blue-700 border border-blue-200'
+                                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                            }`}
+                          >
+                            {freq}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                     <button type="button" onClick={() => {
                     const newSchedule = [...clubCreationData.customSchedule];
                     newSchedule.push({
@@ -1100,6 +1136,8 @@ Your contract is now live and ready for members to join!`);
                       Add Period
                     </button>
                   </div>
+
+
                   
                   <div className="space-y-3 max-h-48 overflow-y-auto">
                     {clubCreationData.customSchedule.map((period, index) => <div key={index} className="p-3 bg-white rounded-lg flex items-center space-x-3 border border-gray-200">
@@ -1133,7 +1171,7 @@ Your contract is now live and ready for members to join!`);
                         }} className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" />
                           </div>
                           <div>
-                            <label className="block text-xs font-medium text-gray-600 mb-1">Weekly Amount ($)</label>
+                            <label className="block text-xs font-medium text-gray-600 mb-1">{clubCreationData.customDepositFrequency.charAt(0).toUpperCase() + clubCreationData.customDepositFrequency.slice(1)} Amount ($)</label>
                             <input type="number" min="1" max="1000" value={period.amount} onChange={e => {
                           e.preventDefault();
                           const newSchedule = [...clubCreationData.customSchedule];
@@ -1163,12 +1201,12 @@ Your contract is now live and ready for members to join!`);
                   </div>
                   
                   <div className="text-xs text-gray-500 mt-3">
-                    Create your own escalation schedule with complete flexibility ($1-$1000 per week). No obligation to increase amounts.
+                    Create your own escalation schedule with complete flexibility ($1-$1000 per entry). No obligation to increase amounts.
                   </div>
                   <div className="text-xs text-gray-600 mt-2 font-medium">
                     Total over {Math.max(...clubCreationData.customSchedule.map(p => p.yearEnd))} years: ${clubCreationData.customSchedule.reduce((sum, period) => {
                     const years = period.yearEnd - period.yearStart + 1;
-                    return sum + period.amount * 52 * years;
+                    return sum + period.amount * periodsPerYear(clubCreationData.customDepositFrequency) * years;
                   }, 0).toLocaleString()}
                   </div>
                 </div>}
@@ -1179,7 +1217,7 @@ Your contract is now live and ready for members to join!`);
                   {clubCreationData.rigorLevel === 'light' && "Light Rigor: Monthly deposits that scale over time. Year 1: $100/month, Year 2: $150/month, Year 3: $200/month, Year 4+: $250/month. Perfect for beginners wanting gradual increases."}
                   {clubCreationData.rigorLevel === 'medium' && "Medium Rigor: Starts at $50/week, scales up over time. Years 1-3: $50/week, 4-6: $100/week, 7-10: $200/week, 11+: $250/week."}
                   {clubCreationData.rigorLevel === 'heavy' && "Heavy Rigor: Starts at $100/week, scales significantly. Years 1-3: $100/week, 4-6: $200/week, 7-10: $300/week, 11+: $400/week."}
-                  {clubCreationData.rigorLevel === 'custom' && `Custom Rigor: Fixed ${clubCreationData.customWeeklyAmount}/week throughout the entire contract duration. Total annual contribution: ${(clubCreationData.customWeeklyAmount * 52).toLocaleString()}.`}
+                  {clubCreationData.rigorLevel === 'custom' && `Custom Rigor: ${clubCreationData.customWeeklyAmount}/${clubCreationData.customDepositFrequency}. Total annual contribution: ${(clubCreationData.customWeeklyAmount * periodsPerYear(clubCreationData.customDepositFrequency)).toLocaleString()}.`}
                 </div>
               </div>
             </div>
@@ -1223,13 +1261,13 @@ Your contract is now live and ready for members to join!`);
                 Privacy Setting
               </label>
               <div className="flex space-x-2">
-                <button onClick={() => setClubCreationData(prev => ({
+                <button type="button" onClick={() => setClubCreationData(prev => ({
                   ...prev,
                   isPrivate: false
                 }))} className={`flex-1 py-3 px-4 rounded-lg text-lg font-medium transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.02] ${!clubCreationData.isPrivate ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-600 border-2 border-gray-200'}`}>
                   Public
                 </button>
-                <button onClick={() => setClubCreationData(prev => ({
+                <button type="button" onClick={() => setClubCreationData(prev => ({
                   ...prev,
                   isPrivate: true
                 }))} className={`flex-1 py-3 px-4 rounded-lg text-lg font-medium transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.02] ${clubCreationData.isPrivate ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-600 border-2 border-gray-200'}`}>
@@ -1241,8 +1279,15 @@ Your contract is now live and ready for members to join!`);
               </div>
             </div>
 
-            <div className="pt-6 border-t">
-              <button onClick={handleCreateClub} className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-4 rounded-lg font-medium text-lg transition-all duration-300 shadow-md hover:shadow-xl hover:scale-[1.02]">
+            <div className="pt-6 border-t space-y-4">
+              <div className="p-4 bg-white rounded-lg border border-gray-200">
+                <div className="text-xs font-semibold text-gray-700 mb-2">Contract Summary</div>
+                <div className="text-sm text-gray-700">
+                  {clubCreationData.isChargedContract ? 'Charged Contract' : 'Traditional Contract'} • {clubCreationData.lockupPeriod} {clubCreationData.isChargedContract ? 'Month' : 'Year'}{clubCreationData.lockupPeriod === 1 ? '' : 's'} • Max {clubCreationData.maxMembers} member{clubCreationData.maxMembers === 1 ? '' : 's'} • {clubCreationData.rigorLevel.charAt(0).toUpperCase() + clubCreationData.rigorLevel.slice(1)} Rigor{clubCreationData.rigorLevel === 'custom' ? ` (${clubCreationData.customDepositFrequency})` : ''} • {clubCreationData.riskLevel.charAt(0).toUpperCase() + clubCreationData.riskLevel.slice(1)} Risk • {clubCreationData.isPrivate ? 'Private' : 'Public'}
+                </div>
+              </div>
+
+              <button type="button" onClick={handleCreateClub} className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-4 rounded-lg font-medium text-lg transition-all duration-300 shadow-md hover:shadow-xl hover:scale-[1.02]">
                 Deploy Contract
               </button>
             </div>
@@ -2346,18 +2391,18 @@ Your contract is now live and ready for members to join!`);
 
       {/* Main Content */}
       <main className="relative">
-        {currentPage === 'home' && <HomePage />}
-        {currentPage === 'dataset' && <DatasetPage />}
-        {currentPage === 'personal' && <PersonalPage />}
-        {currentPage === 'group' && <GroupInfoPage />}
-        {currentPage === 'simulation' && <FutureSimulationPage />}
+        {currentPage === 'home' && HomePage()}
+        {currentPage === 'dataset' && DatasetPage()}
+        {currentPage === 'personal' && PersonalPage()}
+        {currentPage === 'group' && GroupInfoPage()}
+        {currentPage === 'simulation' && FutureSimulationPage()}
       </main>
 
       {/* Strand Modal */}
-      {activeStrand && <StrandModal strand={activeStrand} onClose={closeModal} />}
+      {activeStrand && StrandModal({ strand: activeStrand, onClose: closeModal })}
 
       {/* Create Club Modal */}
-      {activeModal === 'createClub' && <CreateClubModal />}
+      {activeModal === 'createClub' && CreateClubModal()}
       
       {/* Auth Modal */}
       {showAuthModal && <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-up" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
