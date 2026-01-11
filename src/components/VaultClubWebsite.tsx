@@ -1999,12 +1999,15 @@ Your contract is now live and ready for members to join!`);
           )}
         </div>
 
-        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-          <h2 className="text-xl font-bold text-white mb-4">My Contracts</h2>
+        <div className="glass-card p-6 animate-fade-up stagger-2">
+          <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+            My Contracts
+          </h2>
           
           {!walletConnected ? (
-            <div className="text-center py-8 text-slate-300">
-              <div className="text-slate-300 mb-2">
+            <div className="text-center py-8 text-muted-foreground">
+              <div className="text-muted-foreground mb-2">
                 <Wallet className="w-8 h-8 mx-auto mb-2 opacity-50" />
               </div>
               <div className="font-medium">Connect wallet to view your contracts</div>
@@ -2012,8 +2015,8 @@ Your contract is now live and ready for members to join!`);
           ) : deployedSubclubs.filter(club => 
             club.creator === walletAddress || (club.members && club.members.includes(walletAddress))
           ).length === 0 ? (
-            <div className="text-center py-8 text-slate-300">
-              <div className="text-slate-300 mb-2">
+            <div className="text-center py-8 text-muted-foreground">
+              <div className="text-muted-foreground mb-2">
                 <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
               </div>
               <div className="font-medium">No contracts yet</div>
@@ -2024,40 +2027,40 @@ Your contract is now live and ready for members to join!`);
               {deployedSubclubs.filter(club => 
                 club.creator === walletAddress || (club.members && club.members.includes(walletAddress))
               ).map((subclub) => (
-                <div key={subclub.id} className={`p-4 bg-white/10 rounded-lg border-l-4 ${getContractColor(subclub)} relative`}>
+                <div key={subclub.id} className="p-4 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-primary/30 transition-colors relative">
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <div className="font-semibold text-white">
+                      <div className="font-semibold text-foreground">
                         {subclub.lockupPeriod} {subclub.isChargedContract ? 'Month' : 'Year'} Lockup
                       </div>
-              <div className="text-sm text-slate-300">
-                Members: {subclub.currentMembers}/{subclub.maxMembers}
-              </div>
-              <div className="text-xs text-slate-300 mt-1">
-                Contract: {subclub.contractAddress.slice(0, 8)}...{subclub.contractAddress.slice(-6)}
-              </div>
+                      <div className="text-sm text-muted-foreground">
+                        Members: {subclub.currentMembers}/{subclub.maxMembers}
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        Contract: {subclub.contractAddress.slice(0, 8)}...{subclub.contractAddress.slice(-6)}
+                      </div>
                     </div>
                     <div className="flex flex-col items-end space-y-1">
                       <span className={`text-xs px-2 py-1 rounded-full ${
                         subclub.isPrivate 
-                          ? 'bg-purple-100 text-purple-800' 
-                          : 'bg-green-100 text-green-800'
+                          ? 'bg-defi-purple/20 text-defi-purple' 
+                          : 'bg-defi-emerald/20 text-defi-emerald'
                       }`}>
                         {subclub.isPrivate ? 'Private' : 'Public'}
                       </span>
                       <span className={`text-xs px-2 py-1 rounded-full ${
                         subclub.creator === walletAddress 
-                          ? 'bg-blue-100 text-blue-800' 
-                          : 'bg-orange-100 text-orange-800'
+                          ? 'bg-primary/20 text-primary' 
+                          : 'bg-defi-orange/20 text-defi-orange'
                       }`}>
                         {subclub.creator === walletAddress ? 'Owner' : 'Member'}
                       </span>
                     </div>
                   </div>
-                  <div className="text-sm text-slate-300">
-                    Rigor: <span className="font-medium text-white capitalize">{subclub.rigorLevel}</span>
+                  <div className="text-sm text-muted-foreground">
+                    Rigor: <span className="font-medium text-foreground capitalize">{subclub.rigorLevel}</span>
                   </div>
-                  <div className="text-xs text-slate-300 mt-2">
+                  <div className="text-xs text-muted-foreground mt-2">
                     {subclub.creator === walletAddress ? 'Created' : 'Joined'}: {new Date(subclub.createdAt).toLocaleDateString()}
                   </div>
                   
@@ -2090,10 +2093,10 @@ Your contract is now live and ready for members to join!`);
                         }
                       });
                     }}
-                    className="absolute bottom-3 right-3 p-1.5 bg-slate-200 hover:bg-slate-300 rounded-full transition-colors opacity-70 hover:opacity-100"
+                    className="absolute bottom-3 right-3 p-1.5 bg-background/50 hover:bg-background/70 rounded-full transition-colors opacity-70 hover:opacity-100 border border-border/20"
                     title="Share contract link"
                   >
-                    <Share2 className="w-3 h-3 text-slate-300" />
+                    <Share2 className="w-3 h-3 text-muted-foreground" />
                   </button>
                 </div>
               ))}
@@ -2101,22 +2104,25 @@ Your contract is now live and ready for members to join!`);
           )}
         </div>
 
-        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-          <h2 className="text-xl font-bold text-white mb-4">Club Directory</h2>
+        <div className="glass-card p-6 animate-fade-up stagger-3">
+          <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
+            Club Directory
+          </h2>
           
           {/* Create Club Section */}
-          <div className="text-center py-6 border-b border-white/20 mb-6">
+          <div className="text-center py-6 border-b border-border/20 mb-6">
             <div className="mb-4">
-              <div className="text-sm text-slate-200 mb-2">
+              <div className="text-sm text-foreground/80 mb-2">
                 {deployedSubclubs.length === 0 ? "No contracts have been created yet" : `${deployedSubclubs.length} contract${deployedSubclubs.length === 1 ? '' : 's'} deployed`}
               </div>
-              <div className="text-xs text-slate-300">
+              <div className="text-xs text-muted-foreground">
                 {deployedSubclubs.length === 0 ? "Be the first to deploy a contract" : "Create another contract or join existing ones"}
               </div>
             </div>
             <button 
               onClick={() => setActiveModal('createClub')}
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105"
+              className="btn-premium"
             >
               Create New Contract
             </button>
@@ -2124,13 +2130,13 @@ Your contract is now live and ready for members to join!`);
 
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-white">Available Contracts</h3>
-              <div className="text-sm text-slate-300">{deployedSubclubs.filter(club => !club.isPrivate).length} public</div>
+              <h3 className="font-semibold text-foreground">Available Contracts</h3>
+              <div className="text-sm text-muted-foreground">{deployedSubclubs.filter(club => !club.isPrivate).length} public</div>
             </div>
             
             {deployedSubclubs.filter(club => !club.isPrivate).length === 0 ? (
-              <div className="text-center py-12 text-slate-300">
-                <div className="text-slate-300 mb-2">
+              <div className="text-center py-12 text-muted-foreground">
+                <div className="text-muted-foreground mb-2">
                   <Users className="w-12 h-12 mx-auto mb-3 opacity-50" />
                 </div>
                 <div className="font-medium">No public contracts available</div>
@@ -2144,27 +2150,27 @@ Your contract is now live and ready for members to join!`);
                   const isFull = subclub.currentMembers >= subclub.maxMembers;
                   
                   return (
-                    <div key={subclub.id} className="p-4 bg-white/10 rounded-lg">
+                    <div key={subclub.id} className="p-4 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-primary/30 transition-colors">
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <div className="font-semibold text-white">
+                          <div className="font-semibold text-foreground">
                             {subclub.lockupPeriod} {subclub.isChargedContract ? 'Month' : 'Year'} Lockup
                           </div>
-                          <div className="text-sm text-slate-300">
+                          <div className="text-sm text-muted-foreground">
                             Members: {subclub.currentMembers}/{subclub.maxMembers}
                           </div>
-                          <div className="text-xs text-slate-300 mt-1">
+                          <div className="text-xs text-muted-foreground mt-1">
                             Contract: {subclub.contractAddress.slice(0, 8)}...{subclub.contractAddress.slice(-6)}
                           </div>
                         </div>
                         <div className="flex flex-col items-end space-y-1">
                           {isUserMember ? (
-                            <span className="text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-800">
+                            <span className="text-xs px-3 py-1 rounded-full bg-primary/20 text-primary">
                               Member
                             </span>
                           ) : canJoin ? (
                             <button 
-                              className="text-xs px-3 py-1 rounded-full transition-colors bg-green-500 hover:bg-green-600 text-white"
+                              className="text-xs px-3 py-1 rounded-full transition-colors bg-defi-emerald hover:bg-defi-emerald/80 text-background font-medium"
                               onClick={() => {
                                 // Join contract logic here
                                 alert(`Joining contract ${subclub.contractAddress.slice(0,8)}...`);
@@ -2173,23 +2179,23 @@ Your contract is now live and ready for members to join!`);
                               Join
                             </button>
                           ) : isFull ? (
-                            <span className="text-xs px-3 py-1 rounded-full bg-gray-400 text-white">
+                            <span className="text-xs px-3 py-1 rounded-full bg-muted text-muted-foreground">
                               Full
                             </span>
                           ) : (
-                            <span className="text-xs px-3 py-1 rounded-full bg-gray-300 text-gray-600">
+                            <span className="text-xs px-3 py-1 rounded-full bg-muted text-muted-foreground">
                               Connect Wallet
                             </span>
                           )}
                         </div>
                       </div>
-                      <div className="text-sm text-slate-300">
-                        Rigor: <span className="font-medium text-white capitalize">{subclub.rigorLevel}</span>
+                      <div className="text-sm text-muted-foreground">
+                        Rigor: <span className="font-medium text-foreground capitalize">{subclub.rigorLevel}</span>
                       </div>
-                      <div className="text-xs text-slate-300 mt-2">
+                      <div className="text-xs text-muted-foreground mt-2">
                         Created: {new Date(subclub.createdAt).toLocaleDateString()}
                       </div>
-                      <div className="text-xs text-slate-300">
+                      <div className="text-xs text-muted-foreground">
                         Concludes: {new Date(new Date(subclub.createdAt).getTime() + (subclub.lockupPeriod * 365 * 24 * 60 * 60 * 1000)).toLocaleDateString()}
                       </div>
                     </div>
@@ -2373,15 +2379,18 @@ Your contract is now live and ready for members to join!`);
           </div>
 
           {/* Interactive Growth Chart */}
-          <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-            <h2 className="text-xl font-bold text-white mb-4">Growth Visualization</h2>
-            <div className="h-80 bg-gradient-to-r from-green-50 via-blue-50 to-purple-50 rounded-lg p-4">
+          <div className="glass-card p-6 animate-fade-up stagger-2">
+            <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+              Growth Visualization
+            </h2>
+            <div className="h-80 bg-background/30 backdrop-blur-sm rounded-xl p-4 border border-border/20">
               <div className="h-full relative">
                 {/* Simple chart visualization */}
                 <svg viewBox="0 0 800 300" className="w-full h-full">
                   {/* Grid lines */}
                   {[0, 1, 2, 3, 4, 5, 6].map(i => (
-                    <line key={i} x1="0" y1={i * 42.86} x2="800" y2={i * 42.86} stroke="#e2e8f0" strokeWidth="1"/>
+                    <line key={i} x1="0" y1={i * 42.86} x2="800" y2={i * 42.86} stroke="hsl(var(--border))" strokeWidth="1" opacity="0.3"/>
                   ))}
                   {/* Chart lines */}
                   {chartData.length > 1 && (
@@ -2475,121 +2484,124 @@ Your contract is now live and ready for members to join!`);
             {/* Chart Legend */}
             <div className="mt-4 flex flex-wrap justify-center gap-4 text-sm">
               <div className="flex items-center space-x-2">
-                <div className="w-4 h-0.5 bg-slate-500 border-dashed border-t-2"></div>
-                <span className="text-slate-200">Initial Deposits</span>
+                <div className="w-4 h-0.5 bg-muted-foreground border-dashed border-t-2"></div>
+                <span className="text-muted-foreground">Initial Deposits</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-4 h-0.5 bg-blue-500"></div>
-                <span className="text-slate-200">Total Value</span>
+                <div className="w-4 h-0.5 bg-primary"></div>
+                <span className="text-muted-foreground">Total Value</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-4 h-0.5 bg-orange-500"></div>
-                <span className="text-slate-200">wBTC Holdings</span>
+                <div className="w-4 h-0.5 bg-defi-orange"></div>
+                <span className="text-muted-foreground">wBTC Holdings</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-4 h-0.5 bg-pink-500 border-dashed border-t-2"></div>
-                <span className="text-slate-200">Capital Strand</span>
+                <div className="w-4 h-0.5 bg-defi-pink border-dashed border-t-2"></div>
+                <span className="text-muted-foreground">Capital Strand</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-4 h-0.5 bg-purple-500 border-dashed border-t-2"></div>
-                <span className="text-slate-200">Yield Strand</span>
+                <div className="w-4 h-0.5 bg-defi-purple border-dashed border-t-2"></div>
+                <span className="text-muted-foreground">Yield Strand</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-4 h-0.5 bg-cyan-500 border-dashed border-t-2"></div>
-                <span className="text-slate-200">Momentum Strand</span>
+                <div className="w-4 h-0.5 bg-defi-cyan border-dashed border-t-2"></div>
+                <span className="text-muted-foreground">Momentum Strand</span>
               </div>
             </div>
             
             {/* Key metrics */}
             {chartData.length > 0 && (
               <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div className="text-center p-3 bg-white/10 rounded-lg">
-                  <div className="text-lg font-bold text-white">
+                <div className="text-center p-3 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-primary/30 transition-colors">
+                  <div className="text-lg font-bold text-foreground">
                     ${chartData.length > 0 && chartData[chartData.length - 1]?.total ? chartData[chartData.length - 1].total.toLocaleString() : '0'}
                   </div>
-                  <div className="text-sm text-slate-300">Total Value</div>
+                  <div className="text-sm text-muted-foreground">Total Value</div>
                 </div>
-                <div className="text-center p-3 bg-white/10 rounded-lg">
-                  <div className="text-lg font-bold text-white">
+                <div className="text-center p-3 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-primary/30 transition-colors">
+                  <div className="text-lg font-bold text-foreground">
                     ${chartData.length > 0 && chartData[chartData.length - 1]?.initialDeposits ? chartData[chartData.length - 1].initialDeposits.toLocaleString() : '0'}
                   </div>
-                  <div className="text-sm text-slate-300">Initial Deposits</div>
+                  <div className="text-sm text-muted-foreground">Initial Deposits</div>
                 </div>
-                <div className="text-center p-3 bg-white/10 rounded-lg">
-                  <div className="text-lg font-bold text-white">
+                <div className="text-center p-3 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-primary/30 transition-colors">
+                  <div className="text-lg font-bold text-foreground">
                     {chartData.length > 0 && chartData[chartData.length - 1]?.total && chartData[chartData.length - 1]?.initialDeposits ? 
                       ((chartData[chartData.length - 1].total / chartData[chartData.length - 1].initialDeposits - 1) * 100).toFixed(0) : 0}%
                   </div>
-                  <div className="text-sm text-slate-300">ROI</div>
+                  <div className="text-sm text-muted-foreground">ROI</div>
                 </div>
-                <div className="text-center p-3 bg-white/10 rounded-lg">
-                  <div className="text-lg font-bold text-orange-400">
+                <div className="text-center p-3 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-defi-orange/30 transition-colors">
+                  <div className="text-lg font-bold text-defi-orange">
                     {chartData.length > 0 && chartData[chartData.length - 1]?.wbtc ? 
                       (chartData[chartData.length - 1].wbtc / btcPrice).toFixed(3) : 0}₿
                   </div>
-                  <div className="text-sm text-slate-300">Final wBTC Holdings</div>
+                  <div className="text-sm text-muted-foreground">Final wBTC Holdings</div>
                 </div>
-                <div className="text-center p-3 bg-white/10 rounded-lg">
-                  <div className="text-lg font-bold text-red-400">
+                <div className="text-center p-3 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-destructive/30 transition-colors">
+                  <div className="text-lg font-bold text-destructive">
                     ${chartData.length > 0 && chartData[chartData.length - 1]?.cumulativeGasFees ? chartData[chartData.length - 1].cumulativeGasFees.toLocaleString() : '0'}
                   </div>
-                  <div className="text-sm text-slate-300">Total Gas Fees</div>
+                  <div className="text-sm text-muted-foreground">Total Gas Fees</div>
                 </div>
-                <div className="text-center p-3 bg-white/10 rounded-lg">
-                  <div className="text-lg font-bold text-purple-400">
+                <div className="text-center p-3 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-defi-purple/30 transition-colors">
+                  <div className="text-lg font-bold text-defi-purple">
                     ${chartData.length > 0 && chartData[chartData.length - 1]?.cumulativeUtilityFees ? chartData[chartData.length - 1].cumulativeUtilityFees.toLocaleString() : '0'}
                   </div>
-                  <div className="text-sm text-slate-300">Total Utility Fees</div>
+                  <div className="text-sm text-muted-foreground">Total Utility Fees</div>
                 </div>
               </div>
             )}
           </div>
 
           {/* Peak Strand Distribution */}
-          <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-            <h2 className="text-xl font-bold text-white mb-4">Peak Strand Distribution</h2>
-            <div className="text-sm text-slate-300 mb-4">
+          <div className="glass-card p-6 animate-fade-up stagger-3">
+            <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
+              Peak Strand Distribution
+            </h2>
+            <div className="text-sm text-muted-foreground mb-4">
               Maximum strand values during Phase 1 before Phase 2 transition to wBTC
             </div>
             {chartData.length > 0 && (
               <div className="space-y-4">
-                <div className="bg-gradient-to-r from-pink-100 to-rose-100 p-4 rounded-lg border-l-4 border-pink-500">
-                  <h3 className="font-semibold text-pink-700 mb-1">Capital Strand (Spark) - {apyStrand1.toFixed(1)}% APY</h3>
-                  <div className="text-2xl font-bold text-pink-800">
+                <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-pink/30 hover:border-defi-pink/50 transition-colors">
+                  <h3 className="font-semibold text-defi-pink mb-1">Capital Strand (Spark) - {apyStrand1.toFixed(1)}% APY</h3>
+                  <div className="text-2xl font-bold text-foreground">
                     ${Math.max(...chartData.map(d => d.strand1)).toLocaleString()}
                   </div>
-                  <div className="text-pink-600 text-sm">
+                  <div className="text-muted-foreground text-sm">
                     Peak value during Phase 1 accumulation
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-r from-purple-100 to-indigo-100 p-4 rounded-lg border-l-4 border-purple-500">
-                  <h3 className="font-semibold text-purple-700 mb-1">Yield Strand (AAVE Polygon) - {apyStrand2.toFixed(1)}% APY</h3>
-                  <div className="text-2xl font-bold text-purple-800">
+                <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-purple/30 hover:border-defi-purple/50 transition-colors">
+                  <h3 className="font-semibold text-defi-purple mb-1">Yield Strand (AAVE Polygon) - {apyStrand2.toFixed(1)}% APY</h3>
+                  <div className="text-2xl font-bold text-foreground">
                     ${Math.max(...chartData.map(d => d.strand2)).toLocaleString()}
                   </div>
-                  <div className="text-purple-600 text-sm">
+                  <div className="text-muted-foreground text-sm">
                     Peak value during Phase 1 accumulation
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-r from-cyan-100 to-blue-100 p-4 rounded-lg border-l-4 border-cyan-500">
-                  <h3 className="font-semibold text-cyan-700 mb-1">Momentum Strand (QuickSwap V3) - {apyStrand3.toFixed(1)}% APY</h3>
-                  <div className="text-2xl font-bold text-cyan-800">
+                <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-cyan/30 hover:border-defi-cyan/50 transition-colors">
+                  <h3 className="font-semibold text-defi-cyan mb-1">Momentum Strand (QuickSwap V3) - {apyStrand3.toFixed(1)}% APY</h3>
+                  <div className="text-2xl font-bold text-foreground">
                     ${Math.max(...chartData.map(d => d.strand3)).toLocaleString()}
                   </div>
-                  <div className="text-cyan-600 text-sm">
+                  <div className="text-muted-foreground text-sm">
                     Peak value during Phase 1 accumulation
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-r from-orange-100 to-amber-100 p-4 rounded-lg border-l-4 border-orange-500">
-                  <h3 className="font-semibold text-orange-700 mb-1">wBTC Accumulation - Phase 2</h3>
-                  <div className="text-2xl font-bold text-orange-800">
+                <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-orange/30 hover:border-defi-orange/50 transition-colors">
+                  <h3 className="font-semibold text-defi-orange mb-1">wBTC Accumulation - Phase 2</h3>
+                  <div className="text-2xl font-bold text-foreground">
                     {chartData[chartData.length - 1]?.wbtc ? 
                       (chartData[chartData.length - 1].wbtc / btcPrice).toFixed(3) : 0}₿
                   </div>
-                  <div className="text-orange-600 text-sm">
+                  <div className="text-muted-foreground text-sm">
                     Final Bitcoin holdings (${chartData[chartData.length - 1]?.wbtc?.toLocaleString() || 0})
                   </div>
                 </div>
