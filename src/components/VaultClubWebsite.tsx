@@ -2635,27 +2635,21 @@ Your contract is now live and ready for members to join!`);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-800/30 to-slate-900 relative overflow-x-hidden overflow-y-auto">
-      {/* Animations are defined in index.css */}
-      
-      {/* Cyberpunk grid background */}
-      <div className="fixed inset-0 pointer-events-none opacity-20">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px)',
-          backgroundSize: '50px 50px'
-        }}></div>
+    <div className="min-h-screen bg-background relative overflow-x-hidden overflow-y-auto flowing-lines">
+      {/* Elegant background gradients */}
+      <div className="fixed inset-0 pointer-events-none">
+        {/* Subtle grid */}
+        <div className="absolute inset-0 subtle-grid opacity-40"></div>
+        
+        {/* Flowing gradient orbs */}
+        <div className="absolute top-0 left-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] animate-float animate-glow-pulse"></div>
+        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[100px] animate-float" style={{animationDelay: '3s'}}></div>
+        <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-accent/4 rounded-full blur-[80px] animate-float" style={{animationDelay: '5s'}}></div>
       </div>
       
-      {/* Animated scan line */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="scan-line w-full h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
-      </div>
-      
-      {/* Neon glow elements */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/15 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}}></div>
-        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl animate-float" style={{animationDelay: '4s'}}></div>
+      {/* Subtle scan line */}
+      <div className="fixed inset-0 pointer-events-none opacity-30">
+        <div className="scan-line w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
       </div>
       
       {/* Copied Banner */}
@@ -2668,21 +2662,21 @@ Your contract is now live and ready for members to join!`);
       )}
       
       {/* Header */}
-      <header className="relative z-20 bg-slate-900/80 backdrop-blur-xl border-b border-purple-500/30 shadow-lg shadow-purple-500/10 px-6 py-4">
+      <header className="relative z-20 glass-dark border-b border-border/30 px-6 py-4">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-gradient-to-br from-purple-600 to-emerald-500 rounded-lg shadow-lg shadow-purple-500/50 animate-pulse-glow">
-                <svg width="32" height="32" viewBox="0 0 100 100" className="flex-shrink-0">
+              <div className="p-2.5 bg-gradient-to-br from-primary to-secondary rounded-xl shadow-glow-purple animate-pulse-glow">
+                <svg width="28" height="28" viewBox="0 0 100 100" className="flex-shrink-0">
                   {/* Vault safe outline */}
-                  <rect x="5" y="15" width="90" height="75" rx="8" ry="8" fill="#1e293b" stroke="#0f172a" strokeWidth="2"/>
-                  <rect x="10" y="20" width="80" height="65" rx="4" ry="4" fill="#f1f5f9"/>
+                  <rect x="5" y="15" width="90" height="75" rx="8" ry="8" fill="hsl(230 25% 15%)" stroke="hsl(230 25% 8%)" strokeWidth="2"/>
+                  <rect x="10" y="20" width="80" height="65" rx="4" ry="4" fill="hsl(210 40% 96%)"/>
                   
                   {/* Vault door handle/wheel */}
-                  <circle cx="30" cy="45" r="18" fill="#1e293b"/>
-                  <circle cx="30" cy="45" r="6" fill="none" stroke="#fbbf24" strokeWidth="3"/>
-                  <line x1="18" y1="45" x2="42" y2="45" stroke="#fbbf24" strokeWidth="3"/>
-                  <line x1="30" y1="33" x2="30" y2="57" stroke="#fbbf24" strokeWidth="3"/>
+                  <circle cx="30" cy="45" r="18" fill="hsl(230 25% 15%)"/>
+                  <circle cx="30" cy="45" r="6" fill="none" stroke="hsl(45 90% 55%)" strokeWidth="3"/>
+                  <line x1="18" y1="45" x2="42" y2="45" stroke="hsl(45 90% 55%)" strokeWidth="3"/>
+                  <line x1="30" y1="33" x2="30" y2="57" stroke="hsl(45 90% 55%)" strokeWidth="3"/>
                   
                   {/* Keypad grid */}
                   {[0,1,2,3].map(row => 
@@ -2694,27 +2688,27 @@ Your contract is now live and ready for members to join!`);
                         width="6" 
                         height="6" 
                         rx="1" 
-                        fill="#fbbf24"
+                        fill="hsl(45 90% 55%)"
                       />
                     ))
                   )}
                   
                   {/* Vault hinges */}
-                  <rect x="85" y="25" width="6" height="12" rx="1" fill="#1e293b"/>
-                  <rect x="88" y="27" width="2" height="8" fill="#fbbf24"/>
-                  <rect x="85" y="63" width="6" height="12" rx="1" fill="#1e293b"/>
-                  <rect x="88" y="65" width="2" height="8" fill="#fbbf24"/>
+                  <rect x="85" y="25" width="6" height="12" rx="1" fill="hsl(230 25% 15%)"/>
+                  <rect x="88" y="27" width="2" height="8" fill="hsl(45 90% 55%)"/>
+                  <rect x="85" y="63" width="6" height="12" rx="1" fill="hsl(230 25% 15%)"/>
+                  <rect x="88" y="65" width="2" height="8" fill="hsl(45 90% 55%)"/>
                   
                   {/* Vault feet */}
-                  <rect x="15" y="85" width="8" height="6" rx="2" fill="#1e293b"/>
-                  <rect x="77" y="85" width="8" height="6" rx="2" fill="#1e293b"/>
+                  <rect x="15" y="85" width="8" height="6" rx="2" fill="hsl(230 25% 15%)"/>
+                  <rect x="77" y="85" width="8" height="6" rx="2" fill="hsl(230 25% 15%)"/>
                 </svg>
               </div>
               <div>
-                <div className="text-2xl font-bold bg-gradient-to-r from-purple-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                <div className="text-xl font-bold text-gradient-hero">
                   The Vault Club
                 </div>
-                <div className="text-xs text-emerald-400/70 font-medium tracking-wider">DeFi Investment Platform</div>
+                <div className="text-xs text-secondary/80 font-medium tracking-wide">DeFi Investment Platform</div>
               </div>
             </div>
           </div>
@@ -2725,11 +2719,11 @@ Your contract is now live and ready for members to join!`);
               href="https://sequencetheoryinc.com" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="flex items-center bg-slate-800/50 hover:bg-slate-800/80 px-4 py-2 rounded-lg border border-purple-500/30 hover:border-emerald-400/50 shadow-sm hover:shadow-lg hover:shadow-purple-500/20 hover:scale-105 transition-all duration-300 cursor-pointer"
+              className="flex items-center glass px-4 py-2.5 rounded-xl hover:border-primary/40 hover:shadow-glow-purple transition-all duration-300 cursor-pointer group"
             >
-              <div className="text-sm font-bold">
-                <span className="text-cyan-400">SEQUENCE</span>
-                <span className="ml-1 text-purple-400">THEORY</span>
+              <div className="text-sm font-semibold">
+                <span className="text-accent group-hover:text-accent/80 transition-colors">SEQUENCE</span>
+                <span className="ml-1 text-primary group-hover:text-primary/80 transition-colors">THEORY</span>
               </div>
             </a>
           </div>
@@ -2737,95 +2731,95 @@ Your contract is now live and ready for members to join!`);
       </header>
 
       {/* Mobile Bottom Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-xl border-t border-purple-500/30 px-4 py-2 shadow-2xl shadow-purple-500/20 safe-area-pb" aria-label="Main navigation">
-        <div className="flex justify-around items-center max-w-md mx-auto">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 glass-dark border-t border-border/30 px-4 py-3 safe-area-pb" aria-label="Main navigation">
+        <div className="flex justify-around items-center max-w-lg mx-auto">
           <button 
             onClick={() => navigateTo('home')}
-            className="flex flex-col items-center transition-all duration-300 py-2 px-3 rounded-lg"
+            className="flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group"
           >
-            <div className={`p-2 rounded-lg transition-all duration-300 ${
+            <div className={`p-2.5 rounded-xl transition-all duration-300 ${
               currentPage === 'home' 
-                ? 'bg-gradient-to-br from-purple-600 to-emerald-500 text-white shadow-lg shadow-purple-500/50 scale-110' 
-                : 'text-slate-400 hover:bg-slate-800/50 hover:text-emerald-400'
+                ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' 
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
             }`}>
               <Home className="w-5 h-5" />
             </div>
-            <span className={`text-xs font-medium mt-1 ${
+            <span className={`text-[11px] font-medium mt-1.5 transition-colors ${
               currentPage === 'home' 
-                ? 'text-emerald-400' 
-                : 'text-slate-300'
+                ? 'text-secondary' 
+                : 'text-muted-foreground group-hover:text-foreground'
             }`}>Home</span>
           </button>
           
           <button 
             onClick={() => navigateTo('personal')}
-            className="flex flex-col items-center transition-all duration-300 py-2 px-3 rounded-lg"
+            className="flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group"
           >
-            <div className={`p-2 rounded-lg transition-all duration-300 ${
+            <div className={`p-2.5 rounded-xl transition-all duration-300 ${
               currentPage === 'personal' 
-                ? 'bg-gradient-to-br from-purple-600 to-emerald-500 text-white shadow-lg shadow-purple-500/50 scale-110' 
-                : 'text-slate-400 hover:bg-slate-800/50 hover:text-emerald-400'
+                ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' 
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
             }`}>
               <User className="w-5 h-5" />
             </div>
-            <span className={`text-xs font-medium mt-1 ${
+            <span className={`text-[11px] font-medium mt-1.5 transition-colors ${
               currentPage === 'personal' 
-                ? 'text-emerald-400' 
-                : 'text-slate-300'
+                ? 'text-secondary' 
+                : 'text-muted-foreground group-hover:text-foreground'
             }`}>Wallet</span>
           </button>
           
           <button 
             onClick={() => navigateTo('group')}
-            className="flex flex-col items-center transition-all duration-300 py-2 px-3 rounded-lg"
+            className="flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group"
           >
-            <div className={`p-2 rounded-lg transition-all duration-300 ${
+            <div className={`p-2.5 rounded-xl transition-all duration-300 ${
               currentPage === 'group' 
-                ? 'bg-gradient-to-br from-purple-600 to-emerald-500 text-white shadow-lg shadow-purple-500/50 scale-110' 
-                : 'text-slate-400 hover:bg-slate-800/50 hover:text-emerald-400'
+                ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' 
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
             }`}>
               <Users className="w-5 h-5" />
             </div>
-            <span className={`text-xs font-medium mt-1 ${
+            <span className={`text-[11px] font-medium mt-1.5 transition-colors ${
               currentPage === 'group' 
-                ? 'text-emerald-400' 
-                : 'text-slate-300'
+                ? 'text-secondary' 
+                : 'text-muted-foreground group-hover:text-foreground'
             }`}>Contracts</span>
           </button>
           
           <button 
             onClick={() => navigateTo('dataset')}
-            className="flex flex-col items-center transition-all duration-300 py-2 px-3 rounded-lg"
+            className="flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group"
           >
-            <div className={`p-2 rounded-lg transition-all duration-300 ${
+            <div className={`p-2.5 rounded-xl transition-all duration-300 ${
               currentPage === 'dataset' 
-                ? 'bg-gradient-to-br from-purple-600 to-emerald-500 text-white shadow-lg shadow-purple-500/50 scale-110' 
-                : 'text-slate-400 hover:bg-slate-800/50 hover:text-emerald-400'
+                ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' 
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
             }`}>
               <Database className="w-5 h-5" />
             </div>
-            <span className={`text-xs font-medium mt-1 ${
+            <span className={`text-[11px] font-medium mt-1.5 transition-colors ${
               currentPage === 'dataset' 
-                ? 'text-emerald-400' 
-                : 'text-slate-300'
+                ? 'text-secondary' 
+                : 'text-muted-foreground group-hover:text-foreground'
             }`}>Data</span>
           </button>
 
           <button 
             onClick={() => navigateTo('simulation')}
-            className="flex flex-col items-center transition-all duration-300 py-2 px-3 rounded-lg"
+            className="flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group"
           >
-            <div className={`p-2 rounded-lg transition-all duration-300 ${
+            <div className={`p-2.5 rounded-xl transition-all duration-300 ${
               currentPage === 'simulation' 
-                ? 'bg-gradient-to-br from-purple-600 to-emerald-500 text-white shadow-lg shadow-purple-500/50 scale-110' 
-                : 'text-slate-400 hover:bg-slate-800/50 hover:text-emerald-400'
+                ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' 
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
             }`}>
               <TrendingUp className="w-5 h-5" />
             </div>
-            <span className={`text-xs font-medium mt-1 ${
+            <span className={`text-[11px] font-medium mt-1.5 transition-colors ${
               currentPage === 'simulation' 
-                ? 'text-emerald-400' 
-                : 'text-slate-300'
+                ? 'text-secondary' 
+                : 'text-muted-foreground group-hover:text-foreground'
             }`}>Future</span>
           </button>
         </div>
