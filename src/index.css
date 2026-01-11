@@ -622,13 +622,32 @@
   }
 
   .dna-strand-pink {
-    stroke: hsl(330 75% 60%);
-    filter: drop-shadow(0 0 8px hsl(330 75% 60% / 0.5));
+    stroke: hsl(var(--strand-1));
+    filter: drop-shadow(0 0 12px hsl(var(--strand-1) / 0.6));
   }
 
   .dna-strand-cyan {
-    stroke: hsl(192 85% 50%);
-    filter: drop-shadow(0 0 8px hsl(192 85% 50% / 0.5));
+    stroke: hsl(var(--strand-3));
+    filter: drop-shadow(0 0 12px hsl(var(--strand-3) / 0.6));
+  }
+
+  /* Light mode text contrast */
+  :root .light-text-contrast {
+    text-shadow: 0 0 1px hsl(var(--foreground) / 0.3);
+  }
+  
+  :root h1,
+  :root h2,
+  :root h3,
+  :root .hero-text {
+    text-shadow: 0 0 1px hsl(var(--foreground) / 0.2);
+  }
+
+  .dark h1,
+  .dark h2,
+  .dark h3,
+  .dark .hero-text {
+    text-shadow: none;
   }
 
   /* Navigation pill */

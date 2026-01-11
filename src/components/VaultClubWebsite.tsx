@@ -1564,33 +1564,16 @@ Your contract is now live and ready for members to join!`);
         <div className="relative">
           <div className="w-40 h-72 relative">
             {/* Enhanced DNA SVG */}
-            <svg viewBox="0 0 100 200" className="w-full h-full">
-              {/* Glow filters */}
-              <defs>
-                <filter id="glow-pink" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="3" result="blur"/>
-                  <feMerge>
-                    <feMergeNode in="blur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                  </feMerge>
-                </filter>
-                <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="3" result="blur"/>
-                  <feMerge>
-                    <feMergeNode in="blur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                  </feMerge>
-                </filter>
-              </defs>
+            <svg viewBox="0 0 100 200" className="w-full h-full" style={{ overflow: 'visible' }}>
               <path d="M20 0 Q50 25 20 50 Q-10 75 20 100 Q50 125 20 150 Q-10 175 20 200" 
                     className="dna-strand dna-strand-pink"
-                    strokeWidth="5" fill="none" filter="url(#glow-pink)"/>
+                    strokeWidth="5" fill="none"/>
               <path d="M80 0 Q50 25 80 50 Q110 75 80 100 Q50 125 80 150 Q110 175 80 200" 
                     className="dna-strand dna-strand-cyan"
-                    strokeWidth="5" fill="none" filter="url(#glow-cyan)"/>
+                    strokeWidth="5" fill="none"/>
               {[0, 1, 2, 3, 4, 5, 6, 7].map(i => (
                 <line key={i} x1="20" y1={i * 25} x2="80" y2={i * 25} 
-                      stroke="hsl(228 15% 25%)" strokeWidth="2" opacity="0.5"/>
+                      className="stroke-border/50" strokeWidth="2"/>
               ))}
             </svg>
           </div>
