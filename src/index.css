@@ -4,6 +4,77 @@
 
 @layer base {
   :root {
+    /* Light Mode - Clean, Professional, Uplifting */
+    --background: 220 20% 97%;
+    --foreground: 225 25% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 225 25% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 225 25% 12%;
+
+    --primary: 258 75% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 160 65% 42%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 15% 92%;
+    --muted-foreground: 220 10% 45%;
+
+    --accent: 190 85% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 15% 88%;
+    --input: 220 15% 92%;
+    --ring: 258 75% 55%;
+
+    --radius: 1rem;
+
+    /* Light mode glow colors - softer */
+    --purple-glow: 258 75% 55%;
+    --emerald-glow: 160 65% 42%;
+    --cyan-glow: 190 85% 45%;
+    --orange-glow: 30 90% 50%;
+    --pink-glow: 330 75% 55%;
+    --indigo-glow: 240 60% 55%;
+
+    /* Strand colors - vibrant but readable */
+    --strand-1: 330 75% 55%;
+    --strand-2: 258 75% 55%;
+    --strand-3: 190 85% 45%;
+    --strand-btc: 30 90% 50%;
+
+    /* Light mode gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(258 75% 55%), hsl(190 85% 45%), hsl(160 65% 42%));
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(220 20% 98%));
+    --gradient-glow: radial-gradient(ellipse at center, hsl(258 75% 55% / 0.1), transparent 70%);
+    --gradient-mesh: linear-gradient(135deg, hsl(258 75% 55% / 0.03) 0%, transparent 50%, hsl(190 85% 45% / 0.03) 100%);
+
+    /* Light mode shadows */
+    --shadow-glow-purple: 0 0 30px hsl(258 75% 55% / 0.2), 0 0 60px hsl(258 75% 55% / 0.1);
+    --shadow-glow-emerald: 0 0 30px hsl(160 65% 42% / 0.2), 0 0 60px hsl(160 65% 42% / 0.1);
+    --shadow-glow-cyan: 0 0 30px hsl(190 85% 45% / 0.2), 0 0 60px hsl(190 85% 45% / 0.1);
+    --shadow-glow-orange: 0 0 30px hsl(30 90% 50% / 0.2), 0 0 60px hsl(30 90% 50% / 0.1);
+    --shadow-elegant: 0 8px 32px -8px hsl(220 20% 20% / 0.15);
+    --shadow-card: 0 20px 50px -15px hsl(220 20% 20% / 0.12);
+    --shadow-button: 0 8px 24px -4px hsl(220 20% 20% / 0.15);
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 225 25% 12%;
+    --sidebar-primary: 258 75% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 15% 95%;
+    --sidebar-accent-foreground: 225 25% 12%;
+    --sidebar-border: 220 15% 88%;
+    --sidebar-ring: 258 75% 55%;
+  }
+
+  .dark {
     /* Premium Institutional DeFi Theme - Brighter & Uplifting */
     --background: 225 25% 6%;
     --foreground: 0 0% 98%;
@@ -32,8 +103,6 @@
     --border: 225 18% 18%;
     --input: 225 18% 14%;
     --ring: 258 75% 65%;
-
-    --radius: 1rem;
 
     /* Brighter glow colors */
     --purple-glow: 258 75% 65%;
@@ -72,28 +141,6 @@
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 225 18% 18%;
     --sidebar-ring: 258 75% 65%;
-  }
-
-  .dark {
-    --background: 225 25% 6%;
-    --foreground: 0 0% 98%;
-    --card: 225 22% 10%;
-    --card-foreground: 0 0% 98%;
-    --popover: 225 22% 10%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 258 75% 65%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 160 65% 50%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 225 18% 14%;
-    --muted-foreground: 225 15% 55%;
-    --accent: 190 90% 55%;
-    --accent-foreground: 225 25% 6%;
-    --destructive: 0 60% 45%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 225 18% 18%;
-    --input: 225 18% 14%;
-    --ring: 258 75% 65%;
   }
 }
 
@@ -404,8 +451,18 @@
     position: absolute;
     border-radius: 50%;
     filter: blur(120px);
-    opacity: 0.6;
     animation: orb-float 25s ease-in-out infinite;
+  }
+
+  /* Dark mode orbs - vibrant */
+  :root:not(.light) .orb,
+  .dark .orb {
+    opacity: 0.6;
+  }
+
+  /* Light mode orbs - subtle */
+  :root:not(.dark) .orb {
+    opacity: 0.25;
   }
 
   .orb-1 {

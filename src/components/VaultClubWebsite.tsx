@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Database, User, Users, TrendingUp, X, Bitcoin, DollarSign, Zap, Shield, ArrowLeft, Wallet, Home, Share2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import type { Session } from '@supabase/supabase-js';
+import { ThemeToggle } from './ThemeToggle';
 
 // Type declarations
 interface VaultStats {
@@ -2694,7 +2695,10 @@ Your contract is now live and ready for members to join!`);
             </div>
           </div>
           
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
+            {/* Theme Toggle */}
+            <ThemeToggle />
+            
             {/* Sequence Theory Logo */}
             <a 
               href="https://sequencetheoryinc.com" 
