@@ -1203,7 +1203,7 @@ Your contract is now live and ready for members to join!`);
                 </button>
               </div>
               <div className="text-xs text-gray-500 mt-2">
-                {clubCreationData.isPrivate ? "Private subclubs are invitation-only and won't appear in public listings" : "Public subclubs are visible to all users and can be joined freely"}
+                {clubCreationData.isPrivate ? "Private contracts are invitation-only and won't appear in public listings" : "Public contracts are visible to all users and can be joined freely"}
               </div>
             </div>
 
