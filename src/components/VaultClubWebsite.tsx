@@ -730,6 +730,8 @@ const VaultClubWebsite = () => {
     setWalletConnected(false);
     setWalletAddress('');
     setVaultBalance("0");
+    setSelectedContract(null);
+    setActiveStrand(null);
   };
   const getContractColor = subclub => {
     // Use the color assigned when the contract was created
@@ -1756,6 +1758,8 @@ Your contract is now live and ready for members to join!`);
               setWalletConnected(false);
               setWalletAddress(null);
               setVaultBalance("0");
+              setSelectedContract(null);
+              setActiveStrand(null);
             }} className="px-5 py-3 rounded-xl font-medium transition-all duration-300 bg-destructive/10 text-destructive hover:bg-destructive/20 border border-destructive/20">
                   Remove Wallet
                 </button>
