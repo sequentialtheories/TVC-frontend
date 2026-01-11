@@ -1006,7 +1006,7 @@ Your contract is now live and ready for members to join!`);
                         {num}
                       </button>
                     ))
-                  : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 18, 20].map(num => (
+                  : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(num => (
                       <button
                         key={num}
                         type="button"
@@ -1021,6 +1021,27 @@ Your contract is now live and ready for members to join!`);
                       </button>
                     ))
                 }
+                {!clubCreationData.isChargedContract && (
+                  <div className="col-span-4 mt-2">
+                    <div className="text-xs text-gray-500 mb-2">Extended Lockup</div>
+                    <div className="grid grid-cols-5 gap-2">
+                      {[12, 13, 14, 15, 16, 17, 18, 19, 20].map(num => (
+                        <button
+                          key={num}
+                          type="button"
+                          onClick={() => setClubCreationData(prev => ({ ...prev, lockupPeriod: num }))}
+                          className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                            clubCreationData.lockupPeriod === num
+                              ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300'
+                              : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
+                          }`}
+                        >
+                          {num}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -1177,9 +1198,9 @@ Your contract is now live and ready for members to join!`);
               </div>
               <div className="mt-3 p-3 bg-white rounded-lg border border-gray-200">
                 <div className="text-xs text-gray-600">
-                  {clubCreationData.riskLevel === 'low' && "Low Risk: Conservative allocation favoring stablecoin positions. Prioritizes capital preservation with steady, predictable returns."}
-                  {clubCreationData.riskLevel === 'medium' && "Medium Risk: Balanced allocation across all strands. Targets moderate growth while maintaining reasonable volatility exposure."}
-                  {clubCreationData.riskLevel === 'high' && "High Risk: Aggressive allocation favoring BTC exposure. Maximizes growth potential with higher volatility tolerance."}
+                  {clubCreationData.riskLevel === 'low' && "Low Risk: Conservative fund distribution. Prioritizes capital preservation with steady, predictable returns."}
+                  {clubCreationData.riskLevel === 'medium' && "Medium Risk: Balanced fund distribution across all strands. Targets moderate growth with reasonable volatility."}
+                  {clubCreationData.riskLevel === 'high' && "High Risk: Aggressive fund distribution. Maximizes growth potential with higher volatility tolerance."}
                 </div>
               </div>
             </div>
