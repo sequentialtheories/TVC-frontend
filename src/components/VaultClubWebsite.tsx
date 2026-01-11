@@ -3,7 +3,7 @@ import { Database, User, Users, TrendingUp, X, Bitcoin, DollarSign, Zap, Shield,
 import { supabase } from '@/integrations/supabase/client';
 import type { Session } from '@supabase/supabase-js';
 import { ThemeToggle } from './ThemeToggle';
-import BackgroundAnimations from './BackgroundAnimations';
+import VaultBackground from './VaultBackground';
 
 // Type declarations
 interface VaultStats {
@@ -2616,26 +2616,7 @@ Your contract is now live and ready for members to join!`);
 
   return (
     <div className="min-h-screen bg-background relative overflow-x-hidden overflow-y-auto mesh-gradient">
-      {/* Premium animated background */}
-      <div className="orb-container">
-        <div className="orb orb-1"></div>
-        <div className="orb orb-2"></div>
-        <div className="orb orb-3"></div>
-      </div>
-      
-      {/* Enhanced background animations - spirals, particles, morphing blobs */}
-      <BackgroundAnimations />
-      
-      {/* Grid pattern overlay */}
-      <div className="grid-pattern"></div>
-      
-      {/* Noise texture */}
-      <div className="noise-overlay"></div>
-      
-      {/* Subtle scan line effect */}
-      <div className="fixed inset-0 pointer-events-none opacity-20">
-        <div className="scan-line w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
-      </div>
+      <VaultBackground />
       
       {/* Copied Banner */}
       {showCopiedBanner && (
