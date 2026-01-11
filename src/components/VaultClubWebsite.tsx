@@ -1423,46 +1423,56 @@ Your contract is now live and ready for members to join!`);
   };
 
   const HomePage = () => (
-    <div className="relative z-10 px-6 py-8 pb-32 max-w-7xl mx-auto">
-      <div className="text-center mb-12">
+    <div className="relative z-10 px-6 py-10 pb-36 max-w-7xl mx-auto">
+      {/* Hero Section - Spark.fi inspired */}
+      <div className="text-center mb-16 animate-fade-up">
         {selectedContract && (
-          <div className="inline-flex items-center space-x-2 px-4 py-2 bg-slate-800/50 border border-purple-500/30 rounded-lg mb-4 shadow-lg shadow-purple-500/20">
-            <div className="text-sm font-semibold text-emerald-400 tracking-wider">
-              CONTRACT VALUE
+          <div className="inline-flex items-center space-x-3 px-5 py-2.5 glass-card mb-6">
+            <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+            <div className="text-xs font-semibold text-secondary tracking-widest uppercase">
+              Active Contract
             </div>
           </div>
         )}
-        <div className="text-6xl font-bold text-white text-stroke mb-4">
+        
+        {/* Giant stat display - Sky.money style */}
+        <div className="stat-large text-gradient-hero mb-6">
           ${selectedContract 
             ? parseFloat(selectedContract.totalContractBalance || "0").toLocaleString()
             : parseFloat(vaultStats.totalDeposits || "0").toLocaleString()
           }
         </div>
-        <div className="text-white text-stroke font-medium">
+        
+        <div className="text-lg text-muted-foreground font-medium">
           {selectedContract ? (
-            <>
-              {selectedContract.lockupPeriod} {selectedContract.isChargedContract ? 'Month' : 'Year'} Contract • {selectedContract.rigorLevel.charAt(0).toUpperCase() + selectedContract.rigorLevel.slice(1)} Rigor
-              <br />
-              <span className="text-sm text-stroke">
-                {selectedContract.contractAddress.slice(0, 8)}...{selectedContract.contractAddress.slice(-6)}
-              </span>
-            </>
+            <div className="space-y-2">
+              <div className="text-foreground">
+                {selectedContract.lockupPeriod} {selectedContract.isChargedContract ? 'Month' : 'Year'} Contract 
+                <span className="mx-2 text-muted-foreground/50">•</span> 
+                <span className="text-secondary">{selectedContract.rigorLevel.charAt(0).toUpperCase() + selectedContract.rigorLevel.slice(1)} Rigor</span>
+              </div>
+              <div className="text-sm font-mono text-muted-foreground">
+                {selectedContract.contractAddress.slice(0, 10)}...{selectedContract.contractAddress.slice(-8)}
+              </div>
+            </div>
           ) : (
-            parseFloat(vaultStats.totalDeposits || "0") > 0 ? "Investment Active" : "Ready for Investment"
+            <span className="text-muted-foreground">
+              {parseFloat(vaultStats.totalDeposits || "0") > 0 ? "Investment Active" : "Ready for Investment"}
+            </span>
           )}
         </div>
       </div>
 
-      {/* Contract Progress Bars */}
+      {/* Contract Progress Bars - Premium style */}
       {walletConnected && deployedSubclubs.filter(club => 
         club.creator === walletAddress || (club.members && club.members.includes(walletAddress))
       ).length > 0 && (
-        <div className="mb-12 px-4">
-          <div className="text-center mb-6">
-            <div className="text-lg font-semibold text-slate-200 mb-2">Contract Progress</div>
-            <div className="text-sm text-slate-400">Time remaining until lockup expires</div>
+        <div className="mb-16 animate-fade-up stagger-1">
+          <div className="text-center mb-8">
+            <h2 className="text-xl font-semibold text-foreground mb-2">Contract Progress</h2>
+            <p className="text-sm text-muted-foreground">Time remaining until lockup expires</p>
           </div>
-          <div className="space-y-4 max-w-2xl mx-auto">
+          <div className="space-y-4 max-w-3xl mx-auto">
             {deployedSubclubs.filter(club => 
               club.creator === walletAddress || (club.members && club.members.includes(walletAddress))
             ).map((subclub) => {
@@ -1480,52 +1490,55 @@ Your contract is now live and ready for members to join!`);
               return (
                 <div 
                   key={subclub.id} 
-                  className={`bg-slate-800/50 backdrop-blur-sm rounded-lg p-5 border-l-4 ${getContractColor(subclub)} cursor-pointer transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-purple-500/20 ${
+                  className={`glass-card p-6 cursor-pointer border-l-4 ${getContractColor(subclub)} ${
                     selectedContract?.id === subclub.id 
-                      ? 'ring-2 ring-emerald-400 shadow-xl shadow-emerald-500/30 transform scale-[1.02] bg-slate-800/70' 
-                      : 'hover:transform hover:scale-[1.01] hover:bg-slate-800/60'
+                      ? 'ring-2 ring-secondary/50 shadow-glow-emerald' 
+                      : ''
                   }`}
                   onClick={() => setSelectedContract(subclub)}
                   onDoubleClick={() => setSelectedContract(null)}
                 >
-                  <div className="flex justify-between items-start mb-3">
+                  <div className="flex justify-between items-start mb-4">
                     <div>
-                      <div className="font-semibold text-slate-200">
-                        {subclub.lockupPeriod} {subclub.isChargedContract ? 'Month' : 'Year'} Contract - {subclub.rigorLevel.charAt(0).toUpperCase() + subclub.rigorLevel.slice(1)} Rigor
+                      <div className="font-semibold text-foreground text-lg">
+                        {subclub.lockupPeriod} {subclub.isChargedContract ? 'Month' : 'Year'} Contract
+                        <span className="ml-2 text-sm font-normal text-secondary">
+                          {subclub.rigorLevel.charAt(0).toUpperCase() + subclub.rigorLevel.slice(1)}
+                        </span>
                       </div>
-                      <div className="text-sm text-slate-300 font-mono">
-                        {subclub.contractAddress.slice(0, 8)}...{subclub.contractAddress.slice(-6)}
+                      <div className="text-sm text-muted-foreground font-mono mt-1">
+                        {subclub.contractAddress.slice(0, 10)}...{subclub.contractAddress.slice(-8)}
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-emerald-400">{progress.toFixed(1)}%</div>
-                      <div className="text-xs text-slate-300">Complete</div>
+                      <div className="text-2xl font-bold text-secondary">{progress.toFixed(1)}%</div>
+                      <div className="text-xs text-muted-foreground">Complete</div>
                     </div>
                   </div>
                   
                   {/* Progress Bar */}
-                  <div className="w-full bg-slate-900/50 rounded-full h-3 mb-3 overflow-hidden shadow-inner border border-purple-500/20">
+                  <div className="progress-premium h-3 mb-4">
                     <div 
-                      className={`h-3 rounded-full transition-all duration-300 ${
+                      className={`bar ${
                         progress >= 100 
-                          ? 'bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500' 
-                          : 'bg-gradient-to-r from-purple-500 via-emerald-400 to-cyan-400'
+                          ? 'bg-gradient-to-r from-secondary via-secondary/80 to-secondary' 
+                          : 'bg-gradient-to-r from-primary via-accent to-secondary'
                       }`}
                       style={{ width: `${progress}%` }}
                     ></div>
                   </div>
                   
-                  <div className="flex justify-between text-xs text-slate-300">
-                    <span className="text-slate-300">Started: {startDate.toLocaleDateString()}</span>
-                    <span className="text-emerald-400">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">{startDate.toLocaleDateString()}</span>
+                    <span className="text-secondary font-medium">
                       {progress >= 100 
-                        ? 'Contract Complete!' 
+                        ? 'Complete!' 
                         : yearsRemaining > 0 
-                          ? `${yearsRemaining}y ${remainingDays}d remaining`
-                          : `${remainingDays}d remaining`
+                          ? `${yearsRemaining}y ${remainingDays}d left`
+                          : `${remainingDays}d left`
                       }
                     </span>
-                    <span className="text-slate-300">Ends: {endDate.toLocaleDateString()}</span>
+                    <span className="text-muted-foreground">{endDate.toLocaleDateString()}</span>
                   </div>
                 </div>
               );
@@ -1544,30 +1557,52 @@ Your contract is now live and ready for members to join!`);
         </div>
       )}
 
-      <div className="flex justify-center items-center mb-16 gap-8">
-        {/* Phase 1 - Vertical DNA Structure */}
+      {/* DNA Strand Visualization - Premium redesign */}
+      <div className="flex justify-center items-center gap-10 mb-16 animate-fade-up stagger-2">
+        {/* Phase 1 - DNA Helix */}
         <div className="relative">
-          <div className="w-32 h-64 relative">
+          <div className="w-40 h-72 relative">
+            {/* Enhanced DNA SVG */}
             <svg viewBox="0 0 100 200" className="w-full h-full">
+              {/* Glow filters */}
+              <defs>
+                <filter id="glow-pink" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="3" result="blur"/>
+                  <feMerge>
+                    <feMergeNode in="blur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+                <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="3" result="blur"/>
+                  <feMerge>
+                    <feMergeNode in="blur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
               <path d="M20 0 Q50 25 20 50 Q-10 75 20 100 Q50 125 20 150 Q-10 175 20 200" 
-                    stroke="#ec4899" strokeWidth="4" fill="none" opacity="0.8"/>
+                    className="dna-strand dna-strand-pink"
+                    strokeWidth="5" fill="none" filter="url(#glow-pink)"/>
               <path d="M80 0 Q50 25 80 50 Q110 75 80 100 Q50 125 80 150 Q110 175 80 200" 
-                    stroke="#06b6d4" strokeWidth="4" fill="none" opacity="0.8"/>
+                    className="dna-strand dna-strand-cyan"
+                    strokeWidth="5" fill="none" filter="url(#glow-cyan)"/>
               {[0, 1, 2, 3, 4, 5, 6, 7].map(i => (
                 <line key={i} x1="20" y1={i * 25} x2="80" y2={i * 25} 
-                      stroke="#64748b" strokeWidth="2" opacity="0.3"/>
+                      stroke="hsl(228 15% 25%)" strokeWidth="2" opacity="0.5"/>
               ))}
             </svg>
           </div>
           
-          <div className="absolute inset-0 flex flex-col justify-around items-center">
+          {/* Strand Buttons - Premium pills */}
+          <div className="absolute inset-0 flex flex-col justify-around items-center py-4">
             <button 
               onClick={() => selectedContract ? setActiveStrand(1) : null}
               disabled={!selectedContract}
-              className={`px-6 py-3 rounded-2xl font-bold shadow-lg transition-all duration-300 ${
+              className={`btn-strand text-white ${
                 selectedContract 
-                  ? 'bg-gradient-to-r from-pink-500 to-rose-600 text-white hover:shadow-2xl transform hover:scale-105 cursor-pointer hover:from-pink-600 hover:to-rose-700'
-                  : 'bg-gray-300 text-gray-400 cursor-not-allowed'
+                  ? 'bg-gradient-to-r from-pink-500 to-rose-600 glow-pink'
+                  : 'bg-muted text-muted-foreground cursor-not-allowed'
               }`}
             >
               Capital
@@ -1575,10 +1610,10 @@ Your contract is now live and ready for members to join!`);
             <button 
               onClick={() => selectedContract ? setActiveStrand(2) : null}
               disabled={!selectedContract}
-              className={`px-8 py-3 rounded-2xl font-bold shadow-lg transition-all duration-300 ${
+              className={`btn-strand text-white ${
                 selectedContract 
-                  ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:shadow-2xl transform hover:scale-105 cursor-pointer hover:from-purple-600 hover:to-indigo-700'
-                  : 'bg-gray-300 text-gray-400 cursor-not-allowed'
+                  ? 'bg-gradient-to-r from-primary to-indigo-600 glow-purple'
+                  : 'bg-muted text-muted-foreground cursor-not-allowed'
               }`}
             >
               Yield
@@ -1586,10 +1621,10 @@ Your contract is now live and ready for members to join!`);
             <button 
               onClick={() => selectedContract ? setActiveStrand(3) : null}
               disabled={!selectedContract}
-              className={`px-6 py-3 rounded-2xl font-bold shadow-lg transition-all duration-300 ${
+              className={`btn-strand text-white ${
                 selectedContract 
-                  ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:shadow-2xl transform hover:scale-105 cursor-pointer hover:from-cyan-600 hover:to-blue-700'
-                  : 'bg-gray-300 text-gray-400 cursor-not-allowed'
+                  ? 'bg-gradient-to-r from-accent to-blue-500 glow-cyan'
+                  : 'bg-muted text-muted-foreground cursor-not-allowed'
               }`}
             >
               Momentum
@@ -1597,21 +1632,27 @@ Your contract is now live and ready for members to join!`);
           </div>
         </div>
 
-        {/* Phase 2 - Horizontal next to Phase 1 */}
+        {/* Phase 2 - wBTC Card */}
         <button 
           onClick={() => selectedContract ? setActiveStrand(4) : null}
           disabled={!selectedContract}
-          className={`px-6 py-4 rounded-2xl shadow-lg transition-all duration-300 ${
+          className={`glass-card-glow px-8 py-6 transition-all duration-400 ${
             selectedContract 
-              ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white hover:shadow-2xl transform hover:scale-105 cursor-pointer hover:from-orange-500 hover:to-orange-700'
-              : 'bg-gray-300 text-gray-400 cursor-not-allowed'
+              ? 'hover:glow-orange cursor-pointer group'
+              : 'opacity-50 cursor-not-allowed'
           }`}
         >
-          <div className="flex items-center space-x-3">
-            <Bitcoin className="w-8 h-8" />
-            <div>
-              <div className="font-bold text-lg">wBTC</div>
-              <div className={`text-sm ${selectedContract ? 'text-orange-100' : 'text-slate-300'}`}>Phase 2</div>
+          <div className="flex items-center space-x-4">
+            <div className={`p-3 rounded-2xl transition-all duration-300 ${
+              selectedContract 
+                ? 'bg-gradient-to-br from-orange-400 to-orange-600 group-hover:scale-110' 
+                : 'bg-muted'
+            }`}>
+              <Bitcoin className="w-8 h-8 text-white" />
+            </div>
+            <div className="text-left">
+              <div className={`font-bold text-xl ${selectedContract ? 'text-foreground' : 'text-muted-foreground'}`}>wBTC</div>
+              <div className={`text-sm ${selectedContract ? 'text-orange-400' : 'text-muted-foreground'}`}>Phase 2</div>
             </div>
           </div>
         </button>
@@ -2635,21 +2676,23 @@ Your contract is now live and ready for members to join!`);
   };
 
   return (
-    <div className="min-h-screen bg-background relative overflow-x-hidden overflow-y-auto flowing-lines">
-      {/* Elegant background gradients */}
-      <div className="fixed inset-0 pointer-events-none">
-        {/* Subtle grid */}
-        <div className="absolute inset-0 subtle-grid opacity-40"></div>
-        
-        {/* Flowing gradient orbs */}
-        <div className="absolute top-0 left-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] animate-float animate-glow-pulse"></div>
-        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[100px] animate-float" style={{animationDelay: '3s'}}></div>
-        <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-accent/4 rounded-full blur-[80px] animate-float" style={{animationDelay: '5s'}}></div>
+    <div className="min-h-screen bg-background relative overflow-x-hidden overflow-y-auto mesh-gradient">
+      {/* Premium animated background */}
+      <div className="orb-container">
+        <div className="orb orb-1"></div>
+        <div className="orb orb-2"></div>
+        <div className="orb orb-3"></div>
       </div>
       
-      {/* Subtle scan line */}
-      <div className="fixed inset-0 pointer-events-none opacity-30">
-        <div className="scan-line w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+      {/* Grid pattern overlay */}
+      <div className="grid-pattern"></div>
+      
+      {/* Noise texture */}
+      <div className="noise-overlay"></div>
+      
+      {/* Subtle scan line effect */}
+      <div className="fixed inset-0 pointer-events-none opacity-20">
+        <div className="scan-line w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
       </div>
       
       {/* Copied Banner */}
