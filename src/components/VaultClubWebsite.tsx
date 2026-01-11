@@ -930,7 +930,7 @@ Your contract is now live and ready for members to join!`);
             <div className="flex justify-between items-start">
               <div>
                 <h3 id="create-club-title" className="text-xl font-bold">Create New Contract</h3>
-                <p className="text-white/80">Deploy smart contract with mega vault system</p>
+                <p className="text-white/80">Deploy a smart contract with TVC</p>
               </div>
               <button onClick={closeModal} className="text-white/80 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10" aria-label="Close modal">
                 <X className="w-6 h-6" />
