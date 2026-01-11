@@ -1404,7 +1404,7 @@ Your contract is now live and ready for members to join!`);
           ${selectedContract ? parseFloat(selectedContract.totalContractBalance || "0").toLocaleString() : parseFloat(vaultStats.totalDeposits || "0").toLocaleString()}
         </div>
         
-        <div className="text-lg text-muted-foreground font-medium">
+        <div className="text-lg text-muted-foreground font-medium min-h-[60px]">
           {selectedContract ? <div className="space-y-2">
               <div className="text-foreground">
                 {selectedContract.lockupPeriod} {selectedContract.isChargedContract ? 'Month' : 'Year'} Contract 
@@ -1414,9 +1414,7 @@ Your contract is now live and ready for members to join!`);
               <div className="text-sm font-mono text-muted-foreground">
                 {selectedContract.contractAddress.slice(0, 10)}...{selectedContract.contractAddress.slice(-8)}
               </div>
-            </div> : <span className="text-muted-foreground">
-              {parseFloat(vaultStats.totalDeposits || "0") > 0 ? "Investment Active" : "Ready for Investment"}
-            </span>}
+            </div> : null}
         </div>
       </div>
 
