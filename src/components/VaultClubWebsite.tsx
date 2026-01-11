@@ -1438,7 +1438,7 @@ Your contract is now live and ready for members to join!`);
         )}
         
         {/* Giant stat display - Sky.money style */}
-        <div className="text-7xl md:text-8xl font-black text-white mb-6 tracking-tight">
+        <div className="text-7xl md:text-8xl font-black text-white mb-6 tracking-tight hero-stat">
           ${selectedContract 
             ? parseFloat(selectedContract.totalContractBalance || "0").toLocaleString()
             : parseFloat(vaultStats.totalDeposits || "0").toLocaleString()

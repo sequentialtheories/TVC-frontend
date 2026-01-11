@@ -643,11 +643,25 @@
     text-shadow: 0 0 1px hsl(var(--foreground) / 0.2);
   }
 
+  /* Hero stat black outline in light mode */
+  :root .hero-stat {
+    text-shadow: 
+      -1px -1px 0 hsl(var(--foreground)),
+      1px -1px 0 hsl(var(--foreground)),
+      -1px 1px 0 hsl(var(--foreground)),
+      1px 1px 0 hsl(var(--foreground)),
+      0 0 20px hsl(var(--foreground) / 0.3);
+  }
+
   .dark h1,
   .dark h2,
   .dark h3,
   .dark .hero-text {
     text-shadow: none;
+  }
+
+  .dark .hero-stat {
+    text-shadow: 0 0 40px hsl(var(--purple-glow) / 0.5);
   }
 
   /* Navigation pill */
@@ -953,15 +967,42 @@
   will-change: transform;
 }
 
-.background-animations .layer-far {
+/* Light mode: more visible animations */
+:root .background-animations .layer-far {
+  opacity: 1;
+}
+
+:root .background-animations .layer-mid {
+  opacity: 0.9;
+}
+
+:root .background-animations .layer-near {
+  opacity: 1;
+}
+
+:root .background-animations .morphing-blob {
+  opacity: 0.15 !important;
+}
+
+:root .background-animations svg {
+  opacity: 0.12 !important;
+}
+
+:root .background-animations .geometric-square {
+  border-width: 2px;
+  opacity: 0.2;
+}
+
+/* Dark mode */
+.dark .background-animations .layer-far {
   opacity: 0.8;
 }
 
-.background-animations .layer-mid {
+.dark .background-animations .layer-mid {
   opacity: 0.6;
 }
 
-.background-animations .layer-near {
+.dark .background-animations .layer-near {
   opacity: 0.7;
 }
 
