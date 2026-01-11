@@ -1662,236 +1662,182 @@ Your contract is now live and ready for members to join!`);
 
   const DatasetPage = () => (
     <div className="relative z-10 px-6 py-8 pb-32">
-      <div className="flex items-center mb-8">
-        <button onClick={goHome} className="mr-4 p-2 hover:bg-gradient-to-br hover:from-indigo-100 hover:to-purple-100 rounded-full transition-all duration-300">
-          <ArrowLeft className="w-6 h-6 text-slate-300" />
+      <div className="flex items-center mb-8 animate-fade-up">
+        <button onClick={goHome} className="mr-4 p-2.5 glass-card hover:border-primary/30 rounded-xl transition-all duration-300 group">
+          <ArrowLeft className="w-5 h-5 text-foreground/70 group-hover:text-primary transition-colors" />
         </button>
-        <h1 className="text-3xl font-bold text-white">Backend Dataset</h1>
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Backend Dataset</h1>
+          <p className="text-muted-foreground text-sm mt-1">Real-time protocol metrics & market data</p>
+        </div>
       </div>
       
       <div className="space-y-6">
-        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg card-hover">
-          <h2 className="text-xl font-bold text-white mb-4">System Metrics</h2>
+        <div className="glass-card p-6 animate-fade-up stagger-1">
+          <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+            System Metrics
+          </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
-              <div className="text-2xl font-bold text-indigo-500 tabular-nums drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]" style={{ textShadow: '0 0 1px white, 0 0 2px white' }}>{vaultStats.totalMembers || 0}</div>
-              <div className="text-sm text-white">Active Members</div>
+            <div className="text-center p-4 rounded-2xl bg-muted/50 border border-border/50 hover:border-primary/30 transition-all duration-300 hover:bg-muted/70">
+              <div className="text-3xl font-bold text-primary tabular-nums mb-1">{vaultStats.totalMembers || 0}</div>
+              <div className="text-sm text-muted-foreground">Active Members</div>
             </div>
-            <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
-              <div className="text-2xl font-bold text-green-500 tabular-nums drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]" style={{ textShadow: '0 0 1px white, 0 0 2px white' }}>${parseFloat(vaultStats.totalDeposits || "0").toFixed(0)}</div>
-              <div className="text-sm text-white">Total Deposits</div>
+            <div className="text-center p-4 rounded-2xl bg-muted/50 border border-border/50 hover:border-secondary/30 transition-all duration-300 hover:bg-muted/70">
+              <div className="text-3xl font-bold text-secondary tabular-nums mb-1">${parseFloat(vaultStats.totalDeposits || "0").toFixed(0)}</div>
+              <div className="text-sm text-muted-foreground">Total Deposits</div>
             </div>
-            <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
-              <div className="text-2xl font-bold text-purple-500 tabular-nums drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]" style={{ textShadow: '0 0 1px white, 0 0 2px white' }}>{vaultStats.systemHealth || 100}%</div>
-              <div className="text-sm text-white">System Health</div>
+            <div className="text-center p-4 rounded-2xl bg-muted/50 border border-border/50 hover:border-accent/30 transition-all duration-300 hover:bg-muted/70">
+              <div className="text-3xl font-bold text-accent tabular-nums mb-1">{vaultStats.systemHealth || 100}%</div>
+              <div className="text-sm text-muted-foreground">System Health</div>
             </div>
-            <div className="text-center p-3 rounded-xl bg-white/10 transition-colors hover:bg-white/20">
-              <div className="text-2xl font-bold text-orange-500 tabular-nums drop-shadow-[0_0_8px_rgba(249,115,22,0.5)]" style={{ textShadow: '0 0 1px white, 0 0 2px white' }}>{vaultStats.transactions || 0}</div>
-              <div className="text-sm text-white">Transactions</div>
+            <div className="text-center p-4 rounded-2xl bg-muted/50 border border-border/50 hover:border-orange-400/30 transition-all duration-300 hover:bg-muted/70">
+              <div className="text-3xl font-bold text-orange-400 tabular-nums mb-1">{vaultStats.transactions || 0}</div>
+              <div className="text-sm text-muted-foreground">Transactions</div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-          <h2 className="text-xl font-bold text-white mb-4">Live Market Data</h2>
-          <div className="grid grid-cols-4 gap-4">
-            <div className="p-4 bg-white/10 rounded-lg">
-              <div className="text-sm text-white">AAVE USDC Lending Rate</div>
-              <div className="text-2xl font-bold text-purple-500">{aaveRates.liquidityRate.toFixed(2)}%</div>
-              
-              {/* AAVE USDC mini chart */}
-              <div className="h-16 bg-gradient-to-r from-purple-50 to-purple-100 rounded mt-2 p-1">
+        <div className="glass-card p-6 animate-fade-up stagger-2">
+          <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
+            Live Market Data
+          </h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-5 bg-muted/40 rounded-2xl border border-border/40 hover:border-purple-400/30 transition-all duration-300">
+              <div className="text-sm text-muted-foreground mb-2">AAVE USDC Lending</div>
+              <div className="text-2xl font-bold text-purple-400 mb-3">{aaveRates.liquidityRate.toFixed(2)}%</div>
+              <div className="h-12 bg-gradient-to-r from-purple-500/10 to-purple-500/5 rounded-lg p-2">
                 <svg viewBox="0 0 200 40" className="w-full h-full">
-                  <polyline
-                    points="10,25 30,28 50,24 70,26 90,23 110,25 130,22 150,24 170,21 190,23"
-                    fill="none"
-                    stroke="#9333ea"
-                    strokeWidth="2"
-                  />
+                  <polyline points="10,25 30,28 50,24 70,26 90,23 110,25 130,22 150,24 170,21 190,23" fill="none" stroke="hsl(258 75% 65%)" strokeWidth="2.5" strokeLinecap="round"/>
                 </svg>
               </div>
             </div>
             
-            <div className="p-4 bg-white/10 rounded-lg">
-              <div className="text-sm text-white">AAVE Lending Rate</div>
-              <div className="text-2xl font-bold text-indigo-500">8.00%</div>
-              
-              {/* AAVE Lending mini chart */}
-              <div className="h-16 bg-gradient-to-r from-indigo-50 to-indigo-100 rounded mt-2 p-1">
+            <div className="p-5 bg-muted/40 rounded-2xl border border-border/40 hover:border-indigo-400/30 transition-all duration-300">
+              <div className="text-sm text-muted-foreground mb-2">AAVE Lending Rate</div>
+              <div className="text-2xl font-bold text-indigo-400 mb-3">8.00%</div>
+              <div className="h-12 bg-gradient-to-r from-indigo-500/10 to-indigo-500/5 rounded-lg p-2">
                 <svg viewBox="0 0 200 40" className="w-full h-full">
-                  <polyline
-                    points="10,20 30,18 50,22 70,19 90,21 110,17 130,20 150,16 170,19 190,15"
-                    fill="none"
-                    stroke="#4f46e5"
-                    strokeWidth="2"
-                  />
+                  <polyline points="10,20 30,18 50,22 70,19 90,21 110,17 130,20 150,16 170,19 190,15" fill="none" stroke="hsl(240 65% 60%)" strokeWidth="2.5" strokeLinecap="round"/>
                 </svg>
               </div>
             </div>
             
-            <div className="p-4 bg-white/10 rounded-lg">
-              <div className="text-sm text-white">QuickSwap LP Farms APY</div>
-              <div className="text-2xl font-bold text-cyan-500">{quickSwapAPY.toFixed(2)}%</div>
-              
-              {/* QuickSwap mini chart */}
-              <div className="h-16 bg-gradient-to-r from-cyan-50 to-cyan-100 rounded mt-2 p-1">
+            <div className="p-5 bg-muted/40 rounded-2xl border border-border/40 hover:border-accent/30 transition-all duration-300">
+              <div className="text-sm text-muted-foreground mb-2">QuickSwap LP APY</div>
+              <div className="text-2xl font-bold text-accent mb-3">{quickSwapAPY.toFixed(2)}%</div>
+              <div className="h-12 bg-gradient-to-r from-cyan-500/10 to-cyan-500/5 rounded-lg p-2">
                 <svg viewBox="0 0 200 40" className="w-full h-full">
-                  <polyline
-                    points="10,30 30,25 50,28 70,22 90,26 110,20 130,24 150,18 170,22 190,16"
-                    fill="none"
-                    stroke="#0891b2"
-                    strokeWidth="2"
-                  />
+                  <polyline points="10,30 30,25 50,28 70,22 90,26 110,20 130,24 150,18 170,22 190,16" fill="none" stroke="hsl(190 90% 55%)" strokeWidth="2.5" strokeLinecap="round"/>
                 </svg>
               </div>
             </div>
             
-            <div className="p-4 bg-white/10 rounded-lg">
+            <div className="p-5 bg-muted/40 rounded-2xl border border-border/40 hover:border-orange-400/30 transition-all duration-300">
               <div className="flex justify-between items-start mb-2">
-                <div className="text-sm text-white">Bitcoin Price</div>
-                <div className="text-xs text-green-500 font-medium">+2.4%</div>
+                <div className="text-sm text-muted-foreground">Bitcoin Price</div>
+                <div className="text-xs text-secondary font-medium px-2 py-0.5 bg-secondary/10 rounded-full">+2.4%</div>
               </div>
-              <div className="text-2xl font-bold text-orange-500">${btcPrice.toLocaleString()}</div>
-              
-              {/* Bitcoin mini chart */}
-              <div className="h-16 bg-gradient-to-r from-orange-50 to-orange-100 rounded mt-2 p-1">
+              <div className="text-2xl font-bold text-orange-400 mb-3">${btcPrice.toLocaleString()}</div>
+              <div className="h-12 bg-gradient-to-r from-orange-500/10 to-orange-500/5 rounded-lg p-2">
                 <svg viewBox="0 0 200 40" className="w-full h-full">
-                  <polyline
-                    points="10,30 30,20 50,25 70,15 90,20 110,10 130,15 150,25 170,15 190,20"
-                    fill="none"
-                    stroke="#f97316"
-                    strokeWidth="2"
-                  />
+                  <polyline points="10,30 30,20 50,25 70,15 90,20 110,10 130,15 150,25 170,15 190,20" fill="none" stroke="hsl(30 95% 58%)" strokeWidth="2.5" strokeLinecap="round"/>
                 </svg>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-          <h2 className="text-xl font-bold text-white mb-4">Protocol Access & Resources</h2>
-          <div className="text-xs text-slate-300 mb-4">Direct links to DeFi protocols powering The Vault Club</div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <a 
-              href="https://app.spark.fi" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
-            >
+        <div className="glass-card p-6 animate-fade-up stagger-3">
+          <h2 className="text-xl font-semibold text-foreground mb-2">Protocol Access & Resources</h2>
+          <div className="text-sm text-muted-foreground mb-5">Direct links to DeFi protocols powering The Vault Club</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <a href="https://app.spark.fi" target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-primary/30 hover:bg-muted/60 transition-all duration-300 group">
               <div>
-                <div className="font-semibold text-white">Spark Protocol</div>
-                <div className="text-sm text-slate-300">Stablecoin Lending</div>
+                <div className="font-semibold text-foreground group-hover:text-primary transition-colors">Spark Protocol</div>
+                <div className="text-sm text-muted-foreground">Stablecoin Lending</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-primary rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
 
-            <a 
-              href="https://app.aave.com/?marketName=proto_polygon_v3" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
-            >
+            <a href="https://app.aave.com/?marketName=proto_polygon_v3" target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-accent/30 hover:bg-muted/60 transition-all duration-300 group">
               <div>
-                <div className="font-semibold text-white">AAVE Polygon</div>
-                <div className="text-sm text-slate-300">V3 Lending Market</div>
+                <div className="font-semibold text-foreground group-hover:text-accent transition-colors">AAVE Polygon</div>
+                <div className="text-sm text-muted-foreground">V3 Lending Market</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-accent rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
 
-            <a 
-              href="https://quickswap.exchange/#/pools/v3" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
-            >
+            <a href="https://quickswap.exchange/#/pools/v3" target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-secondary/30 hover:bg-muted/60 transition-all duration-300 group">
               <div>
-                <div className="font-semibold text-white">QuickSwap V3</div>
-                <div className="text-sm text-slate-300">Liquidity Pools</div>
+                <div className="font-semibold text-foreground group-hover:text-secondary transition-colors">QuickSwap V3</div>
+                <div className="text-sm text-muted-foreground">Liquidity Pools</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
-            </a>
-            <a 
-              href="https://defillama.com/yields?chain=Polygon&project=quickswap-dex" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
-            >
-              <div>
-                <div className="font-semibold text-white">DeFiLlama</div>
-                <div className="text-sm text-slate-300">Live APY Data Source</div>
-              </div>
-              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-secondary rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
 
-            <a 
-              href="https://www.coingecko.com/en/coins/bitcoin" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
-            >
+            <a href="https://defillama.com/yields?chain=Polygon&project=quickswap-dex" target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-primary/30 hover:bg-muted/60 transition-all duration-300 group">
               <div>
-                <div className="font-semibold text-white">CoinGecko</div>
-                <div className="text-sm text-slate-300">Bitcoin Price Data</div>
+                <div className="font-semibold text-foreground group-hover:text-primary transition-colors">DeFiLlama</div>
+                <div className="text-sm text-muted-foreground">Live APY Data Source</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-primary rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
 
-            <a 
-              href="https://polygon.technology" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
-            >
+            <a href="https://www.coingecko.com/en/coins/bitcoin" target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-orange-400/30 hover:bg-muted/60 transition-all duration-300 group">
               <div>
-                <div className="font-semibold text-white">Polygon Network</div>
-                <div className="text-sm text-slate-300">Layer 2 Infrastructure</div>
+                <div className="font-semibold text-foreground group-hover:text-orange-400 transition-colors">CoinGecko</div>
+                <div className="text-sm text-muted-foreground">Bitcoin Price Data</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-orange-400 rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
+            </a>
+
+            <a href="https://polygon.technology" target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-purple-400/30 hover:bg-muted/60 transition-all duration-300 group">
+              <div>
+                <div className="font-semibold text-foreground group-hover:text-purple-400 transition-colors">Polygon Network</div>
+                <div className="text-sm text-muted-foreground">Layer 2 Infrastructure</div>
+              </div>
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-purple-400 rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
           </div>
         </div>
 
-        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-          <h2 className="text-xl font-bold text-white mb-4">Educational Resources</h2>
-          <div className="text-xs text-slate-300 mb-4">Learn more about DeFi and cryptocurrency fundamentals</div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <a 
-              href="https://www.coinbase.com/learn" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
-            >
+        <div className="glass-card p-6 animate-fade-up stagger-4">
+          <h2 className="text-xl font-semibold text-foreground mb-2">Educational Resources</h2>
+          <div className="text-sm text-muted-foreground mb-5">Learn more about DeFi and cryptocurrency fundamentals</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            <a href="https://www.coinbase.com/learn" target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-primary/30 hover:bg-muted/60 transition-all duration-300 group">
               <div>
-                <div className="font-semibold text-white">Coinbase Learn</div>
-                <div className="text-sm text-slate-300">Crypto Education</div>
+                <div className="font-semibold text-foreground group-hover:text-primary transition-colors">Coinbase Learn</div>
+                <div className="text-sm text-muted-foreground">Crypto Education</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-primary rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
 
-            <a 
-              href="https://docs.aave.com/hub/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
-            >
+            <a href="https://docs.aave.com/hub/" target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-accent/30 hover:bg-muted/60 transition-all duration-300 group">
               <div>
-                <div className="font-semibold text-white">AAVE Documentation</div>
-                <div className="text-sm text-slate-300">Protocol Deep Dive</div>
+                <div className="font-semibold text-foreground group-hover:text-accent transition-colors">AAVE Documentation</div>
+                <div className="text-sm text-muted-foreground">Protocol Deep Dive</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-accent rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
 
-            <a 
-              href="https://www.investopedia.com/terms/c/compoundinterest.asp" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center justify-between p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-colors group"
-            >
+            <a href="https://www.investopedia.com/terms/c/compoundinterest.asp" target="_blank" rel="noopener noreferrer"
+              className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-secondary/30 hover:bg-muted/60 transition-all duration-300 group">
               <div>
-                <div className="font-semibold text-white">Compound Interest</div>
-                <div className="text-sm text-slate-300">The Math Behind Growth</div>
+                <div className="font-semibold text-foreground group-hover:text-secondary transition-colors">Compound Interest</div>
+                <div className="text-sm text-muted-foreground">The Math Behind Growth</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-slate-300 group-hover:text-white rotate-45" />
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-secondary rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
           </div>
         </div>
@@ -1901,81 +1847,54 @@ Your contract is now live and ready for members to join!`);
 
   const PersonalPage = () => (
     <div className="relative z-10 px-6 py-8 pb-32">
-      <div className="flex items-center mb-8">
-        <button onClick={goHome} className="mr-4 p-2 hover:bg-white/20 rounded-full transition-colors">
-          <ArrowLeft className="w-6 h-6 text-slate-300" />
+      <div className="flex items-center mb-8 animate-fade-up">
+        <button onClick={goHome} className="mr-4 p-2.5 glass-card hover:border-primary/30 rounded-xl transition-all duration-300 group">
+          <ArrowLeft className="w-5 h-5 text-foreground/70 group-hover:text-primary transition-colors" />
         </button>
-        <h1 className="text-3xl font-bold text-white">Personal Wallet</h1>
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Personal Wallet</h1>
+          <p className="text-muted-foreground text-sm mt-1">Manage your connection & deposits</p>
+        </div>
       </div>
       
       <div className="space-y-6">
-        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-white">Wallet Connection</h2>
-            <Wallet className="w-6 h-6 text-indigo-600" />
+        <div className="glass-card p-6 animate-fade-up stagger-1">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-xl font-semibold text-foreground">Wallet Connection</h2>
+            <Wallet className="w-6 h-6 text-primary" />
           </div>
           {!walletConnected ? (
-            <div className="text-center py-8">
-              <div className="text-slate-300 mb-4">No wallet connected</div>
-              <button 
-                onClick={handleConnectWallet}
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105"
-              >
+            <div className="text-center py-10">
+              <div className="text-muted-foreground mb-5">No wallet connected</div>
+              <button onClick={handleConnectWallet} className="btn-premium text-white">
                 Connect Account
               </button>
             </div>
           ) : (
             <div className="text-center py-4">
-              <div className="inline-flex items-center space-x-3 bg-green-100 text-green-800 px-4 py-2 rounded-lg mb-4">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <div className="inline-flex items-center space-x-3 bg-secondary/15 text-secondary px-4 py-2.5 rounded-xl mb-4 border border-secondary/20">
+                <div className="w-2.5 h-2.5 bg-secondary rounded-full animate-pulse"></div>
                 <span className="font-medium">Connected: {walletAddress ? walletAddress.slice(0,6) + "..." + walletAddress.slice(-4) : "N/A"}</span>
               </div>
-              <div className="text-sm text-slate-300 mb-4">MetaMask • Polygon Network</div>
+              <div className="text-sm text-muted-foreground mb-5">MetaMask • Polygon Network</div>
               
-              <div className="flex justify-center space-x-3 mt-6">
-                <div className="text-center">
-                  <button 
-                    onClick={handleDeposit}
-                    disabled={!canDeposit() || calculateWeeklyDepositAmount() === 0}
-                    className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105 ${
-                      !canDeposit() || calculateWeeklyDepositAmount() === 0
-                        ? 'bg-gray-400 cursor-not-allowed text-white'
-                        : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white'
-                    }`}
-                  >
-                    {calculateWeeklyDepositAmount() === 0 
-                      ? 'Join/Create a Contract'
-                      : !canDeposit() 
-                        ? `Deposit in ${getDaysUntilNextDeposit()}d`
-                        : `Deposit ${calculateWeeklyDepositAmount()}`
-                    }
-                  </button>
-                  {calculateWeeklyDepositAmount() > 0 && (
-                    <div className="text-xs text-slate-300 mt-1">
-                      Weekly amount based on your contracts (Debug: {deployedSubclubs.filter(club => 
-                        club.members && club.members.includes(walletAddress)
-                      ).length} contracts found)
-                    </div>
-                  )}
-                </div>
-                <button 
-                  onClick={() => setAutoRenewEnabled(!autoRenewEnabled)}
-                  className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105 ${
-                    autoRenewEnabled 
-                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white' 
-                      : 'bg-gradient-to-r from-gray-300 to-gray-400 hover:from-gray-400 hover:to-gray-500 text-gray-700'
-                  }`}
-                >
+              <div className="flex flex-wrap justify-center gap-3 mt-6">
+                <button onClick={handleDeposit} disabled={!canDeposit() || calculateWeeklyDepositAmount() === 0}
+                  className={`px-5 py-3 rounded-xl font-medium transition-all duration-300 ${
+                    !canDeposit() || calculateWeeklyDepositAmount() === 0
+                      ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                      : 'bg-gradient-to-r from-secondary to-emerald-500 hover:shadow-lg hover:shadow-secondary/25 text-white hover:-translate-y-0.5'
+                  }`}>
+                  {calculateWeeklyDepositAmount() === 0 ? 'Join/Create a Contract' : !canDeposit() ? `Deposit in ${getDaysUntilNextDeposit()}d` : `Deposit ${calculateWeeklyDepositAmount()}`}
+                </button>
+                <button onClick={() => setAutoRenewEnabled(!autoRenewEnabled)}
+                  className={`px-5 py-3 rounded-xl font-medium transition-all duration-300 ${
+                    autoRenewEnabled ? 'bg-gradient-to-r from-primary to-indigo-500 text-white hover:shadow-lg hover:shadow-primary/25' : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                  }`}>
                   Auto-Renew
                 </button>
-                <button 
-                  onClick={() => {
-                    setWalletConnected(false);
-                    setWalletAddress(null);
-                    setVaultBalance("0");
-                  }}
-                  className="px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-xl hover:scale-105 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white"
-                >
+                <button onClick={() => { setWalletConnected(false); setWalletAddress(null); setVaultBalance("0"); }}
+                  className="px-5 py-3 rounded-xl font-medium transition-all duration-300 bg-destructive/10 text-destructive hover:bg-destructive/20 border border-destructive/20">
                   Remove Wallet
                 </button>
               </div>
@@ -1983,36 +1902,34 @@ Your contract is now live and ready for members to join!`);
           )}
         </div>
 
-        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-          <h2 className="text-xl font-bold text-white mb-4">Your Position</h2>
+        <div className="glass-card p-6 animate-fade-up stagger-2">
+          <h2 className="text-xl font-semibold text-foreground mb-5">Your Position</h2>
           <div className="grid md:grid-cols-3 gap-4">
-            <div className="text-center p-4 bg-white/10 rounded-lg">
-              <div className="text-2xl font-bold text-white">${parseFloat(vaultBalance).toFixed(2)}</div>
-              <div className="text-sm text-slate-300">Total Contributed</div>
+            <div className="text-center p-5 rounded-2xl bg-muted/50 border border-border/50">
+              <div className="text-3xl font-bold text-foreground tabular-nums mb-1">${parseFloat(vaultBalance).toFixed(2)}</div>
+              <div className="text-sm text-muted-foreground">Total Contributed</div>
             </div>
-            <div className="text-center p-4 bg-white/10 rounded-lg">
-              <div className="text-2xl font-bold text-white">
+            <div className="text-center p-5 rounded-2xl bg-muted/50 border border-border/50">
+              <div className="text-3xl font-bold text-primary tabular-nums mb-1">
                 {parseFloat(vaultStats.totalDeposits || "0") > 0 && parseFloat(vaultBalance) > 0 
-                  ? ((parseFloat(vaultBalance) / parseFloat(vaultStats.totalDeposits)) * 100).toFixed(1)
-                  : 0}%
+                  ? ((parseFloat(vaultBalance) / parseFloat(vaultStats.totalDeposits)) * 100).toFixed(1) : 0}%
               </div>
-              <div className="text-sm text-slate-300">Ownership Share</div>
+              <div className="text-sm text-muted-foreground">Ownership Share</div>
             </div>
-            <div className="text-center p-4 bg-white/10 rounded-lg">
-              <div className="text-2xl font-bold text-white">${parseFloat(vaultBalance).toFixed(2)}</div>
-              <div className="text-sm text-slate-300">Current Value</div>
+            <div className="text-center p-5 rounded-2xl bg-muted/50 border border-border/50">
+              <div className="text-3xl font-bold text-secondary tabular-nums mb-1">${parseFloat(vaultBalance).toFixed(2)}</div>
+              <div className="text-sm text-muted-foreground">Current Value</div>
             </div>
           </div>
         </div>
 
         {walletConnected && (
-          <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-            <h2 className="text-xl font-bold text-white mb-4">Recent Activity</h2>
-            <div className="text-center py-8 text-slate-300">
+          <div className="glass-card p-6 animate-fade-up stagger-3">
+            <h2 className="text-xl font-semibold text-foreground mb-4">Recent Activity</h2>
+            <div className="text-center py-8 text-muted-foreground">
               {(vaultStats.transactions || 0) > 0 
                 ? `${vaultStats.transactions} transaction${vaultStats.transactions === 1 ? '' : 's'} recorded` 
-                : "No transactions yet - make your first deposit to get started"
-              }
+                : "No transactions yet - make your first deposit to get started"}
             </div>
           </div>
         )}
@@ -2022,16 +1939,19 @@ Your contract is now live and ready for members to join!`);
 
   const GroupInfoPage = () => (
     <div className="relative z-10 px-6 py-8 pb-32">
-      <div className="flex items-center mb-8">
-        <button onClick={goHome} className="mr-4 p-2 hover:bg-white/20 rounded-full transition-colors">
-          <ArrowLeft className="w-6 h-6 text-slate-300" />
+      <div className="flex items-center mb-8 animate-fade-up">
+        <button onClick={goHome} className="mr-4 p-2.5 glass-card hover:border-primary/30 rounded-xl transition-all duration-300 group">
+          <ArrowLeft className="w-5 h-5 text-foreground/70 group-hover:text-primary transition-colors" />
         </button>
-        <h1 className="text-3xl font-bold text-white">Group Information</h1>
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Contracts</h1>
+          <p className="text-muted-foreground text-sm mt-1">Manage & join investment contracts</p>
+        </div>
       </div>
       
       <div className="space-y-6">
-        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-          <h2 className="text-xl font-bold text-white mb-4">Member Directory</h2>
+        <div className="glass-card p-6 animate-fade-up stagger-1">
+          <h2 className="text-xl font-semibold text-foreground mb-5">Member Directory</h2>
           
           {walletConnected ? (
             <div className="space-y-6">
@@ -2288,17 +2208,23 @@ Your contract is now live and ready for members to join!`);
   const FutureSimulationPage = () => {
     return (
       <div className="relative z-10 px-6 py-8 pb-32">
-        <div className="flex items-center mb-8">
-          <button onClick={goHome} className="mr-4 p-2 hover:bg-white/20 rounded-full transition-colors">
-            <ArrowLeft className="w-6 h-6 text-slate-300" />
+        <div className="flex items-center mb-8 animate-fade-up">
+          <button onClick={goHome} className="mr-4 p-2.5 glass-card hover:border-primary/30 rounded-xl transition-all duration-300 group">
+            <ArrowLeft className="w-5 h-5 text-foreground/70 group-hover:text-primary transition-colors" />
           </button>
-          <h1 className="text-3xl font-bold text-white">Future Projections</h1>
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">Future Projections</h1>
+            <p className="text-muted-foreground text-sm mt-1">Simulate your investment growth</p>
+          </div>
         </div>
         
         <div className="space-y-6">
           {/* Interactive Controls */}
-          <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-            <h2 className="text-xl font-bold text-white mb-4">Simulation Parameters</h2>
+          <div className="glass-card p-6 animate-fade-up stagger-1">
+            <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+              Simulation Parameters
+            </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">

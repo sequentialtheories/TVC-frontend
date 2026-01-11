@@ -4,96 +4,96 @@
 
 @layer base {
   :root {
-    /* Ultra-Premium DeFi Theme - Spark.fi & Sky.money Inspired */
-    --background: 228 24% 3%;
+    /* Premium Institutional DeFi Theme - Brighter & Uplifting */
+    --background: 225 25% 6%;
     --foreground: 0 0% 98%;
 
-    --card: 228 22% 6%;
+    --card: 225 22% 10%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 228 22% 6%;
+    --popover: 225 22% 10%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 260 65% 58%;
+    --primary: 258 75% 65%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 162 60% 45%;
+    --secondary: 160 65% 50%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 228 18% 10%;
-    --muted-foreground: 228 10% 50%;
+    --muted: 225 18% 14%;
+    --muted-foreground: 225 15% 55%;
 
-    --accent: 192 85% 50%;
-    --accent-foreground: 228 24% 3%;
+    --accent: 190 90% 55%;
+    --accent-foreground: 225 25% 6%;
 
     --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 228 15% 14%;
-    --input: 228 18% 10%;
-    --ring: 260 65% 58%;
+    --border: 225 18% 18%;
+    --input: 225 18% 14%;
+    --ring: 258 75% 65%;
 
     --radius: 1rem;
 
-    /* Premium glow colors */
-    --purple-glow: 260 65% 58%;
-    --emerald-glow: 162 60% 45%;
-    --cyan-glow: 192 85% 50%;
-    --orange-glow: 32 95% 55%;
-    --pink-glow: 330 75% 60%;
-    --indigo-glow: 240 60% 55%;
+    /* Brighter glow colors */
+    --purple-glow: 258 75% 65%;
+    --emerald-glow: 160 65% 50%;
+    --cyan-glow: 190 90% 55%;
+    --orange-glow: 30 95% 58%;
+    --pink-glow: 330 80% 65%;
+    --indigo-glow: 240 65% 60%;
 
-    /* Strand colors - vivid and distinctive */
-    --strand-1: 330 75% 60%;
-    --strand-2: 260 65% 58%;
-    --strand-3: 192 85% 50%;
-    --strand-btc: 32 95% 55%;
+    /* Strand colors - vibrant and clear */
+    --strand-1: 330 80% 65%;
+    --strand-2: 258 75% 65%;
+    --strand-3: 190 90% 55%;
+    --strand-btc: 30 95% 58%;
 
-    /* Premium gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(260 65% 58%), hsl(192 85% 50%), hsl(162 60% 45%));
-    --gradient-card: linear-gradient(180deg, hsl(228 22% 8%), hsl(228 22% 4%));
-    --gradient-glow: radial-gradient(ellipse at center, hsl(260 65% 58% / 0.2), transparent 70%);
-    --gradient-mesh: linear-gradient(135deg, hsl(260 65% 58% / 0.03) 0%, transparent 50%, hsl(192 85% 50% / 0.03) 100%);
+    /* Uplifting gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(258 75% 65%), hsl(190 90% 55%), hsl(160 65% 50%));
+    --gradient-card: linear-gradient(180deg, hsl(225 22% 12%), hsl(225 22% 8%));
+    --gradient-glow: radial-gradient(ellipse at center, hsl(258 75% 65% / 0.25), transparent 70%);
+    --gradient-mesh: linear-gradient(135deg, hsl(258 75% 65% / 0.05) 0%, transparent 50%, hsl(190 90% 55% / 0.05) 100%);
 
-    /* Dramatic shadows */
-    --shadow-glow-purple: 0 0 60px hsl(260 65% 58% / 0.35), 0 0 100px hsl(260 65% 58% / 0.15);
-    --shadow-glow-emerald: 0 0 60px hsl(162 60% 45% / 0.35), 0 0 100px hsl(162 60% 45% / 0.15);
-    --shadow-glow-cyan: 0 0 60px hsl(192 85% 50% / 0.35), 0 0 100px hsl(192 85% 50% / 0.15);
-    --shadow-glow-orange: 0 0 60px hsl(32 95% 55% / 0.35), 0 0 100px hsl(32 95% 55% / 0.15);
-    --shadow-elegant: 0 8px 32px -8px hsl(0 0% 0% / 0.5);
-    --shadow-card: 0 20px 60px -15px hsl(0 0% 0% / 0.6);
-    --shadow-button: 0 8px 24px -4px hsl(0 0% 0% / 0.4);
+    /* Refined shadows with more presence */
+    --shadow-glow-purple: 0 0 50px hsl(258 75% 65% / 0.4), 0 0 100px hsl(258 75% 65% / 0.2);
+    --shadow-glow-emerald: 0 0 50px hsl(160 65% 50% / 0.4), 0 0 100px hsl(160 65% 50% / 0.2);
+    --shadow-glow-cyan: 0 0 50px hsl(190 90% 55% / 0.4), 0 0 100px hsl(190 90% 55% / 0.2);
+    --shadow-glow-orange: 0 0 50px hsl(30 95% 58% / 0.4), 0 0 100px hsl(30 95% 58% / 0.2);
+    --shadow-elegant: 0 8px 32px -8px hsl(0 0% 0% / 0.4);
+    --shadow-card: 0 20px 50px -15px hsl(0 0% 0% / 0.5);
+    --shadow-button: 0 8px 24px -4px hsl(0 0% 0% / 0.35);
 
-    --sidebar-background: 228 22% 6%;
+    --sidebar-background: 225 22% 10%;
     --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 260 65% 58%;
+    --sidebar-primary: 258 75% 65%;
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 228 18% 10%;
+    --sidebar-accent: 225 18% 14%;
     --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 228 15% 14%;
-    --sidebar-ring: 260 65% 58%;
+    --sidebar-border: 225 18% 18%;
+    --sidebar-ring: 258 75% 65%;
   }
 
   .dark {
-    --background: 228 24% 3%;
+    --background: 225 25% 6%;
     --foreground: 0 0% 98%;
-    --card: 228 22% 6%;
+    --card: 225 22% 10%;
     --card-foreground: 0 0% 98%;
-    --popover: 228 22% 6%;
+    --popover: 225 22% 10%;
     --popover-foreground: 0 0% 98%;
-    --primary: 260 65% 58%;
+    --primary: 258 75% 65%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 162 60% 45%;
+    --secondary: 160 65% 50%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 228 18% 10%;
-    --muted-foreground: 228 10% 50%;
-    --accent: 192 85% 50%;
-    --accent-foreground: 228 24% 3%;
-    --destructive: 0 60% 40%;
+    --muted: 225 18% 14%;
+    --muted-foreground: 225 15% 55%;
+    --accent: 190 90% 55%;
+    --accent-foreground: 225 25% 6%;
+    --destructive: 0 60% 45%;
     --destructive-foreground: 0 0% 98%;
-    --border: 228 15% 14%;
-    --input: 228 18% 10%;
-    --ring: 260 65% 58%;
+    --border: 225 18% 18%;
+    --input: 225 18% 14%;
+    --ring: 258 75% 65%;
   }
 }
 
@@ -403,36 +403,36 @@
   .orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(100px);
-    opacity: 0.5;
-    animation: orb-float 20s ease-in-out infinite;
+    filter: blur(120px);
+    opacity: 0.6;
+    animation: orb-float 25s ease-in-out infinite;
   }
 
   .orb-1 {
-    width: 800px;
-    height: 800px;
-    background: radial-gradient(circle, hsl(260 65% 50% / 0.15), transparent 70%);
-    top: -20%;
-    left: -10%;
+    width: 900px;
+    height: 900px;
+    background: radial-gradient(circle, hsl(258 75% 60% / 0.2), transparent 65%);
+    top: -25%;
+    left: -15%;
     animation-delay: 0s;
   }
 
   .orb-2 {
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, hsl(192 85% 50% / 0.12), transparent 70%);
-    bottom: -15%;
-    right: -10%;
-    animation-delay: -7s;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, hsl(190 90% 55% / 0.18), transparent 65%);
+    bottom: -20%;
+    right: -15%;
+    animation-delay: -8s;
   }
 
   .orb-3 {
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, hsl(162 60% 45% / 0.1), transparent 70%);
-    top: 40%;
-    right: 20%;
-    animation-delay: -14s;
+    width: 550px;
+    height: 550px;
+    background: radial-gradient(circle, hsl(160 65% 50% / 0.15), transparent 65%);
+    top: 35%;
+    right: 15%;
+    animation-delay: -16s;
   }
 
   /* Subtle grid */
