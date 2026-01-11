@@ -957,7 +957,7 @@ Your contract is now live and ready for members to join!`);
                 </button>
               </div>
               <div className="text-xs text-gray-500">
-                {clubCreationData.isChargedContract ? "Charged Contracts are >1 year and serve as placeholders to test how it fits into your life. Greater timelines allow for greater compounding." : "Traditional contracts (1+ years) with standard $1/user/week utility fee"}
+                {clubCreationData.isChargedContract ? "Enables 1-12 month contracts with $1.25/user/week fee for timeline flexibility" : "Charged Contracts are >1 year and serve as placeholders to test how it fits into your life. Greater timelines allow for greater compounding."}
               </div>
             </div>
             
