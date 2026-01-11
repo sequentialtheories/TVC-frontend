@@ -266,6 +266,7 @@ const VaultClubWebsite = () => {
   });
   const [quickSwapAPY, setQuickSwapAPY] = useState(12.5);
   const [selectedContract, setSelectedContract] = useState(null);
+  const [showExtendedLockup, setShowExtendedLockup] = useState(false);
   const [simulationYears, setSimulationYears] = useState(15);
   const [simulationRigor, setSimulationRigor] = useState('heavy');
   const [customSimulationAmount, setCustomSimulationAmount] = useState(75);
@@ -1006,7 +1007,8 @@ Your contract is now live and ready for members to join!`);
                         {num}
                       </button>
                     ))
-                  : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(num => (
+                  : <>
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(num => (
                       <button
                         key={num}
                         type="button"
@@ -1019,29 +1021,40 @@ Your contract is now live and ready for members to join!`);
                       >
                         {num}
                       </button>
-                    ))
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => setShowExtendedLockup(!showExtendedLockup)}
+                      className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                        showExtendedLockup || clubCreationData.lockupPeriod > 11
+                          ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300'
+                          : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
+                      }`}
+                    >
+                      More
+                    </button>
+                    {showExtendedLockup && (
+                      <div className="col-span-4 mt-2">
+                        <div className="grid grid-cols-5 gap-2">
+                          {[12, 13, 14, 15, 16, 17, 18, 19, 20].map(num => (
+                            <button
+                              key={num}
+                              type="button"
+                              onClick={() => setClubCreationData(prev => ({ ...prev, lockupPeriod: num }))}
+                              className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                                clubCreationData.lockupPeriod === num
+                                  ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300'
+                                  : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
+                              }`}
+                            >
+                              {num}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
                 }
-                {!clubCreationData.isChargedContract && (
-                  <div className="col-span-4 mt-2">
-                    <div className="text-xs text-gray-500 mb-2">Extended Lockup</div>
-                    <div className="grid grid-cols-5 gap-2">
-                      {[12, 13, 14, 15, 16, 17, 18, 19, 20].map(num => (
-                        <button
-                          key={num}
-                          type="button"
-                          onClick={() => setClubCreationData(prev => ({ ...prev, lockupPeriod: num }))}
-                          className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
-                            clubCreationData.lockupPeriod === num
-                              ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300'
-                              : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
-                          }`}
-                        >
-                          {num}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
 
