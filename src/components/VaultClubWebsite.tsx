@@ -27,6 +27,7 @@ interface SchedulePeriod {
 interface ClubCreationData {
   lockupPeriod: number;
   rigorLevel: string;
+  riskLevel: string;
   maxMembers: number;
   isPrivate: boolean;
   isChargedContract: boolean;
@@ -40,6 +41,7 @@ interface Subclub {
   maxMembers: number;
   lockupPeriod: number;
   rigorLevel: string;
+  riskLevel: string;
   isPrivate: boolean;
   isChargedContract: boolean;
   currentMembers: number;
@@ -219,6 +221,7 @@ const VaultClubWebsite = () => {
   const [clubCreationData, setClubCreationData] = useState({
     lockupPeriod: 5,
     rigorLevel: 'medium',
+    riskLevel: 'medium',
     maxMembers: 4,
     isPrivate: false,
     isChargedContract: false,
@@ -965,84 +968,82 @@ Your contract is now live and ready for members to join!`);
               <label className="block text-sm font-medium text-gray-700 mb-3">
                 Maximum Members
               </label>
-              <select value={clubCreationData.maxMembers} onChange={e => setClubCreationData(prev => ({
-                ...prev,
-                maxMembers: Number(e.target.value)
-              }))} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg text-black">
-                <option value={1}>1 Member</option>
-                <option value={2}>2 Members</option>
-                <option value={3}>3 Members</option>
-                <option value={4}>4 Members</option>
-                <option value={5}>5 Members</option>
-                <option value={6}>6 Members</option>
-                <option value={7}>7 Members</option>
-                <option value={8}>8 Members</option>
-              </select>
+              <div className="grid grid-cols-4 gap-2">
+                {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
+                  <button
+                    key={num}
+                    type="button"
+                    onClick={() => setClubCreationData(prev => ({ ...prev, maxMembers: num }))}
+                    className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                      clubCreationData.maxMembers === num
+                        ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300'
+                        : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
+                    }`}
+                  >
+                    {num}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-3">
                 Lockup Consensus ({clubCreationData.isChargedContract ? 'Months' : 'Years'})
               </label>
-              <select value={clubCreationData.lockupPeriod} onChange={e => setClubCreationData(prev => ({
-                ...prev,
-                lockupPeriod: Number(e.target.value)
-              }))} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg text-black">
-                {clubCreationData.isChargedContract ?
-                // Charged contract options (1-12 months)
-                <>
-                    <option value={1}>1 Month</option>
-                    <option value={2}>2 Months</option>
-                    <option value={3}>3 Months</option>
-                    <option value={4}>4 Months</option>
-                    <option value={5}>5 Months</option>
-                    <option value={6}>6 Months</option>
-                    <option value={7}>7 Months</option>
-                    <option value={8}>8 Months</option>
-                    <option value={9}>9 Months</option>
-                    <option value={10}>10 Months</option>
-                    <option value={11}>11 Months</option>
-                    <option value={12}>12 Months</option>
-                  </> :
-                // Traditional contract options (1-20 years)
-                <>
-                    <option value={1}>1 Year</option>
-                    <option value={2}>2 Years</option>
-                    <option value={3}>3 Years</option>
-                    <option value={4}>4 Years</option>
-                    <option value={5}>5 Years</option>
-                    <option value={6}>6 Years</option>
-                    <option value={7}>7 Years</option>
-                    <option value={8}>8 Years</option>
-                    <option value={9}>9 Years</option>
-                    <option value={10}>10 Years</option>
-                    <option value={11}>11 Years</option>
-                    <option value={12}>12 Years</option>
-                    <option value={13}>13 Years</option>
-                    <option value={14}>14 Years</option>
-                    <option value={15}>15 Years</option>
-                    <option value={16}>16 Years</option>
-                    <option value={17}>17 Years</option>
-                    <option value={18}>18 Years</option>
-                    <option value={19}>19 Years</option>
-                    <option value={20}>20 Years</option>
-                  </>}
-              </select>
+              <div className="grid grid-cols-4 gap-2">
+                {clubCreationData.isChargedContract
+                  ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(num => (
+                      <button
+                        key={num}
+                        type="button"
+                        onClick={() => setClubCreationData(prev => ({ ...prev, lockupPeriod: num }))}
+                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                          clubCreationData.lockupPeriod === num
+                            ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300'
+                            : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
+                        }`}
+                      >
+                        {num}
+                      </button>
+                    ))
+                  : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 18, 20].map(num => (
+                      <button
+                        key={num}
+                        type="button"
+                        onClick={() => setClubCreationData(prev => ({ ...prev, lockupPeriod: num }))}
+                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                          clubCreationData.lockupPeriod === num
+                            ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300'
+                            : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
+                        }`}
+                      >
+                        {num}
+                      </button>
+                    ))
+                }
+              </div>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-3">
                 Investment Rigor
               </label>
-              <select value={clubCreationData.rigorLevel} onChange={e => setClubCreationData(prev => ({
-                ...prev,
-                rigorLevel: e.target.value
-              }))} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg text-black">
-                <option value="light">Light</option>
-                <option value="medium">Medium</option>
-                <option value="heavy">Heavy</option>
-                <option value="custom">Custom</option>
-              </select>
+              <div className="grid grid-cols-4 gap-2">
+                {(['light', 'medium', 'heavy', 'custom'] as const).map(level => (
+                  <button
+                    key={level}
+                    type="button"
+                    onClick={() => setClubCreationData(prev => ({ ...prev, rigorLevel: level }))}
+                    className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 capitalize ${
+                      clubCreationData.rigorLevel === level
+                        ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300'
+                        : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
+                    }`}
+                  >
+                    {level}
+                  </button>
+                ))}
+              </div>
               
               {/* Custom Schedule Input */}
               {clubCreationData.rigorLevel === 'custom' && <div className="mt-4">
@@ -1050,7 +1051,7 @@ Your contract is now live and ready for members to join!`);
                     <label className="block text-sm font-medium text-gray-700">
                       Custom Deposit Schedule
                     </label>
-                    <button onClick={() => {
+                    <button type="button" onClick={() => {
                     const newSchedule = [...clubCreationData.customSchedule];
                     newSchedule.push({
                       yearStart: newSchedule.length > 0 ? newSchedule[newSchedule.length - 1].yearEnd + 1 : 1,
@@ -1067,7 +1068,7 @@ Your contract is now live and ready for members to join!`);
                   </div>
                   
                   <div className="space-y-3 max-h-48 overflow-y-auto">
-                    {clubCreationData.customSchedule.map((period, index) => <div key={index} className="p-3 bg-gray-50 rounded-lg flex items-center space-x-3">
+                    {clubCreationData.customSchedule.map((period, index) => <div key={index} className="p-3 bg-white rounded-lg flex items-center space-x-3 border border-gray-200">
                         <div className="flex-1 grid grid-cols-3 gap-2">
                           <div>
                             <label className="block text-xs font-medium text-gray-600 mb-1">Start Year</label>
@@ -1081,7 +1082,7 @@ Your contract is now live and ready for members to join!`);
                             ...prev,
                             customSchedule: newSchedule
                           }));
-                        }} className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black" />
+                        }} className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" />
                           </div>
                           <div>
                             <label className="block text-xs font-medium text-gray-600 mb-1">End Year</label>
@@ -1095,7 +1096,7 @@ Your contract is now live and ready for members to join!`);
                             ...prev,
                             customSchedule: newSchedule
                           }));
-                        }} className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black" />
+                        }} className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" />
                           </div>
                           <div>
                             <label className="block text-xs font-medium text-gray-600 mb-1">Weekly Amount ($)</label>
@@ -1110,12 +1111,12 @@ Your contract is now live and ready for members to join!`);
                             ...prev,
                             customSchedule: newSchedule
                           }));
-                        }} onFocus={e => e.target.style.outline = 'none'} className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black" style={{
+                        }} onFocus={e => e.target.style.outline = 'none'} className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" style={{
                           outline: 'none'
                         }} />
                           </div>
                         </div>
-                        {clubCreationData.customSchedule.length > 1 && <button onClick={() => {
+                        {clubCreationData.customSchedule.length > 1 && <button type="button" onClick={() => {
                       const newSchedule = clubCreationData.customSchedule.filter((_, i) => i !== index);
                       setClubCreationData(prev => ({
                         ...prev,
@@ -1139,12 +1140,46 @@ Your contract is now live and ready for members to join!`);
                 </div>}
               
               {/* Rigor Level Descriptions */}
-              <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+              <div className="mt-3 p-3 bg-white rounded-lg border border-gray-200">
                 <div className="text-xs text-gray-600">
                   {clubCreationData.rigorLevel === 'light' && "Light Rigor: Monthly deposits that scale over time. Year 1: $100/month, Year 2: $150/month, Year 3: $200/month, Year 4+: $250/month. Perfect for beginners wanting gradual increases."}
                   {clubCreationData.rigorLevel === 'medium' && "Medium Rigor: Starts at $50/week, scales up over time. Years 1-3: $50/week, 4-6: $100/week, 7-10: $200/week, 11+: $250/week."}
                   {clubCreationData.rigorLevel === 'heavy' && "Heavy Rigor: Starts at $100/week, scales significantly. Years 1-3: $100/week, 4-6: $200/week, 7-10: $300/week, 11+: $400/week."}
                   {clubCreationData.rigorLevel === 'custom' && `Custom Rigor: Fixed ${clubCreationData.customWeeklyAmount}/week throughout the entire contract duration. Total annual contribution: ${(clubCreationData.customWeeklyAmount * 52).toLocaleString()}.`}
+                </div>
+              </div>
+            </div>
+
+            {/* Risk Level Section */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Risk Level
+              </label>
+              <div className="flex space-x-2">
+                {(['low', 'medium', 'high'] as const).map(level => (
+                  <button
+                    key={level}
+                    type="button"
+                    onClick={() => setClubCreationData(prev => ({ ...prev, riskLevel: level }))}
+                    className={`flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all duration-300 capitalize ${
+                      clubCreationData.riskLevel === level
+                        ? level === 'low' 
+                          ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border-2 border-green-300'
+                          : level === 'medium'
+                          ? 'bg-gradient-to-r from-yellow-100 to-amber-100 text-yellow-800 border-2 border-yellow-300'
+                          : 'bg-gradient-to-r from-red-100 to-rose-100 text-red-800 border-2 border-red-300'
+                        : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
+                    }`}
+                  >
+                    {level}
+                  </button>
+                ))}
+              </div>
+              <div className="mt-3 p-3 bg-white rounded-lg border border-gray-200">
+                <div className="text-xs text-gray-600">
+                  {clubCreationData.riskLevel === 'low' && "Low Risk: Conservative allocation favoring stablecoin positions. Prioritizes capital preservation with steady, predictable returns."}
+                  {clubCreationData.riskLevel === 'medium' && "Medium Risk: Balanced allocation across all strands. Targets moderate growth while maintaining reasonable volatility exposure."}
+                  {clubCreationData.riskLevel === 'high' && "High Risk: Aggressive allocation favoring BTC exposure. Maximizes growth potential with higher volatility tolerance."}
                 </div>
               </div>
             </div>
