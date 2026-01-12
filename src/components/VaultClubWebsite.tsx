@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Database, User, Users, TrendingUp, X, Bitcoin, DollarSign, Zap, Shield, ArrowLeft, Wallet, Home, Share2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import type { Session } from '@supabase/supabase-js';
 import { ThemeToggle } from './ThemeToggle';
 import VaultBackground from './VaultBackground';
+import { TutorialProvider, useTutorial, TutorialBubble } from './tutorial';
 
 // Type declarations
 interface VaultStats {
@@ -221,7 +222,7 @@ async function depositToVault(amountEther: number): Promise<boolean> {
     return false;
   }
 }
-const VaultClubWebsite = () => {
+const VaultClubWebsiteInner: React.FC<{ onWalletStateChange?: (connected: boolean) => void }> = ({ onWalletStateChange }) => {
   const [activeModal, setActiveModal] = useState(null);
   const [activeStrand, setActiveStrand] = useState(null);
   const [currentPage, setCurrentPage] = useState('home');
@@ -231,6 +232,20 @@ const VaultClubWebsite = () => {
   const [vaultBalance, setVaultBalance] = useState("0");
   const [depositAmount, setDepositAmount] = useState('');
 
+  // Tutorial refs for navigation elements
+  const navWalletRef = useRef<HTMLButtonElement>(null);
+  const navContractsRef = useRef<HTMLButtonElement>(null);
+  const navDataRef = useRef<HTMLButtonElement>(null);
+  const navFutureRef = useRef<HTMLButtonElement>(null);
+  const connectAccountRef = useRef<HTMLButtonElement>(null);
+
+  // Tutorial hook
+  const tutorial = useTutorial();
+
+  // Sync wallet state to parent for tutorial provider
+  useEffect(() => {
+    onWalletStateChange?.(walletConnected);
+  }, [walletConnected, onWalletStateChange]);
   // Club creation states
   const [clubCreationData, setClubCreationData] = useState<ClubCreationData>({
     lockupPeriod: 5,
@@ -1737,7 +1752,11 @@ Your contract is now live and ready for members to join!`);
           </div>
           {!walletConnected ? <div className="text-center py-10">
               <div className="text-muted-foreground mb-5">No wallet connected</div>
-              <button onClick={handleConnectWallet} className="btn-premium text-white">
+              <button 
+                ref={connectAccountRef}
+                onClick={handleConnectWallet} 
+                className={`btn-premium text-white ${tutorial.currentStepData?.target === 'connect-account' ? 'tutorial-highlight' : ''}`}
+              >
                 Connect Account
               </button>
             </div> : <div className="text-center py-4">
@@ -2367,28 +2386,56 @@ Your contract is now live and ready for members to join!`);
             <span className={`text-[11px] font-medium mt-1.5 transition-colors ${currentPage === 'home' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Home</span>
           </button>
           
-          <button onClick={() => navigateTo('personal')} className="flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group">
+          <button 
+            ref={navWalletRef}
+            onClick={() => {
+              navigateTo('personal');
+              tutorial.checkAdvancement('navigation', 'personal');
+            }} 
+            className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-wallet' ? 'tutorial-highlight' : ''}`}
+          >
             <div className={`p-2.5 rounded-xl transition-all duration-300 ${currentPage === 'personal' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
               <User className="w-5 h-5" />
             </div>
             <span className={`text-[11px] font-medium mt-1.5 transition-colors ${currentPage === 'personal' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Wallet</span>
           </button>
           
-          <button onClick={() => navigateTo('group')} className="flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group">
+          <button 
+            ref={navContractsRef}
+            onClick={() => {
+              navigateTo('group');
+              tutorial.checkAdvancement('navigation', 'group');
+            }} 
+            className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-contracts' ? 'tutorial-highlight' : ''}`}
+          >
             <div className={`p-2.5 rounded-xl transition-all duration-300 ${currentPage === 'group' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
               <Users className="w-5 h-5" />
             </div>
             <span className={`text-[11px] font-medium mt-1.5 transition-colors ${currentPage === 'group' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Contracts</span>
           </button>
           
-          <button onClick={() => navigateTo('dataset')} className="flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group">
+          <button 
+            ref={navDataRef}
+            onClick={() => {
+              navigateTo('dataset');
+              tutorial.checkAdvancement('navigation', 'dataset');
+            }} 
+            className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-data' ? 'tutorial-highlight' : ''}`}
+          >
             <div className={`p-2.5 rounded-xl transition-all duration-300 ${currentPage === 'dataset' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
               <Database className="w-5 h-5" />
             </div>
             <span className={`text-[11px] font-medium mt-1.5 transition-colors ${currentPage === 'dataset' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Data</span>
           </button>
 
-          <button onClick={() => navigateTo('simulation')} className="flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group">
+          <button 
+            ref={navFutureRef}
+            onClick={() => {
+              navigateTo('simulation');
+              tutorial.checkAdvancement('navigation', 'simulation');
+            }} 
+            className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-future' ? 'tutorial-highlight' : ''}`}
+          >
             <div className={`p-2.5 rounded-xl transition-all duration-300 ${currentPage === 'simulation' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
               <TrendingUp className="w-5 h-5" />
             </div>
@@ -2396,6 +2443,23 @@ Your contract is now live and ready for members to join!`);
           </button>
         </div>
       </nav>
+
+      {/* Tutorial Bubbles */}
+      {tutorial.isActive && tutorial.currentStepData?.target === 'nav-wallet' && (
+        <TutorialBubble targetRef={navWalletRef} />
+      )}
+      {tutorial.isActive && tutorial.currentStepData?.target === 'nav-contracts' && (
+        <TutorialBubble targetRef={navContractsRef} />
+      )}
+      {tutorial.isActive && tutorial.currentStepData?.target === 'nav-data' && (
+        <TutorialBubble targetRef={navDataRef} />
+      )}
+      {tutorial.isActive && tutorial.currentStepData?.target === 'nav-future' && (
+        <TutorialBubble targetRef={navFutureRef} />
+      )}
+      {tutorial.isActive && tutorial.currentStepData?.target === 'connect-account' && (
+        <TutorialBubble targetRef={connectAccountRef} />
+      )}
 
       {/* Main Content */}
       <main className="relative">
@@ -2479,4 +2543,16 @@ Your contract is now live and ready for members to join!`);
         </div>}
     </div>;
 };
+
+// Wrapper that tracks wallet state for tutorial provider
+const VaultClubWebsite = () => {
+  const [walletState, setWalletState] = useState(false);
+  
+  return (
+    <TutorialProvider walletConnected={walletState}>
+      <VaultClubWebsiteInner onWalletStateChange={setWalletState} />
+    </TutorialProvider>
+  );
+};
+
 export default VaultClubWebsite;
