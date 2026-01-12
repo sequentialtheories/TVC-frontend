@@ -87,19 +87,17 @@ export const TutorialBubble: React.FC<TutorialBubbleProps> = ({ targetRef }) => 
       width: '16px',
       height: '16px',
       transform: 'rotate(45deg)',
-      background: 'linear-gradient(145deg, hsl(225 22% 18%), hsl(225 22% 14%))',
-      borderColor: 'hsl(258 75% 65% / 0.3)',
     };
     
     switch (currentStepData.position) {
       case 'top':
-        return { ...base, bottom: '-8px', left: '50%', marginLeft: '-8px', borderRight: '1px solid', borderBottom: '1px solid', borderTop: 'none', borderLeft: 'none' };
+        return { ...base, bottom: '-8px', left: '50%', marginLeft: '-8px' };
       case 'bottom':
-        return { ...base, top: '-8px', left: '50%', marginLeft: '-8px', borderLeft: '1px solid', borderTop: '1px solid', borderRight: 'none', borderBottom: 'none' };
+        return { ...base, top: '-8px', left: '50%', marginLeft: '-8px' };
       case 'left':
-        return { ...base, right: '-8px', top: '50%', marginTop: '-8px', borderTop: '1px solid', borderRight: '1px solid', borderBottom: 'none', borderLeft: 'none' };
+        return { ...base, right: '-8px', top: '50%', marginTop: '-8px' };
       case 'right':
-        return { ...base, left: '-8px', top: '50%', marginTop: '-8px', borderBottom: '1px solid', borderLeft: '1px solid', borderTop: 'none', borderRight: 'none' };
+        return { ...base, left: '-8px', top: '50%', marginTop: '-8px' };
       default:
         return base;
     }
@@ -135,13 +133,20 @@ export const TutorialBubble: React.FC<TutorialBubbleProps> = ({ targetRef }) => 
       aria-label={`Tutorial step ${currentStep} of ${totalSteps}`}
     >
       {/* Bubble content */}
-      <div className="relative p-4 rounded-2xl" style={{
-        background: 'linear-gradient(145deg, hsl(225 22% 18%), hsl(225 22% 12%))',
-        border: '1px solid hsl(258 75% 65% / 0.3)',
-        boxShadow: '0 0 40px hsl(258 75% 65% / 0.3), 0 20px 40px -10px hsl(0 0% 0% / 0.5)',
-      }}>
+      <div className="relative p-4 rounded-2xl bg-card border border-primary/30 shadow-[0_0_40px_hsl(var(--primary)/0.2),0_20px_40px_-10px_hsl(0_0%_0%/0.3)]">
         {/* Arrow */}
-        <div style={getArrowStyles()} />
+        <div 
+          className="bg-card border-primary/30"
+          style={{
+            ...getArrowStyles(),
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            borderTop: currentStepData.position === 'bottom' ? '1px solid' : 'none',
+            borderLeft: currentStepData.position === 'bottom' || currentStepData.position === 'right' ? '1px solid' : 'none',
+            borderRight: currentStepData.position === 'top' || currentStepData.position === 'left' ? '1px solid' : 'none',
+            borderBottom: currentStepData.position === 'top' ? '1px solid' : 'none',
+          }}
+        />
         
         {/* Header */}
         <div className="flex items-start justify-between mb-3">
