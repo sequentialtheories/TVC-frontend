@@ -165,15 +165,48 @@ serve(async (req) => {
       );
     }
 
-    // Update the user's profile with the eth_address
-    const { error: profileError } = await supabaseAdmin
+    // Ensure profile exists and update with eth_address
+    const { data: existingProfile, error: profileCheckError } = await supabaseAdmin
       .from("profiles")
-      .update({ eth_address: walletAddress })
-      .eq("user_id", user.id);
+      .select("*")
+      .eq("user_id", user.id)
+      .maybeSingle();
 
-    if (profileError) {
-      console.error("Error updating profile:", profileError);
-      // Non-fatal - wallet was created successfully
+    if (profileCheckError) {
+      console.error("Error checking profile:", profileCheckError);
+    }
+
+    if (!existingProfile) {
+      // Create profile if it doesn't exist
+      console.log("Profile not found, creating new profile for user:", user.id);
+      const { error: profileInsertError } = await supabaseAdmin
+        .from("profiles")
+        .insert({
+          user_id: user.id,
+          email: user.email || "no-email@example.com",
+          name: user.user_metadata?.name || "User",
+          eth_address: walletAddress,
+        });
+
+      if (profileInsertError) {
+        console.error("Error creating profile:", profileInsertError);
+        // Non-fatal - wallet was created successfully
+      } else {
+        console.log("Profile created successfully for user:", user.id);
+      }
+    } else {
+      // Update existing profile with eth_address
+      const { error: profileUpdateError } = await supabaseAdmin
+        .from("profiles")
+        .update({ eth_address: walletAddress })
+        .eq("user_id", user.id);
+
+      if (profileUpdateError) {
+        console.error("Error updating profile:", profileUpdateError);
+        // Non-fatal - wallet was created successfully
+      } else {
+        console.log("Profile updated with eth_address for user:", user.id);
+      }
     }
 
     console.log("Wallet created successfully:", walletAddress);
