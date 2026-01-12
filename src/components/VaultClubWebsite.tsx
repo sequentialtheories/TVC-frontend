@@ -1935,11 +1935,13 @@ Your contract is now live and ready for members to join!`);
           <div className="text-center py-6 border-b border-border/20 mb-6">
             <div className="mb-4">
               <div className="text-sm text-foreground/80 mb-2">
-                {deployedSubclubs.length === 0 ? "No contracts have been created yet" : `${deployedSubclubs.length} contract${deployedSubclubs.length === 1 ? '' : 's'} deployed`}
+                {!walletConnected ? "Connect Account First" : deployedSubclubs.length === 0 ? "No contracts have been created yet" : `${deployedSubclubs.length} contract${deployedSubclubs.length === 1 ? '' : 's'} deployed`}
               </div>
-              <div className="text-xs text-muted-foreground">
-                {deployedSubclubs.length === 0 ? "Be the first to deploy a contract" : "Create another contract or join existing ones"}
-              </div>
+              {walletConnected && (
+                <div className="text-xs text-muted-foreground">
+                  {deployedSubclubs.length === 0 ? "" : "Create another contract or join existing ones"}
+                </div>
+              )}
             </div>
             <button 
               onClick={() => setActiveModal('createClub')} 
