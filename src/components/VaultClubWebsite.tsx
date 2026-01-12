@@ -1774,7 +1774,7 @@ Your contract is now live and ready for members to join!`);
               setSelectedContract(null);
               setActiveStrand(null);
             }} className="px-5 py-3 rounded-xl font-medium transition-all duration-300 bg-destructive/10 text-destructive hover:bg-destructive/20 border border-destructive/20">
-                  Remove Wallet
+                  Sign Out
                 </button>
               </div>
             </div>}
