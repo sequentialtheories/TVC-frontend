@@ -1601,30 +1601,30 @@ Your contract is now live and ready for members to join!`);
             Live Market Data
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-5 bg-muted/40 rounded-2xl border border-border/40 hover:border-purple-400/30 transition-all duration-300">
+            <div className="p-5 bg-muted/40 rounded-2xl border border-border/40 hover:border-red-500/30 transition-all duration-300">
               <div className="text-sm text-muted-foreground mb-2">Spark USDC Lending</div>
-              <div className="text-2xl font-bold text-purple-400 mb-3">{aaveRates.liquidityRate.toFixed(2)}%</div>
-              <div className="h-12 bg-gradient-to-r from-purple-500/10 to-purple-500/5 rounded-lg p-2">
+              <div className="text-2xl font-bold text-red-500 mb-3">{aaveRates.liquidityRate.toFixed(2)}%</div>
+              <div className="h-12 bg-gradient-to-r from-red-500/10 to-orange-500/5 rounded-lg p-2">
                 <svg viewBox="0 0 200 40" className="w-full h-full">
-                  <polyline points="10,25 30,28 50,24 70,26 90,23 110,25 130,22 150,24 170,21 190,23" fill="none" stroke="hsl(258 75% 65%)" strokeWidth="2.5" strokeLinecap="round" />
+                  <polyline points="10,25 30,28 50,24 70,26 90,23 110,25 130,22 150,24 170,21 190,23" fill="none" stroke="hsl(12 90% 55%)" strokeWidth="2.5" strokeLinecap="round" />
                 </svg>
               </div>
             </div>
             
-            <div className="p-5 bg-muted/40 rounded-2xl border border-border/40 hover:border-indigo-400/30 transition-all duration-300">
+            <div className="p-5 bg-muted/40 rounded-2xl border border-border/40 hover:border-violet-300/30 transition-all duration-300">
               <div className="text-sm text-muted-foreground mb-2">AAVE Lending Rate</div>
-              <div className="text-2xl font-bold text-indigo-400 mb-3">8.00%</div>
-              <div className="h-12 bg-gradient-to-r from-indigo-500/10 to-indigo-500/5 rounded-lg p-2">
+              <div className="text-2xl font-bold text-violet-300 mb-3">8.00%</div>
+              <div className="h-12 bg-gradient-to-r from-violet-300/10 to-violet-300/5 rounded-lg p-2">
                 <svg viewBox="0 0 200 40" className="w-full h-full">
-                  <polyline points="10,20 30,18 50,22 70,19 90,21 110,17 130,20 150,16 170,19 190,15" fill="none" stroke="hsl(240 65% 60%)" strokeWidth="2.5" strokeLinecap="round" />
+                  <polyline points="10,20 30,18 50,22 70,19 90,21 110,17 130,20 150,16 170,19 190,15" fill="none" stroke="hsl(270 70% 75%)" strokeWidth="2.5" strokeLinecap="round" />
                 </svg>
               </div>
             </div>
             
-            <div className="p-5 bg-muted/40 rounded-2xl border border-border/40 hover:border-accent/30 transition-all duration-300">
+            <div className="p-5 bg-muted/40 rounded-2xl border border-border/40 hover:border-cyan-400/30 transition-all duration-300">
               <div className="text-sm text-muted-foreground mb-2">QuickSwap LP APY</div>
-              <div className="text-2xl font-bold text-accent mb-3">{quickSwapAPY.toFixed(2)}%</div>
-              <div className="h-12 bg-gradient-to-r from-cyan-500/10 to-cyan-500/5 rounded-lg p-2">
+              <div className="text-2xl font-bold text-cyan-400 mb-3">{quickSwapAPY.toFixed(2)}%</div>
+              <div className="h-12 bg-gradient-to-r from-cyan-400/10 to-cyan-400/5 rounded-lg p-2">
                 <svg viewBox="0 0 200 40" className="w-full h-full">
                   <polyline points="10,30 30,25 50,28 70,22 90,26 110,20 130,24 150,18 170,22 190,16" fill="none" stroke="hsl(190 90% 55%)" strokeWidth="2.5" strokeLinecap="round" />
                 </svg>
@@ -1650,52 +1650,52 @@ Your contract is now live and ready for members to join!`);
           <h2 className="text-xl font-semibold text-foreground mb-2">Protocol Access & Resources</h2>
           <div className="text-sm text-muted-foreground mb-5">Direct links to DeFi protocols powering The Vault Club</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            <a href="https://app.spark.fi" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-primary/30 hover:bg-muted/60 transition-all duration-300 group">
+            <a href="https://app.spark.fi" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-red-500/30 hover:bg-muted/60 transition-all duration-300 group">
               <div>
-                <div className="font-semibold text-foreground group-hover:text-primary transition-colors">Spark Protocol</div>
+                <div className="font-semibold text-foreground group-hover:text-red-500 transition-colors">Spark Protocol</div>
                 <div className="text-sm text-muted-foreground">Stablecoin Lending</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-primary rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-red-500 rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
 
-            <a href="https://app.aave.com/?marketName=proto_polygon_v3" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-accent/30 hover:bg-muted/60 transition-all duration-300 group">
+            <a href="https://app.aave.com/?marketName=proto_polygon_v3" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-violet-300/30 hover:bg-muted/60 transition-all duration-300 group">
               <div>
-                <div className="font-semibold text-foreground group-hover:text-accent transition-colors">AAVE Polygon</div>
+                <div className="font-semibold text-foreground group-hover:text-violet-300 transition-colors">AAVE Polygon</div>
                 <div className="text-sm text-muted-foreground">V3 Lending Market</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-accent rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-violet-300 rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
 
-            <a href="https://quickswap.exchange/#/pools/v3" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-secondary/30 hover:bg-muted/60 transition-all duration-300 group">
+            <a href="https://quickswap.exchange/#/pools/v3" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-cyan-400/30 hover:bg-muted/60 transition-all duration-300 group">
               <div>
-                <div className="font-semibold text-foreground group-hover:text-secondary transition-colors">QuickSwap V3</div>
+                <div className="font-semibold text-foreground group-hover:text-cyan-400 transition-colors">QuickSwap V3</div>
                 <div className="text-sm text-muted-foreground">Liquidity Pools</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-secondary rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-cyan-400 rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
 
-            <a href="https://defillama.com/yields?chain=Polygon&project=quickswap-dex" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-primary/30 hover:bg-muted/60 transition-all duration-300 group">
+            <a href="https://defillama.com/yields?chain=Polygon&project=quickswap-dex" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-blue-900/30 hover:bg-muted/60 transition-all duration-300 group">
               <div>
-                <div className="font-semibold text-foreground group-hover:text-primary transition-colors">DeFiLlama</div>
+                <div className="font-semibold text-foreground group-hover:text-blue-800 dark:group-hover:text-blue-400 transition-colors">DeFiLlama</div>
                 <div className="text-sm text-muted-foreground">Live APY Data Source</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-primary rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-blue-800 dark:group-hover:text-blue-400 rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
 
-            <a href="https://www.coingecko.com/en/coins/bitcoin" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-orange-400/30 hover:bg-muted/60 transition-all duration-300 group">
+            <a href="https://www.coingecko.com/en/coins/bitcoin" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-emerald-400/30 hover:bg-muted/60 transition-all duration-300 group">
               <div>
-                <div className="font-semibold text-foreground group-hover:text-orange-400 transition-colors">CoinGecko</div>
+                <div className="font-semibold text-foreground group-hover:text-emerald-400 transition-colors">CoinGecko</div>
                 <div className="text-sm text-muted-foreground">Bitcoin Price Data</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-orange-400 rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-emerald-400 rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
 
-            <a href="https://polygon.technology" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-purple-400/30 hover:bg-muted/60 transition-all duration-300 group">
+            <a href="https://polygon.technology" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-purple-700/30 hover:bg-muted/60 transition-all duration-300 group">
               <div>
-                <div className="font-semibold text-foreground group-hover:text-purple-400 transition-colors">Polygon Network</div>
+                <div className="font-semibold text-foreground group-hover:text-purple-700 dark:group-hover:text-purple-500 transition-colors">Polygon Network</div>
                 <div className="text-sm text-muted-foreground">Layer 2 Infrastructure</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-purple-400 rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-purple-700 dark:group-hover:text-purple-500 rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
           </div>
         </div>
@@ -1704,12 +1704,12 @@ Your contract is now live and ready for members to join!`);
           <h2 className="text-xl font-semibold text-foreground mb-2">Educational Resources</h2>
           <div className="text-sm text-muted-foreground mb-5">Learn more about DeFi and cryptocurrency fundamentals</div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            <a href="https://www.coinbase.com/learn" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-primary/30 hover:bg-muted/60 transition-all duration-300 group">
+            <a href="https://www.coinbase.com/learn" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-blue-700/30 hover:bg-muted/60 transition-all duration-300 group">
               <div>
-                <div className="font-semibold text-foreground group-hover:text-primary transition-colors">Coinbase Learn</div>
+                <div className="font-semibold text-foreground group-hover:text-blue-700 dark:group-hover:text-blue-500 transition-colors">Coinbase Learn</div>
                 <div className="text-sm text-muted-foreground">Crypto Education</div>
               </div>
-              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-primary rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
+              <ArrowLeft className="w-4 h-4 text-muted-foreground group-hover:text-blue-700 dark:group-hover:text-blue-500 rotate-[135deg] transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
 
             <a href="https://docs.aave.com/hub/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 bg-muted/40 rounded-xl border border-border/40 hover:border-accent/30 hover:bg-muted/60 transition-all duration-300 group">
