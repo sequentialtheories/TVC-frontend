@@ -328,7 +328,32 @@ const VaultClubWebsiteInner: React.FC<{ onWalletStateChange?: (connected: boolea
       setSession(session);
       if (session?.user) {
         setWalletConnected(true);
-        setWalletAddress(session.user.email || session.user.id.slice(0, 10));
+        // Defer wallet fetch to avoid deadlock
+        setTimeout(async () => {
+          try {
+            // Fetch user's wallet from database
+            const { data: wallet } = await supabase
+              .from('user_wallets')
+              .select('wallet_address')
+              .eq('user_id', session.user.id)
+              .maybeSingle();
+            
+            if (wallet?.wallet_address) {
+              setWalletAddress(wallet.wallet_address);
+            } else {
+              // Trigger wallet creation if missing
+              const walletResponse = await supabase.functions.invoke('create-turnkey-wallet');
+              if (walletResponse.data?.wallet_address) {
+                setWalletAddress(walletResponse.data.wallet_address);
+              } else {
+                setWalletAddress(session.user.email || session.user.id.slice(0, 10));
+              }
+            }
+          } catch (err) {
+            console.error('Error fetching wallet:', err);
+            setWalletAddress(session.user.email || session.user.id.slice(0, 10));
+          }
+        }, 0);
         setShowAuthModal(false);
       } else {
         setWalletConnected(false);
@@ -343,7 +368,19 @@ const VaultClubWebsiteInner: React.FC<{ onWalletStateChange?: (connected: boolea
       setSession(session);
       if (session?.user) {
         setWalletConnected(true);
-        setWalletAddress(session.user.email || session.user.id.slice(0, 10));
+        // Fetch wallet address
+        supabase
+          .from('user_wallets')
+          .select('wallet_address')
+          .eq('user_id', session.user.id)
+          .maybeSingle()
+          .then(({ data: wallet }) => {
+            if (wallet?.wallet_address) {
+              setWalletAddress(wallet.wallet_address);
+            } else {
+              setWalletAddress(session.user.email || session.user.id.slice(0, 10));
+            }
+          });
       }
     });
     return () => subscription.unsubscribe();
@@ -708,6 +745,7 @@ const VaultClubWebsiteInner: React.FC<{ onWalletStateChange?: (connected: boolea
     try {
       if (authMode === 'signup') {
         const {
+          data,
           error
         } = await supabase.auth.signUp({
           email: authEmail,
@@ -717,18 +755,57 @@ const VaultClubWebsiteInner: React.FC<{ onWalletStateChange?: (connected: boolea
           }
         });
         if (error) throw error;
+        
+        // If user was created and confirmed immediately (email confirmation disabled)
+        if (data.session) {
+          // Create Turnkey wallet for new user
+          try {
+            const walletResponse = await supabase.functions.invoke('create-turnkey-wallet', {
+              headers: {
+                Authorization: `Bearer ${data.session.access_token}`
+              }
+            });
+            console.log('Wallet creation response:', walletResponse.data);
+            if (walletResponse.data?.wallet_address) {
+              setWalletAddress(walletResponse.data.wallet_address);
+            }
+          } catch (walletError) {
+            console.error('Wallet creation error:', walletError);
+            // Non-fatal - user can still use the app
+          }
+        }
+        
         setAuthSuccess('Check your email for confirmation link!');
         setAuthEmail('');
         setAuthPassword('');
         setAuthConfirmPassword('');
       } else {
         const {
+          data,
           error
         } = await supabase.auth.signInWithPassword({
           email: authEmail,
           password: authPassword
         });
         if (error) throw error;
+        
+        // Check/create wallet on login
+        if (data.session) {
+          try {
+            const walletResponse = await supabase.functions.invoke('create-turnkey-wallet', {
+              headers: {
+                Authorization: `Bearer ${data.session.access_token}`
+              }
+            });
+            console.log('Wallet check/creation response:', walletResponse.data);
+            if (walletResponse.data?.wallet_address) {
+              setWalletAddress(walletResponse.data.wallet_address);
+            }
+          } catch (walletError) {
+            console.error('Wallet check error:', walletError);
+          }
+        }
+        
         setVaultBalance("0");
         setAuthEmail('');
         setAuthPassword('');
