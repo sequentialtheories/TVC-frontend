@@ -210,7 +210,20 @@ export const TutorialProvider: React.FC<{
 export const useTutorial = () => {
   const context = useContext(TutorialContext);
   if (!context) {
-    throw new Error('useTutorial must be used within a TutorialProvider');
+    // Return a safe default when used outside provider (prevents crashes during initial render)
+    return {
+      currentStep: 0,
+      isActive: false,
+      hasSkipped: false,
+      hasCompleted: false,
+      currentStepData: null,
+      nextStep: () => {},
+      skipTutorial: () => {},
+      dismissStep: () => {},
+      completeTutorial: () => {},
+      resetTutorial: () => {},
+      checkAdvancement: () => {},
+    } as TutorialContextType;
   }
   return context;
 };
