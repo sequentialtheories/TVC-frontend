@@ -320,7 +320,16 @@ const VaultClubWebsiteInner: React.FC<{
   const [authError, setAuthError] = useState('');
   const [authSuccess, setAuthSuccess] = useState('');
 
-  // Auth state listener
+  // Sync auth modal state with tutorial system
+  useEffect(() => {
+    tutorial.setAuthModalOpen(showAuthModal);
+  }, [showAuthModal, tutorial]);
+
+  // Sync current page with tutorial system on mount and changes
+  useEffect(() => {
+    tutorial.setCurrentPage(currentPage);
+  }, [currentPage, tutorial]);
+
   useEffect(() => {
     const {
       data: {
@@ -354,6 +363,7 @@ const VaultClubWebsiteInner: React.FC<{
           }
         }, 0);
         setShowAuthModal(false);
+        // Note: tutorial.setAuthModalOpen(false) is handled in useEffect below
       } else {
         setWalletConnected(false);
         setWalletAddress('');
@@ -610,6 +620,7 @@ const VaultClubWebsiteInner: React.FC<{
   };
   const navigateTo = page => {
     setCurrentPage(page);
+    tutorial.setCurrentPage(page); // Sync with tutorial system
   };
   const calculateWeeklyDepositAmount = () => {
     if (!walletConnected || !walletAddress) {
@@ -725,6 +736,7 @@ const VaultClubWebsiteInner: React.FC<{
   };
   const handleConnectWallet = async () => {
     setShowAuthModal(true);
+    tutorial.setAuthModalOpen(true); // Suppress tutorials during auth
   };
   const handleAuthSubmit = async () => {
     if (authMode === 'signup' && authPassword !== authConfirmPassword) {
@@ -825,6 +837,7 @@ const VaultClubWebsiteInner: React.FC<{
   };
   const goHome = () => {
     setCurrentPage('home');
+    tutorial.setCurrentPage('home'); // Sync with tutorial system
   };
   const handleDeposit = async () => {
     const weeklyAmount = calculateWeeklyDepositAmount();
@@ -2452,7 +2465,10 @@ Your contract is now live and ready for members to join!`);
                   <p className="text-white/80">Access The Vault Club.</p>
                   <p className="text-white/60 text-sm">(Sequence Theory, Inc. Credentials)</p>
                 </div>
-                <button onClick={() => setShowAuthModal(false)} className="text-white/80 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10" aria-label="Close modal">
+                <button onClick={() => {
+                  setShowAuthModal(false);
+                  tutorial.setAuthModalOpen(false);
+                }} className="text-white/80 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10" aria-label="Close modal">
                   <X className="w-6 h-6" />
                 </button>
               </div>
