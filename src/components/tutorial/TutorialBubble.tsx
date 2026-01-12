@@ -79,17 +79,25 @@ export const TutorialBubble: React.FC<TutorialBubbleProps> = ({ targetRef }) => 
   const isFirstStep = currentStep === 1;
   const totalSteps = TUTORIAL_STEPS.length;
 
-  const getArrowClasses = () => {
-    const base = 'absolute w-4 h-4 bg-card border border-border/40 rotate-45';
+  const getArrowStyles = (): React.CSSProperties => {
+    const base: React.CSSProperties = {
+      position: 'absolute',
+      width: '16px',
+      height: '16px',
+      transform: 'rotate(45deg)',
+      background: 'linear-gradient(145deg, hsl(225 22% 18%), hsl(225 22% 14%))',
+      borderColor: 'hsl(258 75% 65% / 0.3)',
+    };
+    
     switch (currentStepData.position) {
       case 'top':
-        return `${base} -bottom-2 left-1/2 -translate-x-1/2 border-t-0 border-l-0`;
+        return { ...base, bottom: '-8px', left: '50%', marginLeft: '-8px', borderRight: '1px solid', borderBottom: '1px solid', borderTop: 'none', borderLeft: 'none' };
       case 'bottom':
-        return `${base} -top-2 left-1/2 -translate-x-1/2 border-b-0 border-r-0`;
+        return { ...base, top: '-8px', left: '50%', marginLeft: '-8px', borderLeft: '1px solid', borderTop: '1px solid', borderRight: 'none', borderBottom: 'none' };
       case 'left':
-        return `${base} -right-2 top-1/2 -translate-y-1/2 border-l-0 border-b-0`;
+        return { ...base, right: '-8px', top: '50%', marginTop: '-8px', borderTop: '1px solid', borderRight: '1px solid', borderBottom: 'none', borderLeft: 'none' };
       case 'right':
-        return `${base} -left-2 top-1/2 -translate-y-1/2 border-r-0 border-t-0`;
+        return { ...base, left: '-8px', top: '50%', marginTop: '-8px', borderBottom: '1px solid', borderLeft: '1px solid', borderTop: 'none', borderRight: 'none' };
       default:
         return base;
     }
@@ -106,9 +114,13 @@ export const TutorialBubble: React.FC<TutorialBubbleProps> = ({ targetRef }) => 
       aria-label={`Tutorial step ${currentStep} of ${totalSteps}`}
     >
       {/* Bubble content */}
-      <div className="relative glass-card p-4 border border-primary/30 shadow-glow-purple">
+      <div className="relative p-4 rounded-2xl" style={{
+        background: 'linear-gradient(145deg, hsl(225 22% 18%), hsl(225 22% 12%))',
+        border: '1px solid hsl(258 75% 65% / 0.3)',
+        boxShadow: '0 0 40px hsl(258 75% 65% / 0.3), 0 20px 40px -10px hsl(0 0% 0% / 0.5)',
+      }}>
         {/* Arrow */}
-        <div className={getArrowClasses()} />
+        <div style={getArrowStyles()} />
         
         {/* Header */}
         <div className="flex items-start justify-between mb-3">

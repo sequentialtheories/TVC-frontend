@@ -102,20 +102,25 @@ export const TutorialProvider: React.FC<{
     }
   }, []);
 
-  // Activate tutorial when user disconnects (if not skipped/completed)
+  // Handle wallet connection state changes
   useEffect(() => {
-    if (!walletConnected && !hasSkipped && !hasCompleted) {
+    if (walletConnected) {
+      // User connected - if tutorial was active, complete it and clear state
+      if (isActive || currentStep > 0) {
+        setHasCompleted(true);
+        setIsActive(false);
+        setCurrentStep(0);
+        localStorage.setItem(STORAGE_KEYS.completed, 'true');
+        localStorage.removeItem(STORAGE_KEYS.step);
+      }
+    } else if (!hasSkipped && !hasCompleted) {
+      // User disconnected and hasn't skipped/completed - activate tutorial
       if (currentStep === 0) {
         setCurrentStep(1);
       }
       setIsActive(true);
-    } else if (walletConnected) {
-      // User connected - complete tutorial
-      if (isActive) {
-        completeTutorial();
-      }
     }
-  }, [walletConnected, hasSkipped, hasCompleted]);
+  }, [walletConnected]);
 
   // Save step progress
   useEffect(() => {
