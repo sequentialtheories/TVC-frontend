@@ -89,13 +89,11 @@ const rigorAmounts: Record<string, number> = {
   heavy: 100,
   custom: 0
 };
-
 const toWeeklyAmount = (amount: number, frequency: 'daily' | 'weekly' | 'monthly' = 'weekly') => {
   if (frequency === 'daily') return amount * 7;
   if (frequency === 'monthly') return amount * 12 / 52;
   return amount;
 };
-
 const periodsPerYear = (frequency: 'daily' | 'weekly' | 'monthly' = 'weekly') => {
   if (frequency === 'daily') return 365;
   if (frequency === 'monthly') return 12;
@@ -222,7 +220,11 @@ async function depositToVault(amountEther: number): Promise<boolean> {
     return false;
   }
 }
-const VaultClubWebsiteInner: React.FC<{ onWalletStateChange?: (connected: boolean) => void }> = ({ onWalletStateChange }) => {
+const VaultClubWebsiteInner: React.FC<{
+  onWalletStateChange?: (connected: boolean) => void;
+}> = ({
+  onWalletStateChange
+}) => {
   const [activeModal, setActiveModal] = useState(null);
   const [activeStrand, setActiveStrand] = useState(null);
   const [currentPage, setCurrentPage] = useState('home');
@@ -332,12 +334,9 @@ const VaultClubWebsiteInner: React.FC<{ onWalletStateChange?: (connected: boolea
         setTimeout(async () => {
           try {
             // Fetch user's wallet from database
-            const { data: wallet } = await supabase
-              .from('user_wallets')
-              .select('wallet_address')
-              .eq('user_id', session.user.id)
-              .maybeSingle();
-            
+            const {
+              data: wallet
+            } = await supabase.from('user_wallets').select('wallet_address').eq('user_id', session.user.id).maybeSingle();
             if (wallet?.wallet_address) {
               setWalletAddress(wallet.wallet_address);
             } else {
@@ -369,18 +368,15 @@ const VaultClubWebsiteInner: React.FC<{ onWalletStateChange?: (connected: boolea
       if (session?.user) {
         setWalletConnected(true);
         // Fetch wallet address
-        supabase
-          .from('user_wallets')
-          .select('wallet_address')
-          .eq('user_id', session.user.id)
-          .maybeSingle()
-          .then(({ data: wallet }) => {
-            if (wallet?.wallet_address) {
-              setWalletAddress(wallet.wallet_address);
-            } else {
-              setWalletAddress(session.user.email || session.user.id.slice(0, 10));
-            }
-          });
+        supabase.from('user_wallets').select('wallet_address').eq('user_id', session.user.id).maybeSingle().then(({
+          data: wallet
+        }) => {
+          if (wallet?.wallet_address) {
+            setWalletAddress(wallet.wallet_address);
+          } else {
+            setWalletAddress(session.user.email || session.user.id.slice(0, 10));
+          }
+        });
       }
     });
     return () => subscription.unsubscribe();
@@ -755,7 +751,7 @@ const VaultClubWebsiteInner: React.FC<{ onWalletStateChange?: (connected: boolea
           }
         });
         if (error) throw error;
-        
+
         // If user was created and confirmed immediately (email confirmation disabled)
         if (data.session) {
           // Create Turnkey wallet for new user
@@ -774,7 +770,6 @@ const VaultClubWebsiteInner: React.FC<{ onWalletStateChange?: (connected: boolea
             // Non-fatal - user can still use the app
           }
         }
-        
         setAuthSuccess('Check your email for confirmation link!');
         setAuthEmail('');
         setAuthPassword('');
@@ -788,7 +783,7 @@ const VaultClubWebsiteInner: React.FC<{ onWalletStateChange?: (connected: boolea
           password: authPassword
         });
         if (error) throw error;
-        
+
         // Check/create wallet on login
         if (data.session) {
           try {
@@ -805,7 +800,6 @@ const VaultClubWebsiteInner: React.FC<{ onWalletStateChange?: (connected: boolea
             console.error('Wallet check error:', walletError);
           }
         }
-        
         setVaultBalance("0");
         setAuthEmail('');
         setAuthPassword('');
@@ -1084,20 +1078,12 @@ Your contract is now live and ready for members to join!`);
                 Maximum Members
               </label>
               <div className="grid grid-cols-4 gap-2">
-                {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
-                  <button
-                    key={num}
-                    type="button"
-                    onClick={() => setClubCreationData(prev => ({ ...prev, maxMembers: num }))}
-                    className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
-                      clubCreationData.maxMembers === num
-                        ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300'
-                        : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
-                    }`}
-                  >
+                {[1, 2, 3, 4, 5, 6, 7, 8].map(num => <button key={num} type="button" onClick={() => setClubCreationData(prev => ({
+                  ...prev,
+                  maxMembers: num
+                }))} className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${clubCreationData.maxMembers === num ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'}`}>
                     {num}
-                  </button>
-                ))}
+                  </button>)}
               </div>
             </div>
 
@@ -1106,69 +1092,32 @@ Your contract is now live and ready for members to join!`);
                 Lockup Consensus ({clubCreationData.isChargedContract ? 'Months' : 'Years'})
               </label>
               <div className="grid grid-cols-4 gap-2">
-                {clubCreationData.isChargedContract
-                  ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(num => (
-                      <button
-                        key={num}
-                        type="button"
-                        onClick={() => setClubCreationData(prev => ({ ...prev, lockupPeriod: num }))}
-                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
-                          clubCreationData.lockupPeriod === num
-                            ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300'
-                            : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
-                        }`}
-                      >
+                {clubCreationData.isChargedContract ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(num => <button key={num} type="button" onClick={() => setClubCreationData(prev => ({
+                  ...prev,
+                  lockupPeriod: num
+                }))} className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${clubCreationData.lockupPeriod === num ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'}`}>
                         {num}
-                      </button>
-                    ))
-                  : <>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(num => (
-                      <button
-                        key={num}
-                        type="button"
-                        onClick={() => setClubCreationData(prev => ({ ...prev, lockupPeriod: num }))}
-                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
-                          clubCreationData.lockupPeriod === num
-                            ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300'
-                            : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
-                        }`}
-                      >
+                      </button>) : <>
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(num => <button key={num} type="button" onClick={() => setClubCreationData(prev => ({
+                    ...prev,
+                    lockupPeriod: num
+                  }))} className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${clubCreationData.lockupPeriod === num ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'}`}>
                         {num}
-                      </button>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => setShowExtendedLockup(!showExtendedLockup)}
-                      className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
-                        showExtendedLockup || clubCreationData.lockupPeriod > 11
-                          ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300'
-                          : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
-                      }`}
-                    >
+                      </button>)}
+                    <button type="button" onClick={() => setShowExtendedLockup(!showExtendedLockup)} className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${showExtendedLockup || clubCreationData.lockupPeriod > 11 ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'}`}>
                       More
                     </button>
-                    {showExtendedLockup && (
-                      <div className="col-span-4 mt-2">
+                    {showExtendedLockup && <div className="col-span-4 mt-2">
                         <div className="grid grid-cols-5 gap-2">
-                          {[12, 13, 14, 15, 16, 17, 18, 19, 20].map(num => (
-                            <button
-                              key={num}
-                              type="button"
-                              onClick={() => setClubCreationData(prev => ({ ...prev, lockupPeriod: num }))}
-                              className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${
-                                clubCreationData.lockupPeriod === num
-                                  ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300'
-                                  : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
-                              }`}
-                            >
+                          {[12, 13, 14, 15, 16, 17, 18, 19, 20].map(num => <button key={num} type="button" onClick={() => setClubCreationData(prev => ({
+                        ...prev,
+                        lockupPeriod: num
+                      }))} className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${clubCreationData.lockupPeriod === num ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'}`}>
                               {num}
-                            </button>
-                          ))}
+                            </button>)}
                         </div>
-                      </div>
-                    )}
-                  </>
-                }
+                      </div>}
+                  </>}
               </div>
             </div>
 
@@ -1177,20 +1126,12 @@ Your contract is now live and ready for members to join!`);
                 Investment Rigor
               </label>
               <div className="grid grid-cols-4 gap-2">
-                {(['light', 'medium', 'heavy', 'custom'] as const).map(level => (
-                  <button
-                    key={level}
-                    type="button"
-                    onClick={() => setClubCreationData(prev => ({ ...prev, rigorLevel: level }))}
-                    className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 capitalize ${
-                      clubCreationData.rigorLevel === level
-                        ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300'
-                        : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
-                    }`}
-                  >
+                {(['light', 'medium', 'heavy', 'custom'] as const).map(level => <button key={level} type="button" onClick={() => setClubCreationData(prev => ({
+                  ...prev,
+                  rigorLevel: level
+                }))} className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 capitalize ${clubCreationData.rigorLevel === level ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'}`}>
                     {level}
-                  </button>
-                ))}
+                  </button>)}
               </div>
               
               {/* Custom Schedule Input */}
@@ -1199,20 +1140,12 @@ Your contract is now live and ready for members to join!`);
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Custom Deposit Schedule</label>
                       <div className="mt-2 flex gap-2">
-                        {(['daily', 'weekly', 'monthly'] as const).map(freq => (
-                          <button
-                            key={freq}
-                            type="button"
-                            onClick={() => setClubCreationData(prev => ({ ...prev, customDepositFrequency: freq }))}
-                            className={`px-3 py-1 rounded-md text-xs font-medium transition-colors capitalize ${
-                              clubCreationData.customDepositFrequency === freq
-                                ? 'bg-blue-100 text-blue-700 border border-blue-200'
-                                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
-                            }`}
-                          >
+                        {(['daily', 'weekly', 'monthly'] as const).map(freq => <button key={freq} type="button" onClick={() => setClubCreationData(prev => ({
+                        ...prev,
+                        customDepositFrequency: freq
+                      }))} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors capitalize ${clubCreationData.customDepositFrequency === freq ? 'bg-blue-100 text-blue-700 border border-blue-200' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'}`}>
                             {freq}
-                          </button>
-                        ))}
+                          </button>)}
                       </div>
                     </div>
                     <button type="button" onClick={() => {
@@ -1322,24 +1255,12 @@ Your contract is now live and ready for members to join!`);
                 Risk Level
               </label>
               <div className="flex space-x-2">
-                {(['low', 'medium', 'high'] as const).map(level => (
-                  <button
-                    key={level}
-                    type="button"
-                    onClick={() => setClubCreationData(prev => ({ ...prev, riskLevel: level }))}
-                    className={`flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all duration-300 capitalize ${
-                      clubCreationData.riskLevel === level
-                        ? level === 'low' 
-                          ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border-2 border-green-300'
-                          : level === 'medium'
-                          ? 'bg-gradient-to-r from-yellow-100 to-amber-100 text-yellow-800 border-2 border-yellow-300'
-                          : 'bg-gradient-to-r from-red-100 to-rose-100 text-red-800 border-2 border-red-300'
-                        : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'
-                    }`}
-                  >
+                {(['low', 'medium', 'high'] as const).map(level => <button key={level} type="button" onClick={() => setClubCreationData(prev => ({
+                  ...prev,
+                  riskLevel: level
+                }))} className={`flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all duration-300 capitalize ${clubCreationData.riskLevel === level ? level === 'low' ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border-2 border-green-300' : level === 'medium' ? 'bg-gradient-to-r from-yellow-100 to-amber-100 text-yellow-800 border-2 border-yellow-300' : 'bg-gradient-to-r from-red-100 to-rose-100 text-red-800 border-2 border-red-300' : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'}`}>
                     {level}
-                  </button>
-                ))}
+                  </button>)}
               </div>
               <div className="mt-3 p-3 bg-white rounded-lg border border-gray-200">
                 <div className="text-xs text-gray-600">
@@ -1681,7 +1602,7 @@ Your contract is now live and ready for members to join!`);
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="p-5 bg-muted/40 rounded-2xl border border-border/40 hover:border-purple-400/30 transition-all duration-300">
-              <div className="text-sm text-muted-foreground mb-2">AAVE USDC Lending</div>
+              <div className="text-sm text-muted-foreground mb-2">Spark USDC Lending</div>
               <div className="text-2xl font-bold text-purple-400 mb-3">{aaveRates.liquidityRate.toFixed(2)}%</div>
               <div className="h-12 bg-gradient-to-r from-purple-500/10 to-purple-500/5 rounded-lg p-2">
                 <svg viewBox="0 0 200 40" className="w-full h-full">
@@ -1829,11 +1750,7 @@ Your contract is now live and ready for members to join!`);
           </div>
           {!walletConnected ? <div className="text-center py-10">
               <div className="text-muted-foreground mb-5">No wallet connected</div>
-              <button 
-                ref={connectAccountRef}
-                onClick={handleConnectWallet} 
-                className={`btn-premium text-white ${tutorial.currentStepData?.target === 'connect-account' ? 'tutorial-highlight' : ''}`}
-              >
+              <button ref={connectAccountRef} onClick={handleConnectWallet} className={`btn-premium text-white ${tutorial.currentStepData?.target === 'connect-account' ? 'tutorial-highlight' : ''}`}>
                 Connect Account
               </button>
             </div> : <div className="text-center py-4">
@@ -2033,17 +1950,11 @@ Your contract is now live and ready for members to join!`);
               <div className="text-sm text-foreground/80 mb-2">
                 {!walletConnected ? "Connect Account First" : deployedSubclubs.length === 0 ? "No contracts have been created yet" : `${deployedSubclubs.length} contract${deployedSubclubs.length === 1 ? '' : 's'} deployed`}
               </div>
-              {walletConnected && (
-                <div className="text-xs text-muted-foreground">
+              {walletConnected && <div className="text-xs text-muted-foreground">
                   {deployedSubclubs.length === 0 ? "" : "Create another contract or join existing ones"}
-                </div>
-              )}
+                </div>}
             </div>
-            <button 
-              onClick={() => setActiveModal('createClub')} 
-              className={`btn-premium ${!walletConnected ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={!walletConnected}
-            >
+            <button onClick={() => setActiveModal('createClub')} className={`btn-premium ${!walletConnected ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={!walletConnected}>
               Create New Contract
             </button>
           </div>
@@ -2463,56 +2374,40 @@ Your contract is now live and ready for members to join!`);
             <span className={`text-[11px] font-medium mt-1.5 transition-colors ${currentPage === 'home' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Home</span>
           </button>
           
-          <button 
-            ref={navWalletRef}
-            onClick={() => {
-              navigateTo('personal');
-              tutorial.checkAdvancement('navigation', 'personal');
-            }} 
-            className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-wallet' ? 'tutorial-highlight' : ''}`}
-          >
+          <button ref={navWalletRef} onClick={() => {
+          navigateTo('personal');
+          tutorial.checkAdvancement('navigation', 'personal');
+        }} className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-wallet' ? 'tutorial-highlight' : ''}`}>
             <div className={`p-2.5 rounded-xl transition-all duration-300 ${currentPage === 'personal' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
               <User className="w-5 h-5" />
             </div>
             <span className={`text-[11px] font-medium mt-1.5 transition-colors ${currentPage === 'personal' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Wallet</span>
           </button>
           
-          <button 
-            ref={navContractsRef}
-            onClick={() => {
-              navigateTo('group');
-              tutorial.checkAdvancement('navigation', 'group');
-            }} 
-            className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-contracts' ? 'tutorial-highlight' : ''}`}
-          >
+          <button ref={navContractsRef} onClick={() => {
+          navigateTo('group');
+          tutorial.checkAdvancement('navigation', 'group');
+        }} className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-contracts' ? 'tutorial-highlight' : ''}`}>
             <div className={`p-2.5 rounded-xl transition-all duration-300 ${currentPage === 'group' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
               <Users className="w-5 h-5" />
             </div>
             <span className={`text-[11px] font-medium mt-1.5 transition-colors ${currentPage === 'group' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Contracts</span>
           </button>
           
-          <button 
-            ref={navDataRef}
-            onClick={() => {
-              navigateTo('dataset');
-              tutorial.checkAdvancement('navigation', 'dataset');
-            }} 
-            className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-data' ? 'tutorial-highlight' : ''}`}
-          >
+          <button ref={navDataRef} onClick={() => {
+          navigateTo('dataset');
+          tutorial.checkAdvancement('navigation', 'dataset');
+        }} className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-data' ? 'tutorial-highlight' : ''}`}>
             <div className={`p-2.5 rounded-xl transition-all duration-300 ${currentPage === 'dataset' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
               <Database className="w-5 h-5" />
             </div>
             <span className={`text-[11px] font-medium mt-1.5 transition-colors ${currentPage === 'dataset' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Data</span>
           </button>
 
-          <button 
-            ref={navFutureRef}
-            onClick={() => {
-              navigateTo('simulation');
-              tutorial.checkAdvancement('navigation', 'simulation');
-            }} 
-            className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-future' ? 'tutorial-highlight' : ''}`}
-          >
+          <button ref={navFutureRef} onClick={() => {
+          navigateTo('simulation');
+          tutorial.checkAdvancement('navigation', 'simulation');
+        }} className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-future' ? 'tutorial-highlight' : ''}`}>
             <div className={`p-2.5 rounded-xl transition-all duration-300 ${currentPage === 'simulation' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
               <TrendingUp className="w-5 h-5" />
             </div>
@@ -2522,21 +2417,11 @@ Your contract is now live and ready for members to join!`);
       </nav>
 
       {/* Tutorial Bubbles */}
-      {tutorial.isActive && tutorial.currentStepData?.target === 'nav-wallet' && (
-        <TutorialBubble targetRef={navWalletRef} />
-      )}
-      {tutorial.isActive && tutorial.currentStepData?.target === 'nav-contracts' && (
-        <TutorialBubble targetRef={navContractsRef} />
-      )}
-      {tutorial.isActive && tutorial.currentStepData?.target === 'nav-data' && (
-        <TutorialBubble targetRef={navDataRef} />
-      )}
-      {tutorial.isActive && tutorial.currentStepData?.target === 'nav-future' && (
-        <TutorialBubble targetRef={navFutureRef} />
-      )}
-      {tutorial.isActive && tutorial.currentStepData?.target === 'connect-account' && (
-        <TutorialBubble targetRef={connectAccountRef} />
-      )}
+      {tutorial.isActive && tutorial.currentStepData?.target === 'nav-wallet' && <TutorialBubble targetRef={navWalletRef} />}
+      {tutorial.isActive && tutorial.currentStepData?.target === 'nav-contracts' && <TutorialBubble targetRef={navContractsRef} />}
+      {tutorial.isActive && tutorial.currentStepData?.target === 'nav-data' && <TutorialBubble targetRef={navDataRef} />}
+      {tutorial.isActive && tutorial.currentStepData?.target === 'nav-future' && <TutorialBubble targetRef={navFutureRef} />}
+      {tutorial.isActive && tutorial.currentStepData?.target === 'connect-account' && <TutorialBubble targetRef={connectAccountRef} />}
 
       {/* Main Content */}
       <main className="relative">
@@ -2548,7 +2433,10 @@ Your contract is now live and ready for members to join!`);
       </main>
 
       {/* Strand Modal */}
-      {activeStrand && StrandModal({ strand: activeStrand, onClose: closeModal })}
+      {activeStrand && StrandModal({
+      strand: activeStrand,
+      onClose: closeModal
+    })}
 
       {/* Create Club Modal */}
       {activeModal === 'createClub' && CreateClubModal()}
@@ -2624,12 +2512,8 @@ Your contract is now live and ready for members to join!`);
 // Wrapper that tracks wallet state for tutorial provider
 const VaultClubWebsite = () => {
   const [walletState, setWalletState] = useState(false);
-  
-  return (
-    <TutorialProvider walletConnected={walletState}>
+  return <TutorialProvider walletConnected={walletState}>
       <VaultClubWebsiteInner onWalletStateChange={setWalletState} />
-    </TutorialProvider>
-  );
+    </TutorialProvider>;
 };
-
 export default VaultClubWebsite;
