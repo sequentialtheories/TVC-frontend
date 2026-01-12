@@ -7,13 +7,14 @@ interface TutorialBubbleProps {
 }
 
 export const TutorialBubble: React.FC<TutorialBubbleProps> = ({ targetRef }) => {
-  const { currentStepData, currentStep, dismissStep, skipTutorial } = useTutorial();
+  const { currentStepData, currentStep, dismissStep, skipTutorial, shouldShowBubble } = useTutorial();
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [isVisible, setIsVisible] = useState(false);
   const bubbleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!currentStepData || !targetRef.current) {
+    // Don't show if conditions aren't met
+    if (!shouldShowBubble || !currentStepData || !targetRef.current) {
       setIsVisible(false);
       return;
     }
@@ -72,9 +73,10 @@ export const TutorialBubble: React.FC<TutorialBubbleProps> = ({ targetRef }) => 
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition, true);
     };
-  }, [currentStepData, targetRef]);
+  }, [currentStepData, targetRef, shouldShowBubble]);
 
-  if (!currentStepData) return null;
+  // Don't render anything if bubble shouldn't show
+  if (!shouldShowBubble || !currentStepData) return null;
 
   const isFirstStep = currentStep === 1;
   const totalSteps = TUTORIAL_STEPS.length;
@@ -102,6 +104,25 @@ export const TutorialBubble: React.FC<TutorialBubbleProps> = ({ targetRef }) => 
         return base;
     }
   };
+
+  // Determine the action hint based on step type
+  const getActionHint = () => {
+    switch (currentStepData.advanceOn) {
+      case 'navigation':
+        return `Tap the ${currentStepData.advanceValue === 'personal' ? 'Wallet' : 
+          currentStepData.advanceValue === 'simulation' ? 'Future' : 
+          currentStepData.advanceValue === 'group' ? 'Contracts' : 
+          currentStepData.advanceValue} tab to continue`;
+      case 'action':
+        return 'Complete this action to continue';
+      case 'dismiss':
+        return null; // "Got it" button handles this
+      default:
+        return null;
+    }
+  };
+
+  const actionHint = getActionHint();
 
   return (
     <div
@@ -133,9 +154,9 @@ export const TutorialBubble: React.FC<TutorialBubbleProps> = ({ targetRef }) => 
             </h3>
           </div>
           <button
-            onClick={dismissStep}
+            onClick={skipTutorial}
             className="p-1 rounded-lg hover:bg-muted/50 transition-colors text-muted-foreground hover:text-foreground"
-            aria-label="Close tutorial step"
+            aria-label="Skip tutorial"
             type="button"
           >
             <X className="w-4 h-4" />
@@ -143,9 +164,16 @@ export const TutorialBubble: React.FC<TutorialBubbleProps> = ({ targetRef }) => 
         </div>
 
         {/* Message */}
-        <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+        <p className="text-sm text-muted-foreground leading-relaxed mb-3">
           {currentStepData.message}
         </p>
+
+        {/* Action hint for navigation/action steps */}
+        {actionHint && (
+          <p className="text-xs text-primary/70 italic mb-3">
+            {actionHint}
+          </p>
+        )}
 
         {/* Actions */}
         <div className="flex items-center justify-between">
