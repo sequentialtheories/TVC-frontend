@@ -1,1 +1,4 @@
 project_id = "qldjhlnsphlixmzzrdwi"
+
+[functions.create-turnkey-wallet]
+verify_jwt = false
