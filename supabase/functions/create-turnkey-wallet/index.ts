@@ -1,21 +1,21 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.90.1";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
     // Get the authorization header
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
+    if (!authHeader?.startsWith("Bearer ")) {
+      console.error("Missing or invalid Authorization header");
       return new Response(
         JSON.stringify({ error: "No authorization header" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -31,18 +31,22 @@ serve(async (req) => {
       global: { headers: { Authorization: authHeader } },
     });
 
-    // Get the authenticated user
-    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+    // Validate the JWT and get claims
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } = await supabaseClient.auth.getClaims(token);
     
-    if (userError || !user) {
-      console.error("User authentication error:", userError);
+    if (claimsError || !claimsData?.claims) {
+      console.error("User authentication error:", claimsError);
       return new Response(
         JSON.stringify({ error: "User not authenticated" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    console.log("Processing wallet creation for user:", user.id, user.email);
+    const userId = claimsData.claims.sub as string;
+    const userEmail = claimsData.claims.email as string | undefined;
+
+    console.log("Processing wallet creation for user:", userId, userEmail);
 
     // Use service role client for database operations
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
@@ -51,7 +55,7 @@ serve(async (req) => {
     const { data: existingWallet, error: walletCheckError } = await supabaseAdmin
       .from("user_wallets")
       .select("*")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .maybeSingle();
 
     if (walletCheckError) {
@@ -93,11 +97,11 @@ serve(async (req) => {
           timestampMs: timestamp,
           organizationId: turnkeyOrgId,
           parameters: {
-            subOrganizationName: `User-${user.id.slice(0, 8)}`,
+            subOrganizationName: `User-${userId.slice(0, 8)}`,
             rootQuorumThreshold: 1,
             rootUsers: [{
-              userName: user.email || `user-${user.id.slice(0, 8)}`,
-              userEmail: user.email,
+              userName: userEmail || `user-${userId.slice(0, 8)}`,
+              userEmail: userEmail,
               apiKeys: [],
               authenticators: []
             }],
@@ -116,7 +120,7 @@ serve(async (req) => {
         // For now, generate a placeholder address since full Turnkey signing requires more setup
         // This would be replaced with actual Turnkey API call in production
         const encoder = new TextEncoder();
-        const data = encoder.encode(user.id + timestamp);
+        const data = encoder.encode(userId + timestamp);
         const hashBuffer = await crypto.subtle.digest("SHA-256", data);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
         walletAddress = "0x" + hashArray.slice(0, 20).map(b => b.toString(16).padStart(2, "0")).join("");
@@ -126,7 +130,7 @@ serve(async (req) => {
         console.error("Turnkey wallet creation error:", turnkeyError);
         // Fall back to generated address
         const encoder = new TextEncoder();
-        const data = encoder.encode(user.id + Date.now().toString());
+        const data = encoder.encode(userId + Date.now().toString());
         const hashBuffer = await crypto.subtle.digest("SHA-256", data);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
         walletAddress = "0x" + hashArray.slice(0, 20).map(b => b.toString(16).padStart(2, "0")).join("");
@@ -135,7 +139,7 @@ serve(async (req) => {
       // Generate a wallet address based on user ID (for demo/dev purposes)
       console.log("Turnkey not fully configured, generating demo wallet address...");
       const encoder = new TextEncoder();
-      const data = encoder.encode(user.id + Date.now().toString());
+      const data = encoder.encode(userId + Date.now().toString());
       const hashBuffer = await crypto.subtle.digest("SHA-256", data);
       const hashArray = Array.from(new Uint8Array(hashBuffer));
       walletAddress = "0x" + hashArray.slice(0, 20).map(b => b.toString(16).padStart(2, "0")).join("");
@@ -145,7 +149,7 @@ serve(async (req) => {
     const { data: newWallet, error: insertError } = await supabaseAdmin
       .from("user_wallets")
       .insert({
-        user_id: user.id,
+        user_id: userId,
         wallet_address: walletAddress,
         provider: "turnkey",
         provenance: "turnkey_invisible",
@@ -169,7 +173,7 @@ serve(async (req) => {
     const { data: existingProfile, error: profileCheckError } = await supabaseAdmin
       .from("profiles")
       .select("*")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .maybeSingle();
 
     if (profileCheckError) {
@@ -178,13 +182,13 @@ serve(async (req) => {
 
     if (!existingProfile) {
       // Create profile if it doesn't exist
-      console.log("Profile not found, creating new profile for user:", user.id);
+      console.log("Profile not found, creating new profile for user:", userId);
       const { error: profileInsertError } = await supabaseAdmin
         .from("profiles")
         .insert({
-          user_id: user.id,
-          email: user.email || "no-email@example.com",
-          name: user.user_metadata?.name || "User",
+          user_id: userId,
+          email: userEmail || "no-email@example.com",
+          name: "User",
           eth_address: walletAddress,
         });
 
@@ -192,20 +196,20 @@ serve(async (req) => {
         console.error("Error creating profile:", profileInsertError);
         // Non-fatal - wallet was created successfully
       } else {
-        console.log("Profile created successfully for user:", user.id);
+        console.log("Profile created successfully for user:", userId);
       }
     } else {
       // Update existing profile with eth_address
       const { error: profileUpdateError } = await supabaseAdmin
         .from("profiles")
         .update({ eth_address: walletAddress })
-        .eq("user_id", user.id);
+        .eq("user_id", userId);
 
       if (profileUpdateError) {
         console.error("Error updating profile:", profileUpdateError);
         // Non-fatal - wallet was created successfully
       } else {
-        console.log("Profile updated with eth_address for user:", user.id);
+        console.log("Profile updated with eth_address for user:", userId);
       }
     }
 
