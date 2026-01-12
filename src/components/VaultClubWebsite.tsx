@@ -1767,7 +1767,8 @@ Your contract is now live and ready for members to join!`);
                 <button onClick={() => setAutoRenewEnabled(!autoRenewEnabled)} className={`px-5 py-3 rounded-xl font-medium transition-all duration-300 ${autoRenewEnabled ? 'bg-gradient-to-r from-primary to-indigo-500 text-white hover:shadow-lg hover:shadow-primary/25' : 'bg-muted text-muted-foreground hover:bg-muted/80'}`}>
                   Auto-Renew
                 </button>
-                <button onClick={() => {
+                <button onClick={async () => {
+              await supabase.auth.signOut();
               setWalletConnected(false);
               setWalletAddress(null);
               setVaultBalance("0");
