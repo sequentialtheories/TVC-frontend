@@ -145,10 +145,10 @@ Deno.serve(async (req) => {
       walletAddress = "0x" + hashArray.slice(0, 20).map(b => b.toString(16).padStart(2, "0")).join("");
     }
 
-    // Store the wallet in the database
+    // Store the wallet in the database (upsert to handle race conditions)
     const { data: newWallet, error: insertError } = await supabaseAdmin
       .from("user_wallets")
-      .insert({
+      .upsert({
         user_id: userId,
         wallet_address: walletAddress,
         provider: "turnkey",
@@ -157,12 +157,34 @@ Deno.serve(async (req) => {
         created_via: "backend_api",
         turnkey_sub_org_id: turnkeySubOrgId,
         turnkey_wallet_id: turnkeyWalletId,
+      }, { 
+        onConflict: 'user_id',
+        ignoreDuplicates: false 
       })
       .select()
       .single();
 
     if (insertError) {
-      console.error("Error inserting wallet:", insertError);
+      console.error("Error upserting wallet:", insertError);
+      // If upsert fails, try to fetch existing wallet
+      const { data: fallbackWallet } = await supabaseAdmin
+        .from("user_wallets")
+        .select("wallet_address")
+        .eq("user_id", userId)
+        .maybeSingle();
+      
+      if (fallbackWallet?.wallet_address) {
+        return new Response(
+          JSON.stringify({ 
+            success: true, 
+            message: "Wallet already exists",
+            wallet_address: fallbackWallet.wallet_address,
+            is_new: false
+          }),
+          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+      
       return new Response(
         JSON.stringify({ error: "Failed to store wallet", details: insertError.message }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
