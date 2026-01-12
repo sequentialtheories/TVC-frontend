@@ -204,6 +204,62 @@ async function getMemberAllocation(): Promise<unknown[]> {
   return [];
 }
 
+// Calculate RRL-averaged effective APY from 3 strand APYs over 20 years
+function calculateRRLAveragedAPY(apy1: number, apy2: number, apy3: number): number {
+  // Convert annual APY percentages to decimals
+  const annualRate1 = apy1 / 100;
+  const annualRate2 = apy2 / 100;
+  const annualRate3 = apy3 / 100;
+
+  // Convert to weekly rates: weeklyRate = (1 + annualAPY)^(1/52) - 1
+  const weeklyRate1 = Math.pow(1 + annualRate1, 1 / 52) - 1;
+  const weeklyRate2 = Math.pow(1 + annualRate2, 1 / 52) - 1;
+  const weeklyRate3 = Math.pow(1 + annualRate3, 1 / 52) - 1;
+
+  // Initial investment split equally
+  const totalInvestment = 1000; // Use $1000 as base for calculation
+  let strand1 = totalInvestment / 3;
+  let strand2 = totalInvestment / 3;
+  let strand3 = totalInvestment / 3;
+
+  // Run 1,040 weekly cycles (20 years × 52 weeks)
+  const totalWeeks = 20 * 52;
+  
+  for (let week = 0; week < totalWeeks; week++) {
+    // Calculate weekly profits
+    const profit1 = strand1 * weeklyRate1;
+    const profit2 = strand2 * weeklyRate2;
+    const profit3 = strand3 * weeklyRate3;
+
+    // RRL routing:
+    // Strand 1: Keep 40%, send 40% to S2, send 20% to S3
+    const s1Keep = profit1 * 0.40;
+    const s1ToS2 = profit1 * 0.40;
+    const s1ToS3 = profit1 * 0.20;
+
+    // Strand 2: Keep 50%, send 10% to S1, send 40% to S3
+    const s2Keep = profit2 * 0.50;
+    const s2ToS1 = profit2 * 0.10;
+    const s2ToS3 = profit2 * 0.40;
+
+    // Strand 3: Keep 70%, send 30% to S1
+    const s3Keep = profit3 * 0.70;
+    const s3ToS1 = profit3 * 0.30;
+
+    // Apply retained + incoming profits
+    strand1 += s1Keep + s2ToS1 + s3ToS1;
+    strand2 += s2Keep + s1ToS2;
+    strand3 += s3Keep + s1ToS3 + s2ToS3;
+  }
+
+  // Calculate effective APY
+  const finalTotal = strand1 + strand2 + strand3;
+  const effectiveAPY = Math.pow(finalTotal / totalInvestment, 1 / 20) - 1;
+
+  // Return as percentage
+  return effectiveAPY * 100;
+}
+
 // Deposit amount (in ether) to vault contract
 async function depositToVault(amountEther: number): Promise<boolean> {
   if (typeof window === 'undefined' || !window.ethereum) {
@@ -1609,10 +1665,16 @@ Your contract is now live and ready for members to join!`);
         </div>
 
         <div className="glass-card p-6 animate-fade-up stagger-2">
-          <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
-            Live Market Data
-          </h2>
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
+              Live Market Data
+            </h2>
+            <div className="text-sm text-muted-foreground">
+              <span className="text-foreground/70">Averaged Earnings Rate: </span>
+              <span className="text-secondary font-semibold">{calculateRRLAveragedAPY(aaveRates.liquidityRate, apyStrand2, quickSwapAPY).toFixed(2)}%</span>
+            </div>
+          </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="p-5 bg-muted/40 rounded-2xl border border-border/40 hover:border-red-500/30 transition-all duration-300">
               <div className="text-sm text-muted-foreground mb-2">Spark USDC Lending</div>
