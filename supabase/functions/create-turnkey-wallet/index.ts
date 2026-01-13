@@ -186,7 +186,7 @@ Deno.serve(async (req) => {
       }
       
       return new Response(
-        JSON.stringify({ error: "Failed to store wallet", details: insertError.message }),
+        JSON.stringify({ error: "Unable to create wallet. Please try again." }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -249,9 +249,8 @@ Deno.serve(async (req) => {
 
   } catch (error) {
     console.error("Unexpected error:", error);
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
     return new Response(
-      JSON.stringify({ error: "Internal server error", details: errorMessage }),
+      JSON.stringify({ error: "An unexpected error occurred. Please try again." }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
