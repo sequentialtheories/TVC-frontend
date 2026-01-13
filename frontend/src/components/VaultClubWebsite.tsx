@@ -833,66 +833,42 @@ const VaultClubWebsiteInner: React.FC<{
     setAuthSuccess('');
     try {
       if (authMode === 'signup') {
-        const {
-          data,
-          error
-        } = await supabase.auth.signUp({
-          email: authEmail,
-          password: authPassword,
-          options: {
-            emailRedirectTo: `${window.location.origin}/`
-          }
-        });
-        if (error) throw error;
-
-        // If user was created and confirmed immediately (email confirmation disabled)
-        if (data.session) {
-          // Create Turnkey wallet for new user
-          try {
-            const walletResponse = await supabase.functions.invoke('create-turnkey-wallet', {
-              headers: {
-                Authorization: `Bearer ${data.session.access_token}`
-              }
-            });
-            console.log('Wallet creation response:', walletResponse.data);
-            if (walletResponse.data?.wallet_address) {
-              setWalletAddress(walletResponse.data.wallet_address);
-            }
-          } catch (walletError) {
-            console.error('Wallet creation error:', walletError);
-            // Non-fatal - user can still use the app
-          }
+        // Use auth service for registration - triggers Sequence Theory's Turnkey wallet
+        console.log('[VaultClub] Starting registration...');
+        const result = await registerUser(
+          authEmail, 
+          authPassword, 
+          `${window.location.origin}/`
+        );
+        
+        if (!result.success) {
+          throw new Error(result.error || 'Registration failed');
         }
-        setAuthSuccess('Check your email for confirmation link!');
+
+        if (result.requiresEmailConfirmation) {
+          setAuthSuccess('Check your email for confirmation link!');
+        } else if (result.walletAddress) {
+          setWalletAddress(result.walletAddress);
+          console.log('[VaultClub] Registration complete with wallet:', result.walletAddress);
+        }
+        
         setAuthEmail('');
         setAuthPassword('');
         setAuthConfirmPassword('');
       } else {
-        const {
-          data,
-          error
-        } = await supabase.auth.signInWithPassword({
-          email: authEmail,
-          password: authPassword
-        });
-        if (error) throw error;
-
-        // Check/create wallet on login
-        if (data.session) {
-          try {
-            const walletResponse = await supabase.functions.invoke('create-turnkey-wallet', {
-              headers: {
-                Authorization: `Bearer ${data.session.access_token}`
-              }
-            });
-            console.log('Wallet check/creation response:', walletResponse.data);
-            if (walletResponse.data?.wallet_address) {
-              setWalletAddress(walletResponse.data.wallet_address);
-            }
-          } catch (walletError) {
-            console.error('Wallet check error:', walletError);
-          }
+        // Use auth service for sign in - ensures wallet exists via Sequence Theory
+        console.log('[VaultClub] Starting sign in...');
+        const result = await signInUser(authEmail, authPassword);
+        
+        if (!result.success) {
+          throw new Error(result.error || 'Sign in failed');
         }
+
+        if (result.walletAddress) {
+          setWalletAddress(result.walletAddress);
+          console.log('[VaultClub] Sign in complete with wallet:', result.walletAddress);
+        }
+        
         setVaultBalance("0");
         setAuthEmail('');
         setAuthPassword('');
