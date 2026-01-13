@@ -1,11 +1,31 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.90.1";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+// Get allowed origins from environment variable or use defaults
+function getCorsHeaders(req: Request): Record<string, string> {
+  const allowedOriginsEnv = Deno.env.get("ALLOWED_ORIGINS");
+  const allowedOrigins = allowedOriginsEnv 
+    ? allowedOriginsEnv.split(",").map(o => o.trim())
+    : [
+        "https://qldjhlnsphlixmzzrdwi.lovableproject.com",
+        "https://lovable.dev",
+        "http://localhost:5173",
+        "http://localhost:3000"
+      ];
+  
+  const origin = req.headers.get("Origin") || "";
+  const isAllowedOrigin = allowedOrigins.some(allowed => 
+    origin === allowed || allowed === "*"
+  );
+  
+  return {
+    "Access-Control-Allow-Origin": isAllowedOrigin ? origin : allowedOrigins[0],
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  };
+}
 
 Deno.serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
+  
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
