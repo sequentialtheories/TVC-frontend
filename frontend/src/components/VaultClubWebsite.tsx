@@ -414,30 +414,33 @@ const VaultClubWebsiteInner: React.FC<{
       data: {
         subscription
       }
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = authStateChange((event, session) => {
+      console.log('[VaultClub] Auth state changed:', event);
       setSession(session);
       if (session?.user) {
         setWalletConnected(true);
         // Defer wallet fetch to avoid deadlock
         setTimeout(async () => {
           try {
-            // Fetch user's wallet from database
-            const {
-              data: wallet
-            } = await supabase.from('user_wallets').select('wallet_address').eq('user_id', session.user.id).maybeSingle();
-            if (wallet?.wallet_address) {
-              setWalletAddress(wallet.wallet_address);
+            // First try to fetch existing wallet
+            const existingWallet = await fetchExistingWallet(session.user.id);
+            if (existingWallet.success && existingWallet.walletAddress) {
+              setWalletAddress(existingWallet.walletAddress);
+              console.log('[VaultClub] Existing wallet found:', existingWallet.walletAddress);
             } else {
-              // Trigger wallet creation if missing
-              const walletResponse = await supabase.functions.invoke('create-turnkey-wallet');
-              if (walletResponse.data?.wallet_address) {
-                setWalletAddress(walletResponse.data.wallet_address);
+              // Trigger wallet creation via Sequence Theory's Turnkey function
+              console.log('[VaultClub] No wallet found, triggering creation...');
+              const walletResult = await triggerWalletCreation(session.access_token);
+              if (walletResult.success && walletResult.walletAddress) {
+                setWalletAddress(walletResult.walletAddress);
+                console.log('[VaultClub] Wallet created:', walletResult.walletAddress);
               } else {
+                console.warn('[VaultClub] Wallet creation failed:', walletResult.error);
                 setWalletAddress(session.user.email || session.user.id.slice(0, 10));
               }
             }
           } catch (err) {
-            console.error('Error fetching wallet:', err);
+            console.error('[VaultClub] Error in wallet handling:', err);
             setWalletAddress(session.user.email || session.user.id.slice(0, 10));
           }
         }, 0);
@@ -448,7 +451,9 @@ const VaultClubWebsiteInner: React.FC<{
         setWalletAddress('');
       }
     });
-    supabase.auth.getSession().then(({
+    
+    // Check for existing session on mount
+    supabase.auth.getSession().then(async ({
       data: {
         session
       }
@@ -456,16 +461,13 @@ const VaultClubWebsiteInner: React.FC<{
       setSession(session);
       if (session?.user) {
         setWalletConnected(true);
-        // Fetch wallet address
-        supabase.from('user_wallets').select('wallet_address').eq('user_id', session.user.id).maybeSingle().then(({
-          data: wallet
-        }) => {
-          if (wallet?.wallet_address) {
-            setWalletAddress(wallet.wallet_address);
-          } else {
-            setWalletAddress(session.user.email || session.user.id.slice(0, 10));
-          }
-        });
+        // Fetch wallet address using service
+        const walletResult = await fetchExistingWallet(session.user.id);
+        if (walletResult.success && walletResult.walletAddress) {
+          setWalletAddress(walletResult.walletAddress);
+        } else {
+          setWalletAddress(session.user.email || session.user.id.slice(0, 10));
+        }
       }
     });
     return () => subscription.unsubscribe();
