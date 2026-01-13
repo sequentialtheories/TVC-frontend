@@ -881,7 +881,8 @@ const VaultClubWebsiteInner: React.FC<{
     }
   };
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    console.log('[VaultClub] Signing out...');
+    await signOutUser();
     setWalletConnected(false);
     setWalletAddress('');
     setVaultBalance("0");
