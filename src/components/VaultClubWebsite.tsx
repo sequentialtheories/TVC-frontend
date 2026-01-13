@@ -130,27 +130,29 @@ async function getVaultStats(): Promise<VaultStats> {
   };
 }
 
-// Get Spark Protocol and AAVE Polygon lending rates
+// Get Spark Protocol USDC and AAVE token lending rates on Polygon
 async function getAaveRates(): Promise<AaveRates> {
   try {
     const response = await fetch('https://yields.llama.fi/pools');
     if (response.ok) {
       const data = await response.json();
+      // Spark Protocol USDC lending on Ethereum (project is 'sparklend')
       const sparkPool = data.data.find((pool: {
         project: string;
         chain: string;
         symbol: string;
         apy: number;
-      }) => pool.project === 'spark' && pool.chain === 'Ethereum' && pool.symbol.includes('USDC'));
+      }) => pool.project === 'sparklend' && pool.chain === 'Ethereum' && pool.symbol.includes('USDC'));
+      // AAVE token lending on Polygon (lending out AAVE, not USDC)
       const aavePolygonPool = data.data.find((pool: {
         project: string;
         chain: string;
         symbol: string;
         apy: number;
-      }) => pool.project === 'aave-v3' && pool.chain === 'Polygon' && pool.symbol.includes('USDC'));
+      }) => pool.project === 'aave-v3' && pool.chain === 'Polygon' && pool.symbol === 'AAVE');
       return {
         liquidityRate: sparkPool ? sparkPool.apy : 3.5,
-        aavePolygonRate: aavePolygonPool ? aavePolygonPool.apy : 7.5
+        aavePolygonRate: aavePolygonPool ? aavePolygonPool.apy : 8.0
       };
     }
     throw new Error('API call failed');
@@ -158,24 +160,37 @@ async function getAaveRates(): Promise<AaveRates> {
     console.error("Error fetching lending rates:", error);
     return {
       liquidityRate: 3.5,
-      aavePolygonRate: 7.5
+      aavePolygonRate: 8.0
     };
   }
 }
 
-// Get QuickSwap V3 APY data
+// Get QuickSwap V3 USDC/WETH LP APY data on Polygon
 async function getQuickSwapAPY(): Promise<number> {
   try {
     const response = await fetch('https://yields.llama.fi/pools');
     if (response.ok) {
       const data = await response.json();
+      // QuickSwap V3 USDC/WETH liquidity pool on Polygon
       const quickswapPool = data.data.find((pool: {
         project: string;
         chain: string;
         symbol: string;
         apy: number;
-      }) => pool.project === 'quickswap-dex' && pool.chain === 'Polygon' && (pool.symbol.includes('WETH') || pool.symbol.includes('ETH')) && pool.symbol.includes('USDC'));
-      return quickswapPool ? quickswapPool.apy : 12.5;
+      }) => pool.project === 'quickswap-v3' && pool.chain === 'Polygon' && 
+           ((pool.symbol.includes('WETH') || pool.symbol.includes('ETH')) && pool.symbol.includes('USDC')));
+      // Fallback: try alternative project name
+      if (!quickswapPool) {
+        const altPool = data.data.find((pool: {
+          project: string;
+          chain: string;
+          symbol: string;
+          apy: number;
+        }) => pool.project === 'quickswap-dex' && pool.chain === 'Polygon' && 
+             ((pool.symbol.includes('WETH') || pool.symbol.includes('ETH')) && pool.symbol.includes('USDC')));
+        return altPool ? altPool.apy : 12.5;
+      }
+      return quickswapPool.apy;
     }
     throw new Error('API call failed');
   } catch (error) {
