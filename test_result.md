@@ -101,3 +101,61 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+
+user_problem_statement: "Ensure this site's database is correctly linked to the existing Supabase project used by Sequence Theory. When a user registers, registration must be written to the same Supabase instance and trigger the existing Turnkey wallet creation flow."
+
+frontend:
+  - task: "User Registration via Sequence Theory Supabase"
+    implemented: true
+    working: "NA"
+    file: "src/services/authService.ts, src/components/VaultClubWebsite.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created authService.ts to wrap Supabase auth and trigger existing create-turnkey-wallet Edge Function. Updated VaultClubWebsite.tsx to use this service. Integration uses same Supabase project as Sequence Theory (qldjhlnsphlixmzzrdwi)."
+
+  - task: "User Login with Wallet Fetch"
+    implemented: true
+    working: "NA"
+    file: "src/services/authService.ts"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Sign in flow checks for existing wallet and triggers creation if missing via Sequence Theory's Turnkey function."
+
+  - task: "Auth Modal UI"
+    implemented: true
+    working: true
+    file: "src/components/VaultClubWebsite.tsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Auth modal shows 'Sequence Theory, Inc. Credentials' confirming connection to correct Supabase project. Sign up and Login forms both work."
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: true
+
+test_plan:
+  current_focus:
+    - "User Registration via Sequence Theory Supabase"
+    - "User Login with Wallet Fetch"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: "Implemented authService.ts as a lightweight wrapper for Supabase auth. The service uses the existing Supabase project (qldjhlnsphlixmzzrdwi) and triggers the create-turnkey-wallet Edge Function deployed by Sequence Theory. No new infrastructure was created - this is just a trigger/hook layer. Testing needed to verify: 1) Registration creates user in Supabase, 2) Edge Function is called successfully, 3) Wallet address is returned and displayed."
