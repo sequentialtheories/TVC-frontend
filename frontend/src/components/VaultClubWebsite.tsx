@@ -5,6 +5,14 @@ import type { Session } from '@supabase/supabase-js';
 import { ThemeToggle } from './ThemeToggle';
 import VaultBackground from './VaultBackground';
 import { TutorialProvider, useTutorial, TutorialBubble } from './tutorial';
+import { 
+  registerUser, 
+  signInUser, 
+  signOutUser, 
+  triggerWalletCreation,
+  fetchExistingWallet,
+  onAuthStateChange as authStateChange
+} from '@/services/authService';
 
 // Type declarations
 interface VaultStats {
