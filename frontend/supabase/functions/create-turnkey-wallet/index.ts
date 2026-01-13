@@ -1,13 +1,33 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.90.1";
 
+/**
+ * Turnkey Wallet Creation Edge Function
+ * 
+ * This function is the SINGLE SOURCE OF TRUTH for wallet creation in the
+ * Sequence Theory ecosystem. It is invoked by:
+ * - The main Sequence Theory frontend
+ * - The Vault Club frontend (docreader-17.preview.emergentagent.com)
+ * - Any other authorized frontends
+ * 
+ * All frontends share the same Supabase Auth and user_wallets table.
+ * 
+ * CORS Configuration:
+ * - Set ALLOWED_ORIGINS env var in Supabase dashboard to include all frontend domains
+ * - Format: "https://domain1.com,https://domain2.com"
+ */
+
 // Get allowed origins from environment variable or use defaults
 function getCorsHeaders(req: Request): Record<string, string> {
   const allowedOriginsEnv = Deno.env.get("ALLOWED_ORIGINS");
   const allowedOrigins = allowedOriginsEnv 
     ? allowedOriginsEnv.split(",").map(o => o.trim())
     : [
+        // Sequence Theory main frontend
         "https://qldjhlnsphlixmzzrdwi.lovableproject.com",
         "https://lovable.dev",
+        // The Vault Club frontend (Emergent deployment)
+        "https://docreader-17.preview.emergentagent.com",
+        // Local development
         "http://localhost:5173",
         "http://localhost:3000"
       ];
