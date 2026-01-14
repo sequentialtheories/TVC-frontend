@@ -44,8 +44,8 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     position: 'top',
     advanceOn: 'navigation',
     advanceValue: 'simulation',
-    requiredPage: 'home', // Show on home page (navigate from here)
-    prerequisite: { type: 'visited-page', value: 'personal' },
+    requiredPage: 'personal', // Show on personal/wallet page after connecting
+    prerequisite: { type: 'completed-step', value: 2 },
   },
   {
     id: 4,
