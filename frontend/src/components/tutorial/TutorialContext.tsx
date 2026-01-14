@@ -151,7 +151,8 @@ export const TutorialProvider: React.FC<{
       }
       setIsActive(true);
     }
-  }, [walletConnected, currentStep, isActive, hasCompleted, hasSkipped]);
+    // Only depend on walletConnected to avoid loops
+  }, [walletConnected]);
 
   // Save step progress
   useEffect(() => {
