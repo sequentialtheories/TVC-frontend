@@ -2521,7 +2521,7 @@ Your contract is now live and ready for members to join!`);
       
       {/* Auth Modal */}
       {showAuthModal && <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-up" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
-          <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl ring-1 ring-black/5">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full shadow-2xl ring-1 ring-black/5 dark:ring-white/10">
             <div className="bg-gradient-to-r from-purple-500 to-indigo-600 p-6 rounded-t-2xl text-white">
               <div className="flex justify-between items-start">
                 <div>
@@ -2538,33 +2538,33 @@ Your contract is now live and ready for members to join!`);
               </div>
             </div>
             
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-6 bg-white dark:bg-slate-900 rounded-b-2xl">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Email Address
                 </label>
-                <input type="email" value={authEmail} onChange={e => setAuthEmail(e.target.value)} placeholder="your@email.com" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-black" />
+                <input type="email" value={authEmail} onChange={e => setAuthEmail(e.target.value)} placeholder="your@email.com" className="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900 dark:text-white bg-white dark:bg-slate-800 placeholder-gray-400 dark:placeholder-gray-500" />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                   Password
                 </label>
-                <input type="password" value={authPassword} onChange={e => setAuthPassword(e.target.value)} placeholder="••••••••" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-black" />
+                <input type="password" value={authPassword} onChange={e => setAuthPassword(e.target.value)} placeholder="••••••••" className="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900 dark:text-white bg-white dark:bg-slate-800 placeholder-gray-400 dark:placeholder-gray-500" />
               </div>
               
               {authMode === 'signup' && <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                     Confirm Password
                   </label>
-                  <input type="password" value={authConfirmPassword} onChange={e => setAuthConfirmPassword(e.target.value)} placeholder="••••••••" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-black" />
+                  <input type="password" value={authConfirmPassword} onChange={e => setAuthConfirmPassword(e.target.value)} placeholder="••••••••" className="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-900 dark:text-white bg-white dark:bg-slate-800 placeholder-gray-400 dark:placeholder-gray-500" />
                 </div>}
               
-              {authError && <div className="p-3 bg-red-100 border border-red-300 rounded-lg text-red-700 text-sm">
+              {authError && <div className="p-3 bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-lg text-red-700 dark:text-red-400 text-sm">
                   {authError}
                 </div>}
               
-              {authSuccess && <div className="p-3 bg-green-100 border border-green-300 rounded-lg text-green-700 text-sm">
+              {authSuccess && <div className="p-3 bg-green-100 dark:bg-green-900/30 border border-green-300 dark:border-green-700 rounded-lg text-green-700 dark:text-green-400 text-sm">
                   {authSuccess}
                 </div>}
               
@@ -2580,7 +2580,7 @@ Your contract is now live and ready for members to join!`);
               setAuthConfirmPassword('');
               setAuthError('');
               setAuthSuccess('');
-            }} className="text-sm text-purple-600 hover:text-purple-700 font-medium">
+            }} className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium">
                   {authMode === 'login' ? "Don't have an account? Sign Up" : "Already have an account? Log In"}
                 </button>
               </div>
