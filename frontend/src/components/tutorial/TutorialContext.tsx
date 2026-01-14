@@ -132,15 +132,17 @@ export const TutorialProvider: React.FC<{
   // Handle wallet connection state changes
   useEffect(() => {
     if (walletConnected) {
-      // User connected - complete tutorial and clear state
-      if (isActive || currentStep > 0) {
+      // User connected - if we were on step 2 (connect account), advance to step 3
+      if (isActive && currentStep === 2) {
+        // Mark step 2 as completed and advance to step 3
+        setCompletedSteps(prev => new Set([...prev, 2]));
+        setCurrentStep(3);
+        localStorage.setItem(STORAGE_KEYS.step, '3');
+      } else if (currentStep === 0 && !hasCompleted && !hasSkipped) {
+        // User was already connected (e.g., returning user) - mark tutorial as completed
         setHasCompleted(true);
         setIsActive(false);
-        setCurrentStep(0);
         localStorage.setItem(STORAGE_KEYS.completed, 'true');
-        localStorage.removeItem(STORAGE_KEYS.step);
-        localStorage.removeItem(STORAGE_KEYS.visitedPages);
-        localStorage.removeItem(STORAGE_KEYS.completedSteps);
       }
     } else if (!hasSkipped && !hasCompleted) {
       // User disconnected and hasn't skipped/completed - activate tutorial
@@ -149,7 +151,7 @@ export const TutorialProvider: React.FC<{
       }
       setIsActive(true);
     }
-  }, [walletConnected]);
+  }, [walletConnected, currentStep, isActive, hasCompleted, hasSkipped]);
 
   // Save step progress
   useEffect(() => {
