@@ -439,13 +439,15 @@ const VaultClubWebsiteInner: React.FC<{
                 setWalletAddress(session.user.email || session.user.id.slice(0, 10));
               }
             }
+            // Trigger tutorial advancement for "Connect Account" action completion
+            tutorial.checkAdvancement('action');
           } catch (err) {
             console.error('[VaultClub] Error in wallet handling:', err);
             setWalletAddress(session.user.email || session.user.id.slice(0, 10));
           }
         }, 0);
         setShowAuthModal(false);
-        // Note: tutorial.setAuthModalOpen(false) is handled in useEffect below
+        tutorial.setAuthModalOpen(false); // Re-enable tutorials after auth
       } else {
         setWalletConnected(false);
         setWalletAddress('');
