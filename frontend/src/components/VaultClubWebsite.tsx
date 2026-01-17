@@ -2511,9 +2511,12 @@ Your contract is now live and ready for members to join!`);
       {tutorial.isActive && tutorial.currentStepData?.target === 'nav-contracts' && <TutorialBubble targetRef={navContractsRef} />}
       {tutorial.isActive && tutorial.currentStepData?.target === 'nav-data' && <TutorialBubble targetRef={navDataRef} />}
       {tutorial.isActive && tutorial.currentStepData?.target === 'nav-future' && <TutorialBubble targetRef={navFutureRef} />}
+      {tutorial.isActive && tutorial.currentStepData?.target === 'nav-home' && <TutorialBubble targetRef={navHomeRef} />}
       {tutorial.isActive && tutorial.currentStepData?.target === 'connect-account' && <TutorialBubble targetRef={connectAccountRef} />}
       {tutorial.isActive && tutorial.currentStepData?.target === 'future-page-intro' && <TutorialBubble targetRef={futurePageIntroRef} />}
       {tutorial.isActive && tutorial.currentStepData?.target === 'sequence-theory-btn' && <TutorialBubble targetRef={sequenceTheoryBtnRef} />}
+      {tutorial.isActive && tutorial.currentStepData?.target === 'contracts-directory' && <TutorialBubble targetRef={contractsDirectoryRef} />}
+      {tutorial.isActive && tutorial.currentStepData?.target === 'home-contract-section' && <TutorialBubble targetRef={homeContractSectionRef} />}
 
       {/* Main Content */}
       <main className="relative">
