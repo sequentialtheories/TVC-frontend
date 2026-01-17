@@ -221,7 +221,6 @@ export async function registerUser(
         error: error.message
       };
     }
-    }
 
     if (!data.user) {
       return {
