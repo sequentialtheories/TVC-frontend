@@ -272,6 +272,9 @@ export async function signInUser(email: string, password: string): Promise<AuthR
 
     console.log('[AuthService] Sign in successful:', data.user.id);
 
+    // Ensure profile exists (for users who registered before profile trigger existed)
+    await ensureProfileExists(data.user.id, email);
+
     // Check for existing wallet
     let walletAddress: string | undefined;
     const existingWallet = await fetchExistingWallet(data.user.id);
