@@ -2106,7 +2106,7 @@ Your contract is now live and ready for members to join!`);
     </div>;
   const FutureSimulationPage = () => {
     return <div className="relative z-10 px-6 py-8 pb-32">
-        <div className="flex items-center mb-8 animate-fade-up">
+        <div ref={futurePageIntroRef} className={`flex items-center mb-8 animate-fade-up ${tutorial.currentStepData?.target === 'future-page-intro' ? 'tutorial-highlight' : ''}`}>
           <button onClick={goHome} className="mr-4 p-2.5 glass-card hover:border-primary/30 rounded-xl transition-all duration-300 group">
             <ArrowLeft className="w-5 h-5 text-foreground/70 group-hover:text-primary transition-colors" />
           </button>
