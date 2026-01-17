@@ -2454,7 +2454,10 @@ Your contract is now live and ready for members to join!`);
       {/* Mobile Bottom Navigation Bar */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 glass-dark border-t border-border/30 px-4 py-3 safe-area-pb" aria-label="Main navigation">
         <div className="flex justify-around items-center max-w-lg mx-auto">
-          <button onClick={() => navigateTo('home')} className="flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group">
+          <button ref={navHomeRef} onClick={() => {
+          navigateTo('home');
+          tutorial.checkAdvancement('navigation', 'home');
+        }} className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-home' ? 'tutorial-highlight' : ''}`}>
             <div className={`p-2.5 rounded-xl transition-all duration-300 ${currentPage === 'home' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
               <Home className="w-5 h-5" />
             </div>
