@@ -109,7 +109,9 @@ export const TutorialBubble: React.FC<TutorialBubbleProps> = ({ targetRef }) => 
       case 'navigation':
         return `Tap the ${currentStepData.advanceValue === 'personal' ? 'Wallet' : 
           currentStepData.advanceValue === 'simulation' ? 'Future' : 
-          currentStepData.advanceValue === 'group' ? 'Contracts' : 
+          currentStepData.advanceValue === 'group' ? 'Contracts' :
+          currentStepData.advanceValue === 'home' ? 'Home' :
+          currentStepData.advanceValue === 'dataset' ? 'Data' :
           currentStepData.advanceValue} tab to continue`;
       case 'action':
         return 'Complete this action to continue';
