@@ -152,7 +152,7 @@ export const TutorialBubble: React.FC<TutorialBubbleProps> = ({ targetRef }) => 
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-2">
             <span className="text-xs font-medium px-2 py-1 rounded-full bg-primary/20 text-primary">
-              {currentStep}/{totalSteps}
+              {currentStepData.displayStep}
             </span>
             <h3 className="font-semibold text-foreground text-sm">
               {currentStepData.title}
