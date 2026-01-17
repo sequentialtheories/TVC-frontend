@@ -276,18 +276,22 @@ export const TutorialProvider: React.FC<{
   }, []);
 
   const checkAdvancement = useCallback((type: 'navigation' | 'action', value?: string) => {
-    if (!rawStepData || !shouldShowBubble) return;
+    // Get the current step regardless of visibility
+    const stepData = TUTORIAL_STEPS.find(s => s.id === currentStep);
+    if (!stepData || !isActive) return;
     
-    if (rawStepData.advanceOn === type) {
-      if (type === 'navigation' && rawStepData.advanceValue) {
-        if (value === rawStepData.advanceValue) {
+    if (stepData.advanceOn === type) {
+      if (type === 'navigation' && stepData.advanceValue) {
+        if (value === stepData.advanceValue) {
+          console.log('[Tutorial] Advancing from step', currentStep, 'via navigation to', value);
           nextStep();
         }
       } else if (type === 'action') {
+        console.log('[Tutorial] Advancing from step', currentStep, 'via action');
         nextStep();
       }
     }
-  }, [rawStepData, shouldShowBubble, nextStep]);
+  }, [currentStep, isActive, nextStep]);
 
   return (
     <TutorialContext.Provider
