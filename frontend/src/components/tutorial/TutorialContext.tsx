@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 
 export interface TutorialStep {
   id: number;
+  displayStep: string; // e.g., "1/6", "2/6" - what shows in the bubble
   target: string; // ref name to target
   title: string;
   message: string;
@@ -16,11 +17,13 @@ export interface TutorialStep {
 }
 
 export const TUTORIAL_STEPS: TutorialStep[] = [
+  // ========== BUBBLE 1/6: Welcome & Wallet ==========
   {
     id: 1,
+    displayStep: '1/6',
     target: 'nav-wallet',
     title: 'Welcome to The Vault Club!',
-    message: 'Start here! Tap the Wallet tab to manage your account and connect.',
+    message: 'Hey there! Let\'s get you started. Tap the Wallet tab to set up your account.',
     position: 'top',
     advanceOn: 'navigation',
     advanceValue: 'personal',
@@ -28,19 +31,23 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
   },
   {
     id: 2,
+    displayStep: '1/6',
     target: 'connect-account',
     title: 'Connect Your Account',
-    message: 'Connect your account to unlock all features and start exploring.',
+    message: 'Tap here to connect. Once you\'re in, you\'ll see the "Auto-Renew" option - that\'s your subscription agreement that keeps your account active automatically. Simple!',
     position: 'top',
     advanceOn: 'action',
     requiredPage: 'personal',
     prerequisite: { type: 'visited-page', value: 'personal' },
   },
+  
+  // ========== BUBBLE 2/6: Future Page ==========
   {
     id: 3,
+    displayStep: '2/6',
     target: 'nav-future',
-    title: 'Explore Your Future',
-    message: 'See how your investments could grow! Tap Future to explore projections.',
+    title: 'See Your Potential',
+    message: 'Curious how your money could grow? Tap Future to explore projections and earnings possibilities.',
     position: 'top',
     advanceOn: 'navigation',
     advanceValue: 'simulation',
@@ -49,44 +56,90 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
   },
   {
     id: 4,
+    displayStep: '2/6',
     target: 'future-page-intro',
-    title: 'Your Investment Playground',
-    message: 'Welcome to Future Projections! Here you can explore our 3 investment "Strands" - each representing a different yield strategy. Scroll down to see projections and play with the parameters. This is your space to experiment!',
+    title: 'Your Earnings Playground',
+    message: 'Welcome! Here you\'ll find our 3 "Strands" - think of them as different ways your deposits work for you. Each strand has its own earnings rate. Scroll around and play with the numbers to see how it all adds up!',
     position: 'bottom',
     advanceOn: 'dismiss',
     requiredPage: 'simulation',
     prerequisite: { type: 'visited-page', value: 'simulation' },
   },
+  
+  // ========== BUBBLE 3/6: Data Page ==========
   {
     id: 5,
+    displayStep: '3/6',
+    target: 'nav-data',
+    title: 'Behind the Scenes',
+    message: 'For the curious minds! The Data page shows how everything works under the hood - fund distributions, live rates, and more. Totally optional, but it\'s there if you want full transparency.',
+    position: 'top',
+    advanceOn: 'dismiss',
+    requiredPage: 'simulation',
+    prerequisite: { type: 'completed-step', value: 4 },
+  },
+  
+  // ========== BUBBLE 4/6: Contracts Page ==========
+  {
+    id: 6,
+    displayStep: '4/6',
     target: 'nav-contracts',
-    title: 'View Contracts',
-    message: 'The Contracts page is where you can view available investment contracts. No pressure to create one now - just explore when you\'re ready!',
+    title: 'Contracts Await',
+    message: 'Head to Contracts to see what\'s available!',
     position: 'top',
     advanceOn: 'navigation',
     advanceValue: 'group',
     requiredPage: 'simulation',
-    prerequisite: { type: 'completed-step', value: 4 },
+    prerequisite: { type: 'completed-step', value: 5 },
   },
   {
-    id: 6,
-    target: 'sequence-theory-btn',
-    title: 'Learn More About Us',
-    message: 'Want to know more? Tap "Sequence Theory" in the top-right to visit our main website with company info, team details, and more resources.',
+    id: 7,
+    displayStep: '4/6',
+    target: 'contracts-directory',
+    title: 'Your Options',
+    message: 'Here\'s the Club Directory! You can either create your own contract (be a founder!) or browse Available Contracts and join one that fits. Both paths are great - pick whatever feels right for you.',
     position: 'bottom',
     advanceOn: 'dismiss',
     requiredPage: 'group',
     prerequisite: { type: 'visited-page', value: 'group' },
   },
+  
+  // ========== BUBBLE 5/6: Homepage & Sequence Theory ==========
   {
-    id: 7,
-    target: 'nav-data',
-    title: 'Deep Dive Available',
-    message: 'For the curious: the Data page shows detailed fund distributions and contract metrics. It\'s optional, but great for those who want full transparency into how TVC operates.',
+    id: 8,
+    displayStep: '5/6',
+    target: 'nav-home',
+    title: 'Back Home',
+    message: 'Let\'s head back to the Homepage for a couple more tips.',
+    position: 'top',
+    advanceOn: 'navigation',
+    advanceValue: 'home',
+    requiredPage: 'group',
+    prerequisite: { type: 'completed-step', value: 7 },
+  },
+  {
+    id: 9,
+    displayStep: '5/6',
+    target: 'sequence-theory-btn',
+    title: 'Meet the Team',
+    message: 'See "Sequence Theory" up there? That\'s us! Tap it anytime to learn more about the company, our team, and the bigger picture. No rush though!',
+    position: 'bottom',
+    advanceOn: 'dismiss',
+    requiredPage: 'home',
+    prerequisite: { type: 'visited-page', value: 'home' },
+  },
+  
+  // ========== BUBBLE 6/6: Contract Details on Homepage ==========
+  {
+    id: 10,
+    displayStep: '6/6',
+    target: 'home-contract-section',
+    title: 'Your Dashboard',
+    message: 'One last thing! The Homepage is your go-to spot for quick contract updates - total value, progress, and exactly how your deposits get distributed across the Strands. Think of it as your personal command center. 🎉 You\'re all set!',
     position: 'top',
     advanceOn: 'dismiss',
-    requiredPage: 'group',
-    prerequisite: { type: 'completed-step', value: 6 },
+    requiredPage: 'home',
+    prerequisite: { type: 'completed-step', value: 9 },
   },
 ];
 
