@@ -124,12 +124,56 @@ export async function fetchExistingWallet(userId: string): Promise<WalletResult>
 }
 
 /**
+ * Creates a profile record for a new user.
+ * This is a fallback in case the Supabase database trigger doesn't exist.
+ * The profile should ideally be created by a trigger on auth.users insert.
+ */
+async function ensureProfileExists(userId: string, email: string): Promise<void> {
+  console.log('[AuthService] Ensuring profile exists for user:', userId);
+  
+  try {
+    // Check if profile already exists
+    const { data: existingProfile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (existingProfile) {
+      console.log('[AuthService] Profile already exists');
+      return;
+    }
+
+    // Create profile if it doesn't exist
+    const { error } = await supabase
+      .from('profiles')
+      .insert({
+        user_id: userId,
+        email: email,
+        name: email.split('@')[0], // Default name from email
+      });
+
+    if (error) {
+      // Profile might have been created by trigger, ignore duplicate error
+      if (!error.message.includes('duplicate')) {
+        console.error('[AuthService] Error creating profile:', error);
+      }
+    } else {
+      console.log('[AuthService] Profile created successfully');
+    }
+  } catch (err) {
+    console.error('[AuthService] Exception in ensureProfileExists:', err);
+  }
+}
+
+/**
  * Registers a new user and triggers wallet creation via Sequence Theory.
  * 
  * Flow:
  * 1. Create user in Supabase Auth (same instance as Sequence Theory)
- * 2. If email confirmation disabled, immediately trigger wallet creation
- * 3. Wallet creation is handled by Sequence Theory's existing Turnkey function
+ * 2. Create profile record (fallback if no database trigger)
+ * 3. If email confirmation disabled, immediately trigger wallet creation
+ * 4. Wallet creation is handled by Sequence Theory's existing Turnkey function
  */
 export async function registerUser(
   email: string, 
@@ -164,6 +208,39 @@ export async function registerUser(
     }
 
     console.log('[AuthService] User created:', data.user.id);
+
+    // Step 2: Ensure profile exists (fallback for missing trigger)
+    await ensureProfileExists(data.user.id, email);
+
+    // Step 3: Check if email confirmation is required
+    if (!data.session) {
+      console.log('[AuthService] Email confirmation required');
+      return {
+        success: true,
+        user: data.user,
+        requiresEmailConfirmation: true
+      };
+    }
+
+    // Step 4: If session exists, trigger wallet creation immediately
+    console.log('[AuthService] Session active, triggering wallet creation...');
+    const walletResult = await triggerWalletCreation(data.session.access_token);
+
+    return {
+      success: true,
+      user: data.user,
+      session: data.session,
+      walletAddress: walletResult.walletAddress,
+      requiresEmailConfirmation: false
+    };
+  } catch (error: any) {
+    console.error('[AuthService] Registration exception:', error);
+    return {
+      success: false,
+      error: error.message || 'Registration failed'
+    };
+  }
+}
 
     // Step 2: Check if email confirmation is required
     if (!data.session) {
