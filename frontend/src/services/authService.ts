@@ -242,36 +242,6 @@ export async function registerUser(
   }
 }
 
-    // Step 2: Check if email confirmation is required
-    if (!data.session) {
-      console.log('[AuthService] Email confirmation required');
-      return {
-        success: true,
-        user: data.user,
-        requiresEmailConfirmation: true
-      };
-    }
-
-    // Step 3: If session exists, trigger wallet creation immediately
-    console.log('[AuthService] Session active, triggering wallet creation...');
-    const walletResult = await triggerWalletCreation(data.session.access_token);
-
-    return {
-      success: true,
-      user: data.user,
-      session: data.session,
-      walletAddress: walletResult.walletAddress,
-      requiresEmailConfirmation: false
-    };
-  } catch (error: any) {
-    console.error('[AuthService] Registration exception:', error);
-    return {
-      success: false,
-      error: error.message || 'Registration failed'
-    };
-  }
-}
-
 /**
  * Signs in an existing user and ensures wallet exists.
  * If wallet doesn't exist, triggers creation via Sequence Theory.
