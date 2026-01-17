@@ -2025,7 +2025,7 @@ Your contract is now live and ready for members to join!`);
             </div>}
         </div>
 
-        <div className="glass-card p-6 animate-fade-up stagger-3">
+        <div ref={contractsDirectoryRef} className={`glass-card p-6 animate-fade-up stagger-3 ${tutorial.currentStepData?.target === 'contracts-directory' ? 'tutorial-highlight' : ''}`}>
           <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
             Club Directory
