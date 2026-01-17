@@ -318,9 +318,12 @@ const VaultClubWebsiteInner: React.FC<{
   const navContractsRef = useRef<HTMLButtonElement>(null);
   const navDataRef = useRef<HTMLButtonElement>(null);
   const navFutureRef = useRef<HTMLButtonElement>(null);
+  const navHomeRef = useRef<HTMLButtonElement>(null);
   const connectAccountRef = useRef<HTMLButtonElement>(null);
   const futurePageIntroRef = useRef<HTMLDivElement>(null);
   const sequenceTheoryBtnRef = useRef<HTMLAnchorElement>(null);
+  const contractsDirectoryRef = useRef<HTMLDivElement>(null);
+  const homeContractSectionRef = useRef<HTMLDivElement>(null);
 
   // Tutorial hook
   const tutorial = useTutorial();
