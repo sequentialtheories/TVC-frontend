@@ -402,12 +402,14 @@ const VaultClubWebsiteInner: React.FC<{
   // Sync auth modal state with tutorial system
   useEffect(() => {
     tutorial.setAuthModalOpen(showAuthModal);
-  }, [showAuthModal, tutorial]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showAuthModal]);
 
   // Sync current page with tutorial system on mount and changes
   useEffect(() => {
     tutorial.setCurrentPage(currentPage);
-  }, [currentPage, tutorial]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
 
   useEffect(() => {
     const {
