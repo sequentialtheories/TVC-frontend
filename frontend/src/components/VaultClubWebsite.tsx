@@ -2438,7 +2438,7 @@ Your contract is now live and ready for members to join!`);
             <ThemeToggle />
             
             {/* Sequence Theory Logo */}
-            <a href="https://sequencetheoryinc.com" target="_blank" rel="noopener noreferrer" className="flex items-center glass px-4 py-2.5 rounded-xl hover:border-primary/40 hover:shadow-glow-purple transition-all duration-300 cursor-pointer group">
+            <a ref={sequenceTheoryBtnRef} href="https://sequencetheoryinc.com" target="_blank" rel="noopener noreferrer" className={`flex items-center glass px-4 py-2.5 rounded-xl hover:border-primary/40 hover:shadow-glow-purple transition-all duration-300 cursor-pointer group ${tutorial.currentStepData?.target === 'sequence-theory-btn' ? 'tutorial-highlight' : ''}`}>
               <div className="text-sm font-semibold">
                 <span className="text-accent group-hover:text-accent/80 transition-colors">SEQUENCE</span>
                 <span className="ml-1 text-primary group-hover:text-primary/80 transition-colors">THEORY</span>
