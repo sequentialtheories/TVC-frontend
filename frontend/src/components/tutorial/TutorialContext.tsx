@@ -293,25 +293,41 @@ export const TutorialProvider: React.FC<{
     }
   }, [currentStep, isActive, nextStep]);
 
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = React.useMemo(() => ({
+    currentStep,
+    isActive,
+    hasSkipped,
+    hasCompleted,
+    currentStepData,
+    shouldShowBubble,
+    nextStep,
+    skipTutorial,
+    dismissStep,
+    completeTutorial,
+    resetTutorial,
+    checkAdvancement,
+    setCurrentPage,
+    setAuthModalOpen,
+  }), [
+    currentStep,
+    isActive,
+    hasSkipped,
+    hasCompleted,
+    currentStepData,
+    shouldShowBubble,
+    nextStep,
+    skipTutorial,
+    dismissStep,
+    completeTutorial,
+    resetTutorial,
+    checkAdvancement,
+    setCurrentPage,
+    // setAuthModalOpen is stable as it's a state setter
+  ]);
+
   return (
-    <TutorialContext.Provider
-      value={{
-        currentStep,
-        isActive,
-        hasSkipped,
-        hasCompleted,
-        currentStepData,
-        shouldShowBubble,
-        nextStep,
-        skipTutorial,
-        dismissStep,
-        completeTutorial,
-        resetTutorial,
-        checkAdvancement,
-        setCurrentPage,
-        setAuthModalOpen,
-      }}
-    >
+    <TutorialContext.Provider value={contextValue}>
       {children}
     </TutorialContext.Provider>
   );
