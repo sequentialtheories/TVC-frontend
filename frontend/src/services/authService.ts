@@ -170,10 +170,10 @@ async function ensureProfileExists(userId: string, email: string): Promise<void>
  * Registers a new user and triggers wallet creation via Sequence Theory.
  * 
  * Flow:
- * 1. Create user in Supabase Auth (same instance as Sequence Theory)
- * 2. Create profile record (fallback if no database trigger)
- * 3. If email confirmation disabled, immediately trigger wallet creation
- * 4. Wallet creation is handled by Sequence Theory's existing Turnkey function
+ * 1. Try to create user in Supabase Auth
+ * 2. If user already exists (orphan in auth.users), try to sign them in
+ * 3. Create profile record (fallback if no database trigger)
+ * 4. Trigger wallet creation via Sequence Theory's existing Turnkey function
  */
 export async function registerUser(
   email: string, 
@@ -183,7 +183,7 @@ export async function registerUser(
   console.log('[AuthService] Starting registration for:', email);
   
   try {
-    // Step 1: Register user with Supabase Auth
+    // Step 1: Try to register user with Supabase Auth
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -192,12 +192,35 @@ export async function registerUser(
       }
     });
 
+    // Handle "User already registered" - this happens when user exists in auth.users
+    // but may not have a profile. Try to log them in instead.
     if (error) {
+      const errorMsg = error.message.toLowerCase();
+      if (errorMsg.includes('already registered') || errorMsg.includes('already exists')) {
+        console.log('[AuthService] User already in auth.users, attempting sign in...');
+        
+        // Try to sign in the existing user
+        const signInResult = await signInUser(email, password);
+        
+        if (signInResult.success) {
+          console.log('[AuthService] Existing user signed in successfully');
+          return signInResult;
+        } else {
+          // If sign in fails, it might be wrong password
+          console.error('[AuthService] Sign in failed for existing user:', signInResult.error);
+          return {
+            success: false,
+            error: 'This email is already registered. Please use "Log In" with your password, or reset your password if you forgot it.'
+          };
+        }
+      }
+      
       console.error('[AuthService] Registration error:', error);
       return {
         success: false,
         error: error.message
       };
+    }
     }
 
     if (!data.user) {
