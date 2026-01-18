@@ -1869,6 +1869,25 @@ Your contract is now live and ready for members to join!`);
             </a>
           </div>
         </div>
+        
+        {/* Terms of Service Link */}
+        <div className="glass-card p-6 animate-fade-up stagger-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <FileText className="w-5 h-5 text-primary" />
+              <div>
+                <h3 className="font-semibold text-foreground">Legal Documents</h3>
+                <p className="text-sm text-muted-foreground">Review our terms and policies</p>
+              </div>
+            </div>
+            <button 
+              onClick={() => setShowToSViewer(true)}
+              className="px-4 py-2 rounded-xl bg-muted/50 hover:bg-muted border border-border/50 hover:border-primary/30 text-foreground font-medium transition-all duration-300"
+            >
+              Terms of Service
+            </button>
+          </div>
+        </div>
       </div>
     </div>;
   const PersonalPage = () => <div className="relative z-10 px-6 py-8 pb-32">
