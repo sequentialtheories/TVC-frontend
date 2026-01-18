@@ -2658,6 +2658,20 @@ Your contract is now live and ready for members to join!`);
             </div>
           </div>
         </div>}
+      
+      {/* ToS Agreement Modal - appears during signup */}
+      <ToSAgreementModal
+        isOpen={showToSModal}
+        onClose={handleToSClose}
+        onAccept={handleToSAccept}
+        isLoading={authLoading}
+      />
+      
+      {/* ToS Viewer Modal - for viewing ToS from Data page */}
+      <ToSViewer
+        isOpen={showToSViewer}
+        onClose={() => setShowToSViewer(false)}
+      />
     </div>;
 };
 
