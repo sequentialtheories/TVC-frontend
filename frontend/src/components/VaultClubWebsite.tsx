@@ -404,6 +404,11 @@ const VaultClubWebsiteInner: React.FC<{
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState('');
   const [authSuccess, setAuthSuccess] = useState('');
+  
+  // ToS modal states
+  const [showToSModal, setShowToSModal] = useState(false);
+  const [showToSViewer, setShowToSViewer] = useState(false);
+  const [pendingSignupData, setPendingSignupData] = useState<{ email: string; password: string } | null>(null);
 
   // Sync auth modal state with tutorial system
   useEffect(() => {
