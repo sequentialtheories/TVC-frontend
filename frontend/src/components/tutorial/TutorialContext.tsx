@@ -90,7 +90,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     position: 'top',
     advanceOn: 'navigation',
     advanceValue: 'group',
-    requiredPage: 'simulation',
+    requiredPage: 'dataset',
     prerequisite: { type: 'completed-step', value: 5 },
   },
   {
