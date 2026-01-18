@@ -834,6 +834,8 @@ const VaultClubWebsiteInner: React.FC<{
     setShowAuthModal(true);
     tutorial.setAuthModalOpen(true); // Suppress tutorials during auth
   };
+  
+  // Handle initial form submission - intercepts signup to show ToS
   const handleAuthSubmit = async () => {
     if (authMode === 'signup' && authPassword !== authConfirmPassword) {
       setAuthError('Passwords do not match!');
@@ -843,58 +845,104 @@ const VaultClubWebsiteInner: React.FC<{
       setAuthError('Please fill in all fields');
       return;
     }
+    
+    // For signup, show ToS modal first instead of creating account
+    if (authMode === 'signup') {
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(authEmail)) {
+        setAuthError('Please enter a valid email address');
+        return;
+      }
+      if (authPassword.length < 6) {
+        setAuthError('Password must be at least 6 characters');
+        return;
+      }
+      
+      // Store credentials and show ToS modal
+      setPendingSignupData({ email: authEmail, password: authPassword });
+      setShowToSModal(true);
+      setAuthError('');
+      return;
+    }
+    
+    // For login, proceed directly
     setAuthLoading(true);
     setAuthError('');
     setAuthSuccess('');
     try {
-      if (authMode === 'signup') {
-        // Use auth service for registration - triggers Sequence Theory's Turnkey wallet
-        console.log('[VaultClub] Starting registration...');
-        const result = await registerUser(
-          authEmail, 
-          authPassword, 
-          `${window.location.origin}/`
-        );
-        
-        if (!result.success) {
-          throw new Error(result.error || 'Registration failed');
-        }
-
-        if (result.requiresEmailConfirmation) {
-          setAuthSuccess('Check your email for confirmation link!');
-        } else if (result.walletAddress) {
-          setWalletAddress(result.walletAddress);
-          console.log('[VaultClub] Registration complete with wallet:', result.walletAddress);
-        }
-        
-        setAuthEmail('');
-        setAuthPassword('');
-        setAuthConfirmPassword('');
-      } else {
-        // Use auth service for sign in - ensures wallet exists via Sequence Theory
-        console.log('[VaultClub] Starting sign in...');
-        const result = await signInUser(authEmail, authPassword);
-        
-        if (!result.success) {
-          throw new Error(result.error || 'Sign in failed');
-        }
-
-        if (result.walletAddress) {
-          setWalletAddress(result.walletAddress);
-          console.log('[VaultClub] Sign in complete with wallet:', result.walletAddress);
-        }
-        
-        setVaultBalance("0");
-        setAuthEmail('');
-        setAuthPassword('');
-        setAuthConfirmPassword('');
+      console.log('[VaultClub] Starting sign in...');
+      const result = await signInUser(authEmail, authPassword);
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Sign in failed');
       }
+
+      if (result.walletAddress) {
+        setWalletAddress(result.walletAddress);
+        console.log('[VaultClub] Sign in complete with wallet:', result.walletAddress);
+      }
+      
+      setVaultBalance("0");
+      setAuthEmail('');
+      setAuthPassword('');
+      setAuthConfirmPassword('');
     } catch (error: any) {
       setAuthError(error.message || 'Authentication failed');
     } finally {
       setAuthLoading(false);
     }
   };
+  
+  // Handle ToS acceptance - actually create the account
+  const handleToSAccept = async () => {
+    if (!pendingSignupData) return;
+    
+    setAuthLoading(true);
+    setAuthError('');
+    setAuthSuccess('');
+    
+    try {
+      console.log('[VaultClub] ToS accepted, creating account...');
+      const result = await registerUser(
+        pendingSignupData.email, 
+        pendingSignupData.password, 
+        `${window.location.origin}/`
+      );
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Registration failed');
+      }
+
+      if (result.requiresEmailConfirmation) {
+        setAuthSuccess('Check your email for confirmation link!');
+      } else if (result.walletAddress) {
+        setWalletAddress(result.walletAddress);
+        console.log('[VaultClub] Registration complete with wallet:', result.walletAddress);
+      }
+      
+      // Clear form and close modals
+      setAuthEmail('');
+      setAuthPassword('');
+      setAuthConfirmPassword('');
+      setPendingSignupData(null);
+      setShowToSModal(false);
+      setShowAuthModal(false);
+    } catch (error: any) {
+      setAuthError(error.message || 'Registration failed');
+      setShowToSModal(false); // Close ToS modal to show error in auth modal
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+  
+  // Handle ToS modal close (cancel)
+  const handleToSClose = () => {
+    setShowToSModal(false);
+    setPendingSignupData(null);
+    // Keep auth modal open so user can try again or switch to login
+  };
+  
   const handleSignOut = async () => {
     console.log('[VaultClub] Signing out...');
     await signOutUser();
