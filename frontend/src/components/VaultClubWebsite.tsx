@@ -1486,7 +1486,7 @@ Your contract is now live and ready for members to join!`);
   };
   const HomePage = () => <div className="relative z-10 px-6 py-10 pb-36 max-w-7xl mx-auto">
       {/* Hero Section - Spark.fi inspired */}
-      <div className="text-center mb-16 animate-fade-up">
+      <div ref={homeContractSectionRef} className={`text-center mb-16 animate-fade-up ${tutorial.currentStepData?.target === 'home-contract-section' ? 'tutorial-highlight' : ''}`}>
         {selectedContract && <div className="inline-flex items-center space-x-3 px-5 py-2.5 glass-card mb-6">
             <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
             <div className="text-xs font-semibold text-secondary tracking-widest uppercase">
@@ -1514,7 +1514,7 @@ Your contract is now live and ready for members to join!`);
       </div>
 
       {/* Contract Progress Bars - Premium style */}
-      {walletConnected && deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).length > 0 && <div ref={homeContractSectionRef} className={`mb-16 animate-fade-up stagger-1 ${tutorial.currentStepData?.target === 'home-contract-section' ? 'tutorial-highlight' : ''}`}>
+      {walletConnected && deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).length > 0 && <div className="mb-16 animate-fade-up stagger-1">
           <div className="text-center mb-8">
             <h2 className="text-xl font-semibold text-foreground mb-2">Contract Progress</h2>
             <p className="text-sm text-muted-foreground">Time remaining until lockup expires</p>
