@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Database, User, Users, TrendingUp, X, Bitcoin, DollarSign, Zap, Shield, ArrowLeft, Wallet, Home, Share2 } from 'lucide-react';
+import { Database, User, Users, TrendingUp, X, Bitcoin, DollarSign, Zap, Shield, ArrowLeft, Wallet, Home, Share2, FileText } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import type { Session } from '@supabase/supabase-js';
 import { ThemeToggle } from './ThemeToggle';
 import VaultBackground from './VaultBackground';
 import { TutorialProvider, useTutorial, TutorialBubble } from './tutorial';
+import { ToSAgreementModal, ToSViewer } from './ToSAgreementModal';
 import { 
   registerUser, 
   signInUser, 
