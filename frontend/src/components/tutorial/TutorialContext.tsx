@@ -97,7 +97,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     id: 7,
     displayStep: '4/6',
     target: 'contracts-directory',
-    title: 'The Club Directory',
+    title: 'The Contract Directory',
     message: 'From here, you can create your own contract or browse existing ones to join — whichever feels right for you.',
     position: 'bottom',
     advanceOn: 'dismiss',
