@@ -310,7 +310,6 @@ const VaultClubWebsiteInner: React.FC<{
   const [currentPage, setCurrentPage] = useState('home');
   const [walletConnected, setWalletConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState(null);
-  const [autoRenewEnabled, setAutoRenewEnabled] = useState(false);
   const [vaultBalance, setVaultBalance] = useState("0");
   const [depositAmount, setDepositAmount] = useState('');
 
