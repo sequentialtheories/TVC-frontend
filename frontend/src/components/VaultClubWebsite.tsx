@@ -2029,7 +2029,7 @@ Your contract is now live and ready for members to join!`);
                 <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
               </div>
               <div className="font-medium">No contracts yet</div>
-              <div className="text-sm">Create or join your first subclub below</div>
+              <div className="text-sm">Create or join your first contract below</div>
             </div> : <div className="grid md:grid-cols-2 gap-4">
               {deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).map(subclub => <div key={subclub.id} className="p-4 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-primary/30 transition-colors relative">
                   <div className="flex justify-between items-start mb-2">
