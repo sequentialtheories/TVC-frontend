@@ -63,13 +63,13 @@ For this site to work with Sequence Theory's Edge Functions, the `ALLOWED_ORIGIN
 environment variable in Supabase must include:
 
 ```
-https://docreader-17.preview.emergentagent.com
+https://wallet-onboarding.preview.emergentagent.com
 ```
 
 **To configure:**
 1. Go to Supabase Dashboard → Edge Functions → create-turnkey-wallet
 2. Add environment variable: `ALLOWED_ORIGINS`
-3. Value: `https://qldjhlnsphlixmzzrdwi.lovableproject.com,https://docreader-17.preview.emergentagent.com,https://lovable.dev`
+3. Value: `https://qldjhlnsphlixmzzrdwi.lovableproject.com,https://wallet-onboarding.preview.emergentagent.com,https://lovable.dev`
 
 ## Environment Variables
 
@@ -81,7 +81,7 @@ VITE_SUPABASE_PUBLISHABLE_KEY=<anon_key>
 
 ### Edge Function (Supabase Dashboard)
 ```
-ALLOWED_ORIGINS=https://qldjhlnsphlixmzzrdwi.lovableproject.com,https://docreader-17.preview.emergentagent.com
+ALLOWED_ORIGINS=https://qldjhlnsphlixmzzrdwi.lovableproject.com,https://wallet-onboarding.preview.emergentagent.com
 TURNKEY_ORGANIZATION_ID=<from_turnkey>
 TURNKEY_API_PUBLIC_KEY=<from_turnkey>
 TURNKEY_API_PRIVATE_KEY=<from_turnkey>

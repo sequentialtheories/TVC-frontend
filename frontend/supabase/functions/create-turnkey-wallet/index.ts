@@ -26,7 +26,7 @@ function getCorsHeaders(req: Request): Record<string, string> {
         "https://qldjhlnsphlixmzzrdwi.lovableproject.com",
         "https://lovable.dev",
         // The Vault Club frontend (Emergent deployment)
-        "https://docreader-17.preview.emergentagent.com",
+        "https://wallet-onboarding.preview.emergentagent.com",
         // Local development
         "http://localhost:5173",
         "http://localhost:3000"
