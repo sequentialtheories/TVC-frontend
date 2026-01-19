@@ -2006,7 +2006,7 @@ Your contract is now live and ready for members to join!`);
                 </div>)}
               {deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).length === 0 && <div className="text-center py-8 text-slate-300">
                   <div className="font-medium">No contracts yet</div>
-                  <div className="text-sm">Join a subclub to see member information</div>
+                  <div className="text-sm">Join a contract to see member information</div>
                 </div>}
             </div> : <div className="text-center py-8 text-slate-300">
               Connect wallet to view member information
