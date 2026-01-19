@@ -1584,13 +1584,13 @@ Your contract is now live and ready for members to join!`);
                     <label className="text-sm text-white/70 mb-2 block">Contract Type</label>
                     <div className="flex gap-2">
                       <button
-                        onClick={() => setClubCreationData(prev => ({ ...prev, isChargedContract: false }))}
+                        onClick={() => setClubCreationData(prev => ({ ...prev, isChargedContract: false, lockupPeriod: 5 }))}
                         className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${!clubCreationData.isChargedContract ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
                       >
                         Traditional (Years)
                       </button>
                       <button
-                        onClick={() => setClubCreationData(prev => ({ ...prev, isChargedContract: true }))}
+                        onClick={() => setClubCreationData(prev => ({ ...prev, isChargedContract: true, lockupPeriod: 3 }))}
                         className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${clubCreationData.isChargedContract ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
                       >
                         Charged (Months)
@@ -1598,22 +1598,57 @@ Your contract is now live and ready for members to join!`);
                     </div>
                   </div>
                   
-                  {/* Lockup Period */}
+                  {/* Lockup Period - Full options */}
                   <div className="mb-4">
                     <label className="text-sm text-white/70 mb-2 block">
                       Lockup Period ({clubCreationData.isChargedContract ? 'Months' : 'Years'})
                     </label>
-                    <div className="grid grid-cols-6 gap-2">
-                      {(clubCreationData.isChargedContract ? [1, 3, 6, 9, 12] : [1, 3, 5, 7, 10, 15]).map(num => (
-                        <button
-                          key={num}
-                          onClick={() => setClubCreationData(prev => ({ ...prev, lockupPeriod: num }))}
-                          className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${clubCreationData.lockupPeriod === num ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
-                        >
-                          {num}
-                        </button>
-                      ))}
-                    </div>
+                    {clubCreationData.isChargedContract ? (
+                      <div className="grid grid-cols-6 gap-2">
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(num => (
+                          <button
+                            key={num}
+                            onClick={() => setClubCreationData(prev => ({ ...prev, lockupPeriod: num }))}
+                            className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${clubCreationData.lockupPeriod === num ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+                          >
+                            {num}
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <>
+                        <div className="grid grid-cols-6 gap-2">
+                          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(num => (
+                            <button
+                              key={num}
+                              onClick={() => setClubCreationData(prev => ({ ...prev, lockupPeriod: num }))}
+                              className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${clubCreationData.lockupPeriod === num ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+                            >
+                              {num}
+                            </button>
+                          ))}
+                          <button
+                            onClick={() => setShowExtendedLockup(!showExtendedLockup)}
+                            className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${showExtendedLockup || clubCreationData.lockupPeriod > 11 ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+                          >
+                            More
+                          </button>
+                        </div>
+                        {showExtendedLockup && (
+                          <div className="grid grid-cols-5 gap-2 mt-2">
+                            {[12, 13, 14, 15, 16, 17, 18, 19, 20].map(num => (
+                              <button
+                                key={num}
+                                onClick={() => setClubCreationData(prev => ({ ...prev, lockupPeriod: num }))}
+                                className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${clubCreationData.lockupPeriod === num ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+                              >
+                                {num}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
                   
                   {/* Rigor Level */}
@@ -1654,7 +1689,7 @@ Your contract is now live and ready for members to join!`);
                     </div>
                   </div>
                   
-                  {/* Members (only in Custom) */}
+                  {/* Members */}
                   <div className="mb-4">
                     <label className="text-sm text-white/70 mb-2 block">Maximum Members</label>
                     <div className="grid grid-cols-8 gap-2">
@@ -1670,7 +1705,7 @@ Your contract is now live and ready for members to join!`);
                     </div>
                   </div>
                   
-                  {/* Privacy (only in Custom) */}
+                  {/* Privacy */}
                   <div className="mb-4">
                     <label className="text-sm text-white/70 mb-2 block">Privacy</label>
                     <div className="grid grid-cols-2 gap-2">
@@ -1687,6 +1722,58 @@ Your contract is now live and ready for members to join!`);
                         Public
                       </button>
                     </div>
+                  </div>
+                  
+                  {/* Phase 2 Settings - Only in Custom */}
+                  <div className="border-t border-white/10 pt-4 mt-4">
+                    <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+                      <Clock className="w-4 h-4" />
+                      Phase 2 Trigger Settings
+                    </h4>
+                    <p className="text-white/50 text-xs mb-4">
+                      Phase 2 transitions your strategy to wealth preservation. Set when this happens.
+                    </p>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Time-based trigger */}
+                      <div className="bg-white/5 rounded-xl p-4">
+                        <label className="text-sm text-white/70 mb-2 block">Time-Based</label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="range"
+                            min="20"
+                            max="80"
+                            value={clubCreationData.phase2TimePercent}
+                            onChange={(e) => setClubCreationData(prev => ({ ...prev, phase2TimePercent: Number(e.target.value) }))}
+                            className="flex-1 accent-blue-500"
+                          />
+                          <span className="text-white font-medium text-sm w-12 text-right">{clubCreationData.phase2TimePercent}%</span>
+                        </div>
+                        <p className="text-white/40 text-xs mt-2">Trigger at {clubCreationData.phase2TimePercent}% completion</p>
+                      </div>
+                      
+                      {/* Value-based trigger */}
+                      <div className="bg-white/5 rounded-xl p-4">
+                        <label className="text-sm text-white/70 mb-2 block">Value-Based</label>
+                        <div className="flex items-center gap-2">
+                          <span className="text-white/50">$</span>
+                          <input
+                            type="number"
+                            min="10000"
+                            max="10000000"
+                            step="50000"
+                            value={clubCreationData.phase2ValueThreshold}
+                            onChange={(e) => setClubCreationData(prev => ({ ...prev, phase2ValueThreshold: Number(e.target.value) }))}
+                            className="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                        </div>
+                        <p className="text-white/40 text-xs mt-2">Trigger when vault reaches this value</p>
+                      </div>
+                    </div>
+                    
+                    <p className="text-white/50 text-xs mt-3 text-center">
+                      Phase 2 triggers when <span className="text-white">either</span> condition is met (whichever comes first)
+                    </p>
                   </div>
                 </div>
               </div>
