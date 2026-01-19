@@ -341,8 +341,8 @@ const VaultClubWebsiteInner: React.FC<{
     lockupPeriod: 5,
     rigorLevel: 'medium',
     riskLevel: 'medium',
-    maxMembers: 4,
-    isPrivate: false,
+    maxMembers: 1,
+    isPrivate: true,
     isChargedContract: false,
     customDepositFrequency: 'weekly',
     customWeeklyAmount: 75,
@@ -362,8 +362,16 @@ const VaultClubWebsiteInner: React.FC<{
       yearStart: 11,
       yearEnd: 20,
       amount: 200
-    }]
+    }],
+    phase2TriggerType: 'both',
+    phase2TimePercent: 50,
+    phase2ValueThreshold: 1000000
   });
+  
+  // Template selection state
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [templateCarouselIndex, setTemplateCarouselIndex] = useState(0);
+  const [showCustomControls, setShowCustomControls] = useState(false);
 
   // Dynamic data states - accurate initial values reflecting empty state
   const [vaultStats, setVaultStats] = useState({
