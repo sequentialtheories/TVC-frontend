@@ -1779,62 +1779,6 @@ Your contract is now live and ready for members to join!`);
               </div>
             )}
             
-            {/* Phase 2 Settings (shown when template is selected) */}
-            {selectedTemplate && (
-              <div className="px-6 pb-4 animate-fade-up">
-                <div className="border-t border-white/10 pt-4">
-                  <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
-                    <Clock className="w-4 h-4" />
-                    Phase 2 Trigger Settings
-                  </h4>
-                  <p className="text-white/50 text-xs mb-4">
-                    Phase 2 transitions your strategy to wealth preservation. Set when this happens.
-                  </p>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    {/* Time-based trigger */}
-                    <div className="bg-white/5 rounded-xl p-4">
-                      <label className="text-sm text-white/70 mb-2 block">Time-Based</label>
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="range"
-                          min="20"
-                          max="80"
-                          value={clubCreationData.phase2TimePercent}
-                          onChange={(e) => setClubCreationData(prev => ({ ...prev, phase2TimePercent: Number(e.target.value) }))}
-                          className="flex-1 accent-blue-500"
-                        />
-                        <span className="text-white font-medium text-sm w-12 text-right">{clubCreationData.phase2TimePercent}%</span>
-                      </div>
-                      <p className="text-white/40 text-xs mt-2">Trigger at {clubCreationData.phase2TimePercent}% completion</p>
-                    </div>
-                    
-                    {/* Value-based trigger */}
-                    <div className="bg-white/5 rounded-xl p-4">
-                      <label className="text-sm text-white/70 mb-2 block">Value-Based</label>
-                      <div className="flex items-center gap-2">
-                        <span className="text-white/50">$</span>
-                        <input
-                          type="number"
-                          min="10000"
-                          max="10000000"
-                          step="50000"
-                          value={clubCreationData.phase2ValueThreshold}
-                          onChange={(e) => setClubCreationData(prev => ({ ...prev, phase2ValueThreshold: Number(e.target.value) }))}
-                          className="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                      </div>
-                      <p className="text-white/40 text-xs mt-2">Trigger when vault reaches this value</p>
-                    </div>
-                  </div>
-                  
-                  <p className="text-white/50 text-xs mt-3 text-center">
-                    Phase 2 triggers when <span className="text-white">either</span> condition is met (whichever comes first)
-                  </p>
-                </div>
-              </div>
-            )}
-            
             {/* Summary & Deploy */}
             {selectedTemplate && (
               <div className="px-6 pb-6 animate-fade-up">
@@ -1859,18 +1803,20 @@ Your contract is now live and ready for members to join!`);
                     </div>
                     <div className="flex justify-between">
                       <span className="text-white/70">Members:</span>
-                      <span>{clubCreationData.maxMembers} (Private)</span>
+                      <span>{clubCreationData.maxMembers} ({clubCreationData.isPrivate ? 'Private' : 'Public'})</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-white/70">Phase 2:</span>
-                      <span>{clubCreationData.phase2TimePercent}% or ${(clubCreationData.phase2ValueThreshold / 1000).toFixed(0)}K</span>
-                    </div>
+                    {selectedTemplate === 'custom' && (
+                      <div className="flex justify-between">
+                        <span className="text-white/70">Phase 2:</span>
+                        <span>{clubCreationData.phase2TimePercent}% or ${(clubCreationData.phase2ValueThreshold / 1000).toFixed(0)}K</span>
+                      </div>
+                    )}
                   </div>
                 </div>
                 
                 <button 
                   onClick={handleCreateClub} 
-                  className={`w-full bg-gradient-to-r ${CONTRACT_TEMPLATES.find(t => t.id === selectedTemplate)?.gradient || 'from-blue-600 to-indigo-600'} hover:opacity-90 text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2`}
+                  className={`w-full bg-gradient-to-r ${CONTRACT_TEMPLATES.find(t => t.id === selectedTemplate)?.gradient || 'from-blue-600 to-indigo-600'} hover:opacity-90 text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2`}
                 >
                   <Rocket className="w-5 h-5" />
                   Deploy Contract
