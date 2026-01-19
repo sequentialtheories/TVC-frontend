@@ -502,7 +502,7 @@ const VaultClubWebsiteInner: React.FC<{
           members: [...(contractToJoin.members || []), walletAddress]
         };
         setDeployedSubclubs(prev => prev.map(club => club.contractAddress === joinContractId ? updatedContract : club));
-        alert(`✅ Successfully joined subclub contract!\n\n${contractToJoin.lockupPeriod} ${contractToJoin.isChargedContract ? 'Month' : 'Year'} Lockup • ${contractToJoin.rigorLevel.charAt(0).toUpperCase() + contractToJoin.rigorLevel.slice(1)} Rigor\n\nYou can now start making deposits according to the contract schedule.`);
+        alert(`✅ Successfully joined contract!\n\n${contractToJoin.lockupPeriod} ${contractToJoin.isChargedContract ? 'Month' : 'Year'} Lockup • ${contractToJoin.rigorLevel.charAt(0).toUpperCase() + contractToJoin.rigorLevel.slice(1)} Rigor\n\nYou can now start making deposits according to the contract schedule.`);
 
         // Clean up URL
         window.history.replaceState({}, document.title, window.location.pathname);
