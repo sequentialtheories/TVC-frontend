@@ -44,6 +44,10 @@ interface ClubCreationData {
   customDepositFrequency: 'daily' | 'weekly' | 'monthly';
   customWeeklyAmount: number;
   customSchedule: SchedulePeriod[];
+  // Phase 2 trigger settings
+  phase2TriggerType: 'time' | 'value' | 'both';
+  phase2TimePercent: number; // 0-100
+  phase2ValueThreshold: number; // Dollar amount
 }
 interface Subclub {
   id: number;
