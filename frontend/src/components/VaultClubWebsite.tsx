@@ -1459,99 +1459,114 @@ Your contract is now live and ready for members to join!`);
               <div className="flex items-center justify-between mb-4">
                 <button 
                   onClick={() => setTemplateCarouselIndex(prev => prev > 0 ? prev - 1 : CONTRACT_TEMPLATES.length - 1)}
-                  className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors text-white/70 hover:text-white"
+                  className="p-3 rounded-full bg-white/5 hover:bg-white/10 transition-all duration-300 text-white/70 hover:text-white hover:scale-110 active:scale-95"
                 >
-                  <ChevronLeft className="w-5 h-5" />
+                  <ChevronLeft className="w-6 h-6" />
                 </button>
                 <div className="flex items-center gap-2">
                   {CONTRACT_TEMPLATES.map((_, idx) => (
                     <button
                       key={idx}
                       onClick={() => setTemplateCarouselIndex(idx)}
-                      className={`w-2 h-2 rounded-full transition-all ${idx === templateCarouselIndex ? 'bg-white w-6' : 'bg-white/30 hover:bg-white/50'}`}
+                      className={`h-2 rounded-full transition-all duration-500 ${idx === templateCarouselIndex ? 'bg-white w-8' : 'bg-white/30 hover:bg-white/50 w-2'}`}
                     />
                   ))}
                 </div>
                 <button 
                   onClick={() => setTemplateCarouselIndex(prev => prev < CONTRACT_TEMPLATES.length - 1 ? prev + 1 : 0)}
-                  className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors text-white/70 hover:text-white"
+                  className="p-3 rounded-full bg-white/5 hover:bg-white/10 transition-all duration-300 text-white/70 hover:text-white hover:scale-110 active:scale-95"
                 >
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="w-6 h-6" />
                 </button>
               </div>
               
-              {/* Current Template Card */}
-              <div 
-                className={`relative bg-gradient-to-br ${currentTemplate.gradient} rounded-2xl p-6 text-white shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.02] ${selectedTemplate === currentTemplate.id ? 'ring-4 ring-white/50' : ''}`}
-                onClick={() => applyTemplate(currentTemplate)}
-              >
-                {selectedTemplate === currentTemplate.id && (
-                  <div className="absolute top-4 right-4 bg-white rounded-full p-1">
-                    <Check className="w-5 h-5 text-green-600" />
-                  </div>
-                )}
-                
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
-                    {currentTemplate.icon}
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="text-xl font-bold">{currentTemplate.name}</h4>
-                    <p className="text-white/80 text-sm">{currentTemplate.tagline}</p>
-                  </div>
-                </div>
-                
-                <p className="text-white/90 text-sm mb-4 leading-relaxed">
-                  {currentTemplate.description}
-                </p>
-                
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {currentTemplate.tags.map((tag, idx) => (
-                    <span key={idx} className={`px-3 py-1 rounded-full text-xs font-medium ${tag.color}`}>
-                      {tag.label}
-                    </span>
-                  ))}
-                </div>
-                
-                {/* Highlights */}
-                <div className="grid grid-cols-3 gap-2">
-                  {currentTemplate.highlights.map((highlight, idx) => (
-                    <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-lg p-2 text-center">
-                      <span className="text-xs text-white/90">{highlight}</span>
+              {/* Card Stack Container */}
+              <div className="relative h-[340px] perspective-1000">
+                {CONTRACT_TEMPLATES.map((template, idx) => {
+                  const offset = idx - templateCarouselIndex;
+                  const isActive = offset === 0;
+                  const isPrev = offset === -1 || (templateCarouselIndex === 0 && idx === CONTRACT_TEMPLATES.length - 1);
+                  const isNext = offset === 1 || (templateCarouselIndex === CONTRACT_TEMPLATES.length - 1 && idx === 0);
+                  
+                  // Only render nearby cards for performance
+                  if (Math.abs(offset) > 2 && !isPrev && !isNext) return null;
+                  
+                  return (
+                    <div
+                      key={template.id}
+                      className={`absolute inset-0 transition-all duration-500 ease-out cursor-pointer`}
+                      style={{
+                        transform: isActive 
+                          ? 'translateX(0) rotateY(0deg) scale(1)' 
+                          : isPrev 
+                            ? 'translateX(-85%) rotateY(25deg) scale(0.85)' 
+                            : isNext 
+                              ? 'translateX(85%) rotateY(-25deg) scale(0.85)'
+                              : offset < 0 
+                                ? 'translateX(-150%) rotateY(45deg) scale(0.7)'
+                                : 'translateX(150%) rotateY(-45deg) scale(0.7)',
+                        opacity: isActive ? 1 : (isPrev || isNext) ? 0.6 : 0,
+                        zIndex: isActive ? 30 : (isPrev || isNext) ? 20 : 10,
+                        pointerEvents: isActive ? 'auto' : 'none',
+                      }}
+                      onClick={() => isActive && applyTemplate(template)}
+                    >
+                      <div 
+                        className={`h-full bg-gradient-to-br ${template.gradient} rounded-2xl p-6 text-white shadow-2xl ${selectedTemplate === template.id ? 'ring-4 ring-white/50' : ''}`}
+                      >
+                        {selectedTemplate === template.id && (
+                          <div className="absolute top-4 right-4 bg-white rounded-full p-1 shadow-lg">
+                            <Check className="w-5 h-5 text-green-600" />
+                          </div>
+                        )}
+                        
+                        <div className="flex items-start gap-4 mb-4">
+                          <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm shadow-inner">
+                            {template.icon}
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="text-xl font-bold">{template.name}</h4>
+                            <p className="text-white/80 text-sm">{template.tagline}</p>
+                          </div>
+                        </div>
+                        
+                        <p className="text-white/90 text-sm mb-4 leading-relaxed">
+                          {template.description}
+                        </p>
+                        
+                        {/* Tags */}
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {template.tags.map((tag, tagIdx) => (
+                            <span key={tagIdx} className={`px-3 py-1 rounded-full text-xs font-medium ${tag.color} shadow-sm`}>
+                              {tag.label}
+                            </span>
+                          ))}
+                        </div>
+                        
+                        {/* Highlights */}
+                        <div className="grid grid-cols-3 gap-2">
+                          {template.highlights.map((highlight, hIdx) => (
+                            <div key={hIdx} className="bg-white/10 backdrop-blur-sm rounded-lg p-2 text-center">
+                              <span className="text-xs text-white/90">{highlight}</span>
+                            </div>
+                          ))}
+                        </div>
+                        
+                        {/* Selection hint */}
+                        <div className="mt-4 text-center">
+                          <span className={`text-xs transition-all duration-300 ${selectedTemplate === template.id ? 'text-white font-medium' : 'text-white/60'}`}>
+                            {selectedTemplate === template.id ? '✓ Selected' : 'Click to select'}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  ))}
-                </div>
-                
-                {/* Selection hint */}
-                <div className="mt-4 text-center">
-                  <span className="text-white/60 text-xs">
-                    {selectedTemplate === currentTemplate.id ? '✓ Selected' : 'Click to select'}
-                  </span>
-                </div>
+                  );
+                })}
               </div>
               
-              {/* Quick Select Grid */}
-              <div className="mt-4 grid grid-cols-5 gap-2">
-                {CONTRACT_TEMPLATES.map((template, idx) => (
-                  <button
-                    key={template.id}
-                    onClick={() => { setTemplateCarouselIndex(idx); applyTemplate(template); }}
-                    className={`p-2 rounded-lg transition-all text-center ${
-                      selectedTemplate === template.id 
-                        ? `bg-gradient-to-br ${template.gradient} text-white` 
-                        : idx === templateCarouselIndex
-                          ? 'bg-white/10 text-white'
-                          : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
-                    }`}
-                    title={template.name}
-                  >
-                    <div className="w-5 h-5 mx-auto mb-1 opacity-80">
-                      {template.icon}
-                    </div>
-                    <span className="text-[10px] font-medium line-clamp-1">{template.name.split(' ')[0]}</span>
-                  </button>
-                ))}
+              {/* Template counter */}
+              <div className="text-center mt-4">
+                <span className="text-white/50 text-sm">{templateCarouselIndex + 1} / {CONTRACT_TEMPLATES.length}</span>
               </div>
             </div>
             
