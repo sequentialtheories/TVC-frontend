@@ -161,6 +161,12 @@
     -moz-osx-font-smoothing: grayscale;
     letter-spacing: -0.01em;
   }
+  
+  /* 3D Perspective for card carousel */
+  .perspective-1000 {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
 
   /* Focus states */
   :focus-visible {
