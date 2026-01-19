@@ -1976,131 +1976,14 @@ Your contract is now live and ready for members to join!`);
       </div>
       
       <div className="space-y-6">
-        <div className="glass-card p-6 animate-fade-up stagger-1">
-          <h2 className="text-xl font-semibold text-foreground mb-5">Member Directory</h2>
-          
-          {walletConnected ? <div className="space-y-6">
-              {deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).map(subclub => <div key={subclub.id} className={`p-4 bg-white/10 rounded-lg border-l-4 ${getContractColor(subclub)}`}>
-                  <h3 className="font-semibold text-white mb-3">
-                    {subclub.lockupPeriod} Year Lockup - {subclub.rigorLevel.charAt(0).toUpperCase() + subclub.rigorLevel.slice(1)} Rigor
-                  </h3>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="p-3 bg-white/10 rounded-lg">
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <div className="font-semibold text-white">Me ({walletAddress?.slice(0, 6)}...{walletAddress?.slice(-4)})</div>
-                          <div className="text-sm text-slate-300">Penalties: 0/15</div>
-                        </div>
-                        <span className="text-xs px-2 py-1 rounded-full bg-green-100 text-green-800">
-                          Active
-                        </span>
-                      </div>
-                      <div className="text-sm text-slate-300">
-                        Contributed: <span className="font-medium text-white">${parseFloat(vaultBalance).toFixed(2)}</span>
-                      </div>
-                      <div className="text-xs text-slate-300 mt-1">
-                        Role: {subclub.creator === walletAddress ? 'Owner' : 'Member'}
-                      </div>
-                    </div>
-                  </div>
-                </div>)}
-              {deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).length === 0 && <div className="text-center py-8 text-slate-300">
-                  <div className="font-medium">No contracts yet</div>
-                  <div className="text-sm">Join a contract to see member information</div>
-                </div>}
-            </div> : <div className="text-center py-8 text-slate-300">
-              Connect wallet to view member information
-            </div>}
-        </div>
-
-        <div className="glass-card p-6 animate-fade-up stagger-2">
-          <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
-            My Contracts
-          </h2>
-          
-          {!walletConnected ? <div className="text-center py-8 text-muted-foreground">
-              <div className="text-muted-foreground mb-2">
-                <Wallet className="w-8 h-8 mx-auto mb-2 opacity-50" />
-              </div>
-              <div className="font-medium">Connect wallet to view your contracts</div>
-            </div> : deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).length === 0 ? <div className="text-center py-8 text-muted-foreground">
-              <div className="text-muted-foreground mb-2">
-                <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
-              </div>
-              <div className="font-medium">No contracts yet</div>
-              <div className="text-sm">Create or join your first contract below</div>
-            </div> : <div className="grid md:grid-cols-2 gap-4">
-              {deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).map(subclub => <div key={subclub.id} className="p-4 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-primary/30 transition-colors relative">
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <div className="font-semibold text-foreground">
-                        {subclub.lockupPeriod} {subclub.isChargedContract ? 'Month' : 'Year'} Lockup
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        Members: {subclub.currentMembers}/{subclub.maxMembers}
-                      </div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Contract: {subclub.contractAddress.slice(0, 8)}...{subclub.contractAddress.slice(-6)}
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-end space-y-1">
-                      <span className={`text-xs px-2 py-1 rounded-full ${subclub.isPrivate ? 'bg-defi-purple/20 text-defi-purple' : 'bg-defi-emerald/20 text-defi-emerald'}`}>
-                        {subclub.isPrivate ? 'Private' : 'Public'}
-                      </span>
-                      <span className={`text-xs px-2 py-1 rounded-full ${subclub.creator === walletAddress ? 'bg-primary/20 text-primary' : 'bg-defi-orange/20 text-defi-orange'}`}>
-                        {subclub.creator === walletAddress ? 'Owner' : 'Member'}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    Rigor: <span className="font-medium text-foreground capitalize">{subclub.rigorLevel}</span>
-                  </div>
-                  <div className="text-xs text-muted-foreground mt-2">
-                    {subclub.creator === walletAddress ? 'Created' : 'Joined'}: {new Date(subclub.createdAt).toLocaleDateString()}
-                  </div>
-                  
-                  {/* Share Button */}
-                  <button onClick={() => {
-              // Generate shareable URL using your domain
-              const baseUrl = 'https://thevaultclub.sequencetheoryinc.com';
-              const shareUrl = `${baseUrl}?join=${subclub.contractAddress}`;
-
-              // Copy to clipboard
-              navigator.clipboard.writeText(shareUrl).then(() => {
-                // Show copied banner
-                setShowCopiedBanner(true);
-                setTimeout(() => setShowCopiedBanner(false), 2000);
-              }).catch(() => {
-                // Fallback for older browsers
-                const shareText = `Join my VaultClub investment contract!\n\n${subclub.lockupPeriod} ${subclub.isChargedContract ? 'Month' : 'Year'} Lockup • ${subclub.rigorLevel.charAt(0).toUpperCase() + subclub.rigorLevel.slice(1)} Rigor\n\nJoin here: ${shareUrl}`;
-
-                // Try to use the Web Share API if available
-                if (navigator.share) {
-                  navigator.share({
-                    title: 'Join VaultClub Investment Contract',
-                    text: shareText,
-                    url: shareUrl
-                  });
-                } else {
-                  // Final fallback - show the URL in an alert
-                  alert(`Share this link:\n\n${shareUrl}\n\nOr copy this message:\n\n${shareText}`);
-                }
-              });
-            }} className="absolute bottom-3 right-3 p-1.5 bg-background/50 hover:bg-background/70 rounded-full transition-colors opacity-70 hover:opacity-100 border border-border/20" title="Share contract link">
-                    <Share2 className="w-3 h-3 text-muted-foreground" />
-                  </button>
-                </div>)}
-            </div>}
-        </div>
-
-        <div ref={contractsDirectoryRef} className={`glass-card p-6 animate-fade-up stagger-3 ${tutorial.currentStepData?.target === 'contracts-directory' ? 'tutorial-highlight' : ''}`}>
+        {/* Contract Directory - First (Create/Join) */}
+        <div ref={contractsDirectoryRef} className={`glass-card p-6 animate-fade-up stagger-1 ${tutorial.currentStepData?.target === 'contracts-directory' ? 'tutorial-highlight' : ''}`}>
           <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
-            Club Directory
+            Contract Directory
           </h2>
           
-          {/* Create Club Section */}
+          {/* Create Contract Section */}
           <div className="text-center py-6 border-b border-border/20 mb-6">
             <div className="mb-4">
               <div className="text-sm text-foreground/80 mb-2">
@@ -2173,6 +2056,126 @@ Your contract is now live and ready for members to join!`);
             })}
               </div>}
           </div>
+        </div>
+
+        {/* My Contracts - Second */}
+        <div className="glass-card p-6 animate-fade-up stagger-2">
+          <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+            My Contracts
+          </h2>
+          
+          {!walletConnected ? <div className="text-center py-8 text-muted-foreground">
+              <div className="text-muted-foreground mb-2">
+                <Wallet className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              </div>
+              <div className="font-medium">Connect wallet to view your contracts</div>
+            </div> : deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).length === 0 ? <div className="text-center py-8 text-muted-foreground">
+              <div className="text-muted-foreground mb-2">
+                <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              </div>
+              <div className="font-medium">No contracts yet</div>
+              <div className="text-sm">Create or join your first contract above</div>
+            </div> : <div className="grid md:grid-cols-2 gap-4">
+              {deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).map(subclub => <div key={subclub.id} className="p-4 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-primary/30 transition-colors relative">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <div className="font-semibold text-foreground">
+                        {subclub.lockupPeriod} {subclub.isChargedContract ? 'Month' : 'Year'} Lockup
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Members: {subclub.currentMembers}/{subclub.maxMembers}
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        Contract: {subclub.contractAddress.slice(0, 8)}...{subclub.contractAddress.slice(-6)}
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end space-y-1">
+                      <span className={`text-xs px-2 py-1 rounded-full ${subclub.isPrivate ? 'bg-defi-purple/20 text-defi-purple' : 'bg-defi-emerald/20 text-defi-emerald'}`}>
+                        {subclub.isPrivate ? 'Private' : 'Public'}
+                      </span>
+                      <span className={`text-xs px-2 py-1 rounded-full ${subclub.creator === walletAddress ? 'bg-primary/20 text-primary' : 'bg-defi-orange/20 text-defi-orange'}`}>
+                        {subclub.creator === walletAddress ? 'Owner' : 'Member'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Rigor: <span className="font-medium text-foreground capitalize">{subclub.rigorLevel}</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-2">
+                    {subclub.creator === walletAddress ? 'Created' : 'Joined'}: {new Date(subclub.createdAt).toLocaleDateString()}
+                  </div>
+                  
+                  {/* Share Button */}
+                  <button onClick={() => {
+              // Generate shareable URL using your domain
+              const baseUrl = 'https://thevaultclub.sequencetheoryinc.com';
+              const shareUrl = `${baseUrl}?join=${subclub.contractAddress}`;
+
+              // Copy to clipboard
+              navigator.clipboard.writeText(shareUrl).then(() => {
+                // Show copied banner
+                setShowCopiedBanner(true);
+                setTimeout(() => setShowCopiedBanner(false), 2000);
+              }).catch(() => {
+                // Fallback for older browsers
+                const shareText = `Join my VaultClub investment contract!\n\n${subclub.lockupPeriod} ${subclub.isChargedContract ? 'Month' : 'Year'} Lockup • ${subclub.rigorLevel.charAt(0).toUpperCase() + subclub.rigorLevel.slice(1)} Rigor\n\nJoin here: ${shareUrl}`;
+
+                // Try to use the Web Share API if available
+                if (navigator.share) {
+                  navigator.share({
+                    title: 'Join VaultClub Investment Contract',
+                    text: shareText,
+                    url: shareUrl
+                  });
+                } else {
+                  // Final fallback - show the URL in an alert
+                  alert(`Share this link:\n\n${shareUrl}\n\nOr copy this message:\n\n${shareText}`);
+                }
+              });
+            }} className="absolute bottom-3 right-3 p-1.5 bg-background/50 hover:bg-background/70 rounded-full transition-colors opacity-70 hover:opacity-100 border border-border/20" title="Share contract link">
+                    <Share2 className="w-3 h-3 text-muted-foreground" />
+                  </button>
+                </div>)}
+            </div>}
+        </div>
+
+        {/* Member Directory - Third */}
+        <div className="glass-card p-6 animate-fade-up stagger-3">
+          <h2 className="text-xl font-semibold text-foreground mb-5">Member Directory</h2>
+          
+          {walletConnected ? <div className="space-y-6">
+              {deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).map(subclub => <div key={subclub.id} className={`p-4 bg-white/10 rounded-lg border-l-4 ${getContractColor(subclub)}`}>
+                  <h3 className="font-semibold text-white mb-3">
+                    {subclub.lockupPeriod} Year Lockup - {subclub.rigorLevel.charAt(0).toUpperCase() + subclub.rigorLevel.slice(1)} Rigor
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="p-3 bg-white/10 rounded-lg">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <div className="font-semibold text-white">Me ({walletAddress?.slice(0, 6)}...{walletAddress?.slice(-4)})</div>
+                          <div className="text-sm text-slate-300">Penalties: 0/15</div>
+                        </div>
+                        <span className="text-xs px-2 py-1 rounded-full bg-green-100 text-green-800">
+                          Active
+                        </span>
+                      </div>
+                      <div className="text-sm text-slate-300">
+                        Contributed: <span className="font-medium text-white">${parseFloat(vaultBalance).toFixed(2)}</span>
+                      </div>
+                      <div className="text-xs text-slate-300 mt-1">
+                        Role: {subclub.creator === walletAddress ? 'Owner' : 'Member'}
+                      </div>
+                    </div>
+                  </div>
+                </div>)}
+              {deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).length === 0 && <div className="text-center py-8 text-slate-300">
+                  <div className="font-medium">No contracts yet</div>
+                  <div className="text-sm">Join a contract to see member information</div>
+                </div>}
+            </div> : <div className="text-center py-8 text-slate-300">
+              Connect wallet to view member information
+            </div>}
         </div>
       </div>
     </div>;
