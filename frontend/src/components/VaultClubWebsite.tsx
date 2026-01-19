@@ -2337,7 +2337,7 @@ Your contract is now live and ready for members to join!`);
                   {deployedSubclubs.length === 0 ? "" : "Create another contract or join existing ones"}
                 </div>}
             </div>
-            <button onClick={() => setActiveModal('createClub')} className="btn-premium">
+            <button onClick={() => setActiveModal('createClub')} className={`btn-premium ${!walletConnected ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={!walletConnected}>
               Create New Contract
             </button>
           </div>
