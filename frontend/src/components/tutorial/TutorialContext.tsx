@@ -34,7 +34,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     displayStep: '1/6',
     target: 'connect-account',
     title: 'Connect Your Account',
-    message: 'Tap here to connect. Once you\'re in, you\'ll see the "Auto-Renew" option - that\'s your subscription agreement that keeps your account active automatically. Simple!',
+    message: 'Tap here to connect your account. This creates your secure wallet powered by Turnkey on the Polygon network. Quick and easy!',
     position: 'top',
     advanceOn: 'action',
     requiredPage: 'personal',
