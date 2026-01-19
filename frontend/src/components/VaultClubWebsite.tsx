@@ -1923,9 +1923,6 @@ Your contract is now live and ready for members to join!`);
                 <button onClick={handleDeposit} disabled={!canDeposit() || calculateWeeklyDepositAmount() === 0} className={`px-5 py-3 rounded-xl font-medium transition-all duration-300 ${!canDeposit() || calculateWeeklyDepositAmount() === 0 ? 'bg-muted text-muted-foreground cursor-not-allowed' : 'bg-gradient-to-r from-secondary to-emerald-500 hover:shadow-lg hover:shadow-secondary/25 text-white hover:-translate-y-0.5'}`}>
                   {calculateWeeklyDepositAmount() === 0 ? 'Join/Create a Contract' : !canDeposit() ? `Deposit in ${getDaysUntilNextDeposit()}d` : `Deposit ${calculateWeeklyDepositAmount()}`}
                 </button>
-                <button onClick={() => setAutoRenewEnabled(!autoRenewEnabled)} className={`px-5 py-3 rounded-xl font-medium transition-all duration-300 ${autoRenewEnabled ? 'bg-gradient-to-r from-primary to-indigo-500 text-white hover:shadow-lg hover:shadow-primary/25' : 'bg-muted text-muted-foreground hover:bg-muted/80'}`}>
-                  Auto-Renew
-                </button>
                 <button onClick={async () => {
               await supabase.auth.signOut();
               setWalletConnected(false);
