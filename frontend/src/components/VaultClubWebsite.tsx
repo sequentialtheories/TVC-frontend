@@ -1179,279 +1179,611 @@ Utility Fee: ${clubCreationData.isChargedContract ? '$1.25' : '$1.00'}/user/week
 
 Your contract is now live and ready for members to join!`);
     setActiveModal(null);
+    setSelectedTemplate(null);
+    setShowCustomControls(false);
   };
+  
+  // Contract Templates Definition
+  const CONTRACT_TEMPLATES = [
+    {
+      id: 'foundation',
+      name: 'The Foundation',
+      tagline: 'A balanced start for your wealth journey',
+      description: 'The most popular choice. Steady growth with manageable commitments that fit into everyday life.',
+      icon: <Shield className="w-8 h-8" />,
+      gradient: 'from-blue-500 to-indigo-600',
+      tags: [
+        { label: 'Balanced', color: 'bg-blue-100 text-blue-700' },
+        { label: 'Long-term', color: 'bg-purple-100 text-purple-700' },
+        { label: 'Recommended', color: 'bg-green-100 text-green-700' }
+      ],
+      settings: {
+        lockupPeriod: 5,
+        rigorLevel: 'medium',
+        riskLevel: 'medium',
+        isChargedContract: false,
+        phase2TimePercent: 50,
+        phase2ValueThreshold: 500000
+      },
+      highlights: ['5-year commitment', '$50/week to start', 'Grows with you over time']
+    },
+    {
+      id: 'steady-builder',
+      name: 'Steady Builder',
+      tagline: 'Slow and steady wins the race',
+      description: 'Perfect for those who prefer a gentler approach. Lower weekly amounts that gradually increase as you grow.',
+      icon: <TrendingUp className="w-8 h-8" />,
+      gradient: 'from-emerald-500 to-teal-600',
+      tags: [
+        { label: 'Safe', color: 'bg-green-100 text-green-700' },
+        { label: 'Long-term', color: 'bg-purple-100 text-purple-700' },
+        { label: 'Beginner', color: 'bg-blue-100 text-blue-700' }
+      ],
+      settings: {
+        lockupPeriod: 7,
+        rigorLevel: 'light',
+        riskLevel: 'low',
+        isChargedContract: false,
+        phase2TimePercent: 60,
+        phase2ValueThreshold: 300000
+      },
+      highlights: ['7-year journey', '$100/month to start', 'Gentle increases over time']
+    },
+    {
+      id: 'extreme-wealth',
+      name: 'Extreme Wealth',
+      tagline: 'Maximum commitment, maximum potential',
+      description: 'For the serious wealth builder. Longer timelines mean more compounding power. Time and discipline are your greatest allies.',
+      icon: <Crown className="w-8 h-8" />,
+      gradient: 'from-amber-500 to-orange-600',
+      tags: [
+        { label: 'Moderate', color: 'bg-yellow-100 text-yellow-700' },
+        { label: 'Long-term', color: 'bg-purple-100 text-purple-700' },
+        { label: 'High Reward', color: 'bg-amber-100 text-amber-700' }
+      ],
+      settings: {
+        lockupPeriod: 15,
+        rigorLevel: 'heavy',
+        riskLevel: 'medium',
+        isChargedContract: false,
+        phase2TimePercent: 50,
+        phase2ValueThreshold: 1000000
+      },
+      highlights: ['15-year commitment', '$100/week to start', 'Scales up significantly']
+    },
+    {
+      id: 'compounder',
+      name: 'The Compounder',
+      tagline: 'Let time do the heavy lifting',
+      description: 'A decade-long journey focused on steady compounding. Watch your wealth grow while you live your life.',
+      icon: <Sparkles className="w-8 h-8" />,
+      gradient: 'from-violet-500 to-purple-600',
+      tags: [
+        { label: 'Balanced', color: 'bg-blue-100 text-blue-700' },
+        { label: 'Long-term', color: 'bg-purple-100 text-purple-700' },
+        { label: 'Set & Forget', color: 'bg-indigo-100 text-indigo-700' }
+      ],
+      settings: {
+        lockupPeriod: 10,
+        rigorLevel: 'medium',
+        riskLevel: 'low',
+        isChargedContract: false,
+        phase2TimePercent: 50,
+        phase2ValueThreshold: 750000
+      },
+      highlights: ['10-year horizon', '$50/week steady', 'Reliable growth path']
+    },
+    {
+      id: 'test-drive',
+      name: 'Quick Test Drive',
+      tagline: 'Try it out, no long commitment',
+      description: 'Want to see how it works first? Start with a shorter timeline to get comfortable with the system.',
+      icon: <TestTube className="w-8 h-8" />,
+      gradient: 'from-cyan-500 to-blue-600',
+      tags: [
+        { label: 'Safe', color: 'bg-green-100 text-green-700' },
+        { label: 'Short-term', color: 'bg-cyan-100 text-cyan-700' },
+        { label: 'Trial', color: 'bg-gray-100 text-gray-700' }
+      ],
+      settings: {
+        lockupPeriod: 3,
+        rigorLevel: 'light',
+        riskLevel: 'low',
+        isChargedContract: true,
+        phase2TimePercent: 70,
+        phase2ValueThreshold: 50000
+      },
+      highlights: ['3-month trial', 'Light commitments', 'Learn the ropes']
+    },
+    {
+      id: 'sprinter',
+      name: 'The Sprinter',
+      tagline: 'Medium-term with momentum',
+      description: 'A 3-year sprint towards your goals. Balanced approach for those who want meaningful results in a reasonable timeframe.',
+      icon: <Zap className="w-8 h-8" />,
+      gradient: 'from-sky-500 to-blue-600',
+      tags: [
+        { label: 'Moderate', color: 'bg-yellow-100 text-yellow-700' },
+        { label: 'Medium-term', color: 'bg-sky-100 text-sky-700' },
+        { label: 'Active', color: 'bg-blue-100 text-blue-700' }
+      ],
+      settings: {
+        lockupPeriod: 3,
+        rigorLevel: 'medium',
+        riskLevel: 'medium',
+        isChargedContract: false,
+        phase2TimePercent: 50,
+        phase2ValueThreshold: 200000
+      },
+      highlights: ['3-year focus', '$50/week consistent', 'Quick Phase 2 transition']
+    },
+    {
+      id: 'accelerator',
+      name: 'Growth Accelerator',
+      tagline: 'Aggressive growth for the ambitious',
+      description: 'Push the pace with higher contributions. More in means more potential out. For those ready to commit seriously.',
+      icon: <Rocket className="w-8 h-8" />,
+      gradient: 'from-rose-500 to-pink-600',
+      tags: [
+        { label: 'Aggressive', color: 'bg-red-100 text-red-700' },
+        { label: 'Medium-term', color: 'bg-sky-100 text-sky-700' },
+        { label: 'High Growth', color: 'bg-pink-100 text-pink-700' }
+      ],
+      settings: {
+        lockupPeriod: 5,
+        rigorLevel: 'heavy',
+        riskLevel: 'medium',
+        isChargedContract: false,
+        phase2TimePercent: 40,
+        phase2ValueThreshold: 400000
+      },
+      highlights: ['5-year accelerated', '$100/week to start', 'Faster wealth building']
+    },
+    {
+      id: 'extreme-degen',
+      name: 'Extreme Degen',
+      tagline: 'High risk, high potential rewards',
+      description: 'Not for the faint of heart. Maximum exposure to growth strategies. You understand the risks and embrace them.',
+      icon: <Flame className="w-8 h-8" />,
+      gradient: 'from-red-500 to-orange-600',
+      tags: [
+        { label: 'High Risk', color: 'bg-red-100 text-red-700' },
+        { label: 'Medium-term', color: 'bg-sky-100 text-sky-700' },
+        { label: 'Aggressive', color: 'bg-orange-100 text-orange-700' }
+      ],
+      settings: {
+        lockupPeriod: 5,
+        rigorLevel: 'heavy',
+        riskLevel: 'high',
+        isChargedContract: false,
+        phase2TimePercent: 35,
+        phase2ValueThreshold: 500000
+      },
+      highlights: ['5-year intense', 'Heavy contributions', 'Maximum growth mode']
+    },
+    {
+      id: 'yolo',
+      name: 'YOLO Mode',
+      tagline: 'All in, nothing held back',
+      description: 'The most aggressive option available. Highest risk settings with heavy commitments. Only for those who truly understand what they\'re signing up for.',
+      icon: <Target className="w-8 h-8" />,
+      gradient: 'from-fuchsia-500 to-purple-600',
+      tags: [
+        { label: 'Max Risk', color: 'bg-red-100 text-red-700' },
+        { label: 'Long-term', color: 'bg-purple-100 text-purple-700' },
+        { label: 'All In', color: 'bg-fuchsia-100 text-fuchsia-700' }
+      ],
+      settings: {
+        lockupPeriod: 10,
+        rigorLevel: 'heavy',
+        riskLevel: 'high',
+        isChargedContract: false,
+        phase2TimePercent: 30,
+        phase2ValueThreshold: 750000
+      },
+      highlights: ['10-year marathon', 'Maximum contributions', 'Highest growth potential']
+    },
+    {
+      id: 'custom',
+      name: 'Custom',
+      tagline: 'Full control over every detail',
+      description: 'Design your own contract with complete flexibility. Set your own timeline, contribution schedule, and risk level. Great for group contracts too!',
+      icon: <Settings className="w-8 h-8" />,
+      gradient: 'from-slate-500 to-gray-600',
+      tags: [
+        { label: 'Flexible', color: 'bg-gray-100 text-gray-700' },
+        { label: 'Any Timeline', color: 'bg-slate-100 text-slate-700' },
+        { label: 'Groups OK', color: 'bg-indigo-100 text-indigo-700' }
+      ],
+      settings: null, // Uses current clubCreationData
+      highlights: ['Any lockup period', 'Custom contributions', 'Multi-member groups']
+    }
+  ];
+  
+  const applyTemplate = (template: typeof CONTRACT_TEMPLATES[0]) => {
+    setSelectedTemplate(template.id);
+    if (template.settings) {
+      setClubCreationData(prev => ({
+        ...prev,
+        lockupPeriod: template.settings!.lockupPeriod,
+        rigorLevel: template.settings!.rigorLevel,
+        riskLevel: template.settings!.riskLevel,
+        isChargedContract: template.settings!.isChargedContract,
+        maxMembers: 1,
+        isPrivate: true,
+        phase2TimePercent: template.settings!.phase2TimePercent,
+        phase2ValueThreshold: template.settings!.phase2ValueThreshold,
+        phase2TriggerType: 'both'
+      }));
+      setShowCustomControls(false);
+    } else {
+      setShowCustomControls(true);
+    }
+  };
+
   const CreateClubModal = () => {
-    return <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-up" role="dialog" aria-modal="true" aria-labelledby="create-club-title">
-        <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl max-h-[90vh] overflow-hidden ring-1 ring-black/5">
-          <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 rounded-t-2xl text-white">
-            <div className="flex justify-between items-start">
+    const currentTemplate = CONTRACT_TEMPLATES[templateCarouselIndex];
+    
+    return <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fade-up" role="dialog" aria-modal="true" aria-labelledby="create-club-title">
+        <div className="bg-slate-900 rounded-2xl max-w-2xl w-full shadow-2xl max-h-[90vh] overflow-hidden ring-1 ring-white/10">
+          {/* Header */}
+          <div className={`bg-gradient-to-r ${currentTemplate.gradient} p-6 rounded-t-2xl text-white relative overflow-hidden`}>
+            <div className="absolute inset-0 bg-black/10"></div>
+            <div className="relative flex justify-between items-start">
               <div>
-                <h3 id="create-club-title" className="text-xl font-bold">Create New Contract</h3>
-                <p className="text-white/80">Deploy a smart contract with TVC</p>
+                <h3 id="create-club-title" className="text-2xl font-bold">Create Your Contract</h3>
+                <p className="text-white/80 mt-1">Choose a template that fits your goals</p>
               </div>
-              <button onClick={closeModal} className="text-white/80 hover:text-white transition-colors p-1 rounded-lg hover:bg-white/10" aria-label="Close modal">
+              <button onClick={() => { closeModal(); setSelectedTemplate(null); setShowCustomControls(false); setTemplateCarouselIndex(0); }} className="text-white/80 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10" aria-label="Close modal">
                 <X className="w-6 h-6" />
               </button>
             </div>
           </div>
           
-          <div className="overflow-y-auto" style={{
-          maxHeight: 'calc(90vh - 120px)'
-        }}>
-            <div className="p-6 space-y-6">
+          <div className="overflow-y-auto" style={{ maxHeight: 'calc(90vh - 100px)' }}>
+            {/* Key Message */}
+            <div className="px-6 pt-5 pb-3">
+              <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-xl p-4 text-center">
+                <p className="text-amber-200 text-sm font-medium">
+                  💡 Time and discipline are your greatest wealth-building tools. Longer commitments = more compounding power.
+                </p>
+                <p className="text-amber-200/70 text-xs mt-2">
+                  Want to create a group contract? Choose "Custom" for multi-member options.
+                </p>
+              </div>
+            </div>
             
-            {/* Charged Contract Toggle */}
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <label className="text-sm font-medium text-gray-700">
-                  Charged Contract
-                </label>
-                <button onClick={() => setClubCreationData(prev => ({
-                  ...prev,
-                  isChargedContract: !prev.isChargedContract
-                }))} className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${clubCreationData.isChargedContract ? 'bg-blue-600' : 'bg-gray-200'}`}>
-                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${clubCreationData.isChargedContract ? 'translate-x-6' : 'translate-x-1'}`} />
+            {/* Template Carousel */}
+            <div className="px-6 py-4">
+              {/* Carousel Navigation */}
+              <div className="flex items-center justify-between mb-4">
+                <button 
+                  onClick={() => setTemplateCarouselIndex(prev => prev > 0 ? prev - 1 : CONTRACT_TEMPLATES.length - 1)}
+                  className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors text-white/70 hover:text-white"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <div className="flex items-center gap-2">
+                  {CONTRACT_TEMPLATES.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setTemplateCarouselIndex(idx)}
+                      className={`w-2 h-2 rounded-full transition-all ${idx === templateCarouselIndex ? 'bg-white w-6' : 'bg-white/30 hover:bg-white/50'}`}
+                    />
+                  ))}
+                </div>
+                <button 
+                  onClick={() => setTemplateCarouselIndex(prev => prev < CONTRACT_TEMPLATES.length - 1 ? prev + 1 : 0)}
+                  className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors text-white/70 hover:text-white"
+                >
+                  <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
-              <div className="text-xs text-gray-500">
-                {clubCreationData.isChargedContract ? "Enables 1-12 month contracts with $1.25/user/week fee for timeline flexibility" : "Charged Contracts are >1 year and serve as placeholders to test how it fits into your life. Greater timelines allow for greater compounding."}
-              </div>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Maximum Members
-              </label>
-              <div className="grid grid-cols-4 gap-2">
-                {[1, 2, 3, 4, 5, 6, 7, 8].map(num => <button key={num} type="button" onClick={() => setClubCreationData(prev => ({
-                  ...prev,
-                  maxMembers: num
-                }))} className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${clubCreationData.maxMembers === num ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'}`}>
-                    {num}
-                  </button>)}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Lockup Consensus ({clubCreationData.isChargedContract ? 'Months' : 'Years'})
-              </label>
-              <div className="grid grid-cols-4 gap-2">
-                {clubCreationData.isChargedContract ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(num => <button key={num} type="button" onClick={() => setClubCreationData(prev => ({
-                  ...prev,
-                  lockupPeriod: num
-                }))} className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${clubCreationData.lockupPeriod === num ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'}`}>
-                        {num}
-                      </button>) : <>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(num => <button key={num} type="button" onClick={() => setClubCreationData(prev => ({
-                    ...prev,
-                    lockupPeriod: num
-                  }))} className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${clubCreationData.lockupPeriod === num ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'}`}>
-                        {num}
-                      </button>)}
-                    <button type="button" onClick={() => setShowExtendedLockup(!showExtendedLockup)} className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${showExtendedLockup || clubCreationData.lockupPeriod > 11 ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'}`}>
-                      More
-                    </button>
-                    {showExtendedLockup && <div className="col-span-4 mt-2">
-                        <div className="grid grid-cols-5 gap-2">
-                          {[12, 13, 14, 15, 16, 17, 18, 19, 20].map(num => <button key={num} type="button" onClick={() => setClubCreationData(prev => ({
-                        ...prev,
-                        lockupPeriod: num
-                      }))} className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 ${clubCreationData.lockupPeriod === num ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'}`}>
-                              {num}
-                            </button>)}
-                        </div>
-                      </div>}
-                  </>}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Investment Rigor
-              </label>
-              <div className="grid grid-cols-4 gap-2">
-                {(['light', 'medium', 'heavy', 'custom'] as const).map(level => <button key={level} type="button" onClick={() => setClubCreationData(prev => ({
-                  ...prev,
-                  rigorLevel: level
-                }))} className={`py-2 px-3 rounded-lg text-sm font-medium transition-all duration-300 capitalize ${clubCreationData.rigorLevel === level ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'}`}>
-                    {level}
-                  </button>)}
-              </div>
               
-              {/* Custom Schedule Input */}
-              {clubCreationData.rigorLevel === 'custom' && <div className="mt-4">
-                  <div className="flex justify-between items-start gap-4 mb-3">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Custom Deposit Schedule</label>
-                      <div className="mt-2 flex gap-2">
-                        {(['daily', 'weekly', 'monthly'] as const).map(freq => <button key={freq} type="button" onClick={() => setClubCreationData(prev => ({
-                        ...prev,
-                        customDepositFrequency: freq
-                      }))} className={`px-3 py-1 rounded-md text-xs font-medium transition-colors capitalize ${clubCreationData.customDepositFrequency === freq ? 'bg-blue-100 text-blue-700 border border-blue-200' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'}`}>
-                            {freq}
-                          </button>)}
-                      </div>
+              {/* Current Template Card */}
+              <div 
+                className={`relative bg-gradient-to-br ${currentTemplate.gradient} rounded-2xl p-6 text-white shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.02] ${selectedTemplate === currentTemplate.id ? 'ring-4 ring-white/50' : ''}`}
+                onClick={() => applyTemplate(currentTemplate)}
+              >
+                {selectedTemplate === currentTemplate.id && (
+                  <div className="absolute top-4 right-4 bg-white rounded-full p-1">
+                    <Check className="w-5 h-5 text-green-600" />
+                  </div>
+                )}
+                
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+                    {currentTemplate.icon}
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-xl font-bold">{currentTemplate.name}</h4>
+                    <p className="text-white/80 text-sm">{currentTemplate.tagline}</p>
+                  </div>
+                </div>
+                
+                <p className="text-white/90 text-sm mb-4 leading-relaxed">
+                  {currentTemplate.description}
+                </p>
+                
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {currentTemplate.tags.map((tag, idx) => (
+                    <span key={idx} className={`px-3 py-1 rounded-full text-xs font-medium ${tag.color}`}>
+                      {tag.label}
+                    </span>
+                  ))}
+                </div>
+                
+                {/* Highlights */}
+                <div className="grid grid-cols-3 gap-2">
+                  {currentTemplate.highlights.map((highlight, idx) => (
+                    <div key={idx} className="bg-white/10 backdrop-blur-sm rounded-lg p-2 text-center">
+                      <span className="text-xs text-white/90">{highlight}</span>
                     </div>
-                    <button type="button" onClick={() => {
-                    const newSchedule = [...clubCreationData.customSchedule];
-                    newSchedule.push({
-                      yearStart: newSchedule.length > 0 ? newSchedule[newSchedule.length - 1].yearEnd + 1 : 1,
-                      yearEnd: newSchedule.length > 0 ? newSchedule[newSchedule.length - 1].yearEnd + 3 : 3,
-                      amount: 100
-                    });
-                    setClubCreationData(prev => ({
-                      ...prev,
-                      customSchedule: newSchedule
-                    }));
-                  }} className="text-xs px-3 py-1 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors">
-                      Add Period
-                    </button>
-                  </div>
-
-
-                  
-                  <div className="space-y-3 max-h-48 overflow-y-auto">
-                    {clubCreationData.customSchedule.map((period, index) => <div key={index} className="p-3 bg-white rounded-lg flex items-center space-x-3 border border-gray-200">
-                        <div className="flex-1 grid grid-cols-3 gap-2">
-                          <div>
-                            <label className="block text-xs font-medium text-gray-600 mb-1">Start Year</label>
-                            <input type="number" min="1" max="50" value={period.yearStart} onChange={e => {
-                          const newSchedule = [...clubCreationData.customSchedule];
-                          newSchedule[index] = {
-                            ...period,
-                            yearStart: Number(e.target.value)
-                          };
-                          setClubCreationData(prev => ({
-                            ...prev,
-                            customSchedule: newSchedule
-                          }));
-                        }} className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-medium text-gray-600 mb-1">End Year</label>
-                            <input type="number" min="1" max="50" value={period.yearEnd} onChange={e => {
-                          const newSchedule = [...clubCreationData.customSchedule];
-                          newSchedule[index] = {
-                            ...period,
-                            yearEnd: Number(e.target.value)
-                          };
-                          setClubCreationData(prev => ({
-                            ...prev,
-                            customSchedule: newSchedule
-                          }));
-                        }} className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-medium text-gray-600 mb-1">{clubCreationData.customDepositFrequency.charAt(0).toUpperCase() + clubCreationData.customDepositFrequency.slice(1)} Amount ($)</label>
-                            <input type="number" min="1" max="1000" value={period.amount} onChange={e => {
-                          e.preventDefault();
-                          const newSchedule = [...clubCreationData.customSchedule];
-                          newSchedule[index] = {
-                            ...period,
-                            amount: Number(e.target.value)
-                          };
-                          setClubCreationData(prev => ({
-                            ...prev,
-                            customSchedule: newSchedule
-                          }));
-                        }} onFocus={e => e.target.style.outline = 'none'} className="w-full px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 text-black bg-white" style={{
-                          outline: 'none'
-                        }} />
-                          </div>
-                        </div>
-                        {clubCreationData.customSchedule.length > 1 && <button type="button" onClick={() => {
-                      const newSchedule = clubCreationData.customSchedule.filter((_, i) => i !== index);
-                      setClubCreationData(prev => ({
-                        ...prev,
-                        customSchedule: newSchedule
-                      }));
-                    }} className="text-red-500 hover:text-red-700 text-xs px-2 py-1">
-                            Remove
-                          </button>}
-                      </div>)}
-                  </div>
-                  
-                  <div className="text-xs text-gray-500 mt-3">
-                    Create your own escalation schedule with complete flexibility ($1-$1000 per entry). No obligation to increase amounts.
-                  </div>
-                  <div className="text-xs text-gray-600 mt-2 font-medium">
-                    Total over {Math.max(...clubCreationData.customSchedule.map(p => p.yearEnd))} years: ${clubCreationData.customSchedule.reduce((sum, period) => {
-                    const years = period.yearEnd - period.yearStart + 1;
-                    return sum + period.amount * periodsPerYear(clubCreationData.customDepositFrequency) * years;
-                  }, 0).toLocaleString()}
-                  </div>
-                </div>}
+                  ))}
+                </div>
+                
+                {/* Selection hint */}
+                <div className="mt-4 text-center">
+                  <span className="text-white/60 text-xs">
+                    {selectedTemplate === currentTemplate.id ? '✓ Selected' : 'Click to select'}
+                  </span>
+                </div>
+              </div>
               
-              {/* Rigor Level Descriptions */}
-              <div className="mt-3 p-3 bg-white rounded-lg border border-gray-200">
-                <div className="text-xs text-gray-600">
-                  {clubCreationData.rigorLevel === 'light' && "Light Rigor: Monthly deposits that scale over time. Year 1: $100/month, Year 2: $150/month, Year 3: $200/month, Year 4+: $250/month. Perfect for beginners wanting gradual increases."}
-                  {clubCreationData.rigorLevel === 'medium' && "Medium Rigor: Starts at $50/week, scales up over time. Years 1-3: $50/week, 4-6: $100/week, 7-10: $200/week, 11+: $250/week."}
-                  {clubCreationData.rigorLevel === 'heavy' && "Heavy Rigor: Starts at $100/week, scales significantly. Years 1-3: $100/week, 4-6: $200/week, 7-10: $300/week, 11+: $400/week."}
-                  {clubCreationData.rigorLevel === 'custom' && `Custom Rigor: ${clubCreationData.customWeeklyAmount}/${clubCreationData.customDepositFrequency}. Total annual contribution: ${(clubCreationData.customWeeklyAmount * periodsPerYear(clubCreationData.customDepositFrequency)).toLocaleString()}.`}
-                </div>
+              {/* Quick Select Grid */}
+              <div className="mt-4 grid grid-cols-5 gap-2">
+                {CONTRACT_TEMPLATES.map((template, idx) => (
+                  <button
+                    key={template.id}
+                    onClick={() => { setTemplateCarouselIndex(idx); applyTemplate(template); }}
+                    className={`p-2 rounded-lg transition-all text-center ${
+                      selectedTemplate === template.id 
+                        ? `bg-gradient-to-br ${template.gradient} text-white` 
+                        : idx === templateCarouselIndex
+                          ? 'bg-white/10 text-white'
+                          : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
+                    }`}
+                    title={template.name}
+                  >
+                    <div className="w-5 h-5 mx-auto mb-1 opacity-80">
+                      {template.icon}
+                    </div>
+                    <span className="text-[10px] font-medium line-clamp-1">{template.name.split(' ')[0]}</span>
+                  </button>
+                ))}
               </div>
             </div>
-
-            {/* Risk Level Section */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Risk Level
-              </label>
-              <div className="flex space-x-2">
-                {(['low', 'medium', 'high'] as const).map(level => <button key={level} type="button" onClick={() => setClubCreationData(prev => ({
-                  ...prev,
-                  riskLevel: level
-                }))} className={`flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-all duration-300 capitalize ${clubCreationData.riskLevel === level ? level === 'low' ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border-2 border-green-300' : level === 'medium' ? 'bg-gradient-to-r from-yellow-100 to-amber-100 text-yellow-800 border-2 border-yellow-300' : 'bg-gradient-to-r from-red-100 to-rose-100 text-red-800 border-2 border-red-300' : 'bg-white hover:bg-gray-50 text-gray-600 border-2 border-gray-200'}`}>
-                    {level}
-                  </button>)}
-              </div>
-              <div className="mt-3 p-3 bg-white rounded-lg border border-gray-200">
-                <div className="text-xs text-gray-600">
-                  {clubCreationData.riskLevel === 'low' && "Low Risk: Conservative fund distribution. Prioritizes capital preservation with steady, predictable returns."}
-                  {clubCreationData.riskLevel === 'medium' && "Medium Risk: Balanced fund distribution across all strands. Targets moderate growth with reasonable volatility."}
-                  {clubCreationData.riskLevel === 'high' && "High Risk: Aggressive fund distribution. Maximizes growth potential with higher volatility tolerance."}
+            
+            {/* Custom Controls (shown only for Custom template) */}
+            {showCustomControls && (
+              <div className="px-6 pb-4 space-y-4 animate-fade-up">
+                <div className="border-t border-white/10 pt-4">
+                  <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
+                    <Settings className="w-4 h-4" />
+                    Custom Settings
+                  </h4>
+                  
+                  {/* Contract Type Toggle */}
+                  <div className="mb-4">
+                    <label className="text-sm text-white/70 mb-2 block">Contract Type</label>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setClubCreationData(prev => ({ ...prev, isChargedContract: false }))}
+                        className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${!clubCreationData.isChargedContract ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+                      >
+                        Traditional (Years)
+                      </button>
+                      <button
+                        onClick={() => setClubCreationData(prev => ({ ...prev, isChargedContract: true }))}
+                        className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${clubCreationData.isChargedContract ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+                      >
+                        Charged (Months)
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {/* Lockup Period */}
+                  <div className="mb-4">
+                    <label className="text-sm text-white/70 mb-2 block">
+                      Lockup Period ({clubCreationData.isChargedContract ? 'Months' : 'Years'})
+                    </label>
+                    <div className="grid grid-cols-6 gap-2">
+                      {(clubCreationData.isChargedContract ? [1, 3, 6, 9, 12] : [1, 3, 5, 7, 10, 15]).map(num => (
+                        <button
+                          key={num}
+                          onClick={() => setClubCreationData(prev => ({ ...prev, lockupPeriod: num }))}
+                          className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${clubCreationData.lockupPeriod === num ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+                        >
+                          {num}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Rigor Level */}
+                  <div className="mb-4">
+                    <label className="text-sm text-white/70 mb-2 block">Contribution Level</label>
+                    <div className="grid grid-cols-4 gap-2">
+                      {['light', 'medium', 'heavy', 'custom'].map(level => (
+                        <button
+                          key={level}
+                          onClick={() => setClubCreationData(prev => ({ ...prev, rigorLevel: level }))}
+                          className={`py-2 px-3 rounded-lg text-sm font-medium transition-all capitalize ${clubCreationData.rigorLevel === level ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+                        >
+                          {level}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Risk Level */}
+                  <div className="mb-4">
+                    <label className="text-sm text-white/70 mb-2 block">Risk Level</label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {['low', 'medium', 'high'].map(level => (
+                        <button
+                          key={level}
+                          onClick={() => setClubCreationData(prev => ({ ...prev, riskLevel: level }))}
+                          className={`py-2 px-3 rounded-lg text-sm font-medium transition-all capitalize ${
+                            clubCreationData.riskLevel === level 
+                              ? level === 'low' ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white'
+                                : level === 'medium' ? 'bg-gradient-to-r from-yellow-500 to-amber-500 text-white'
+                                : 'bg-gradient-to-r from-red-500 to-rose-500 text-white'
+                              : 'bg-white/10 text-white/70 hover:bg-white/20'
+                          }`}
+                        >
+                          {level}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Members (only in Custom) */}
+                  <div className="mb-4">
+                    <label className="text-sm text-white/70 mb-2 block">Maximum Members</label>
+                    <div className="grid grid-cols-8 gap-2">
+                      {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
+                        <button
+                          key={num}
+                          onClick={() => setClubCreationData(prev => ({ ...prev, maxMembers: num }))}
+                          className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${clubCreationData.maxMembers === num ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+                        >
+                          {num}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Privacy (only in Custom) */}
+                  <div className="mb-4">
+                    <label className="text-sm text-white/70 mb-2 block">Privacy</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => setClubCreationData(prev => ({ ...prev, isPrivate: true }))}
+                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${clubCreationData.isPrivate ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+                      >
+                        Private
+                      </button>
+                      <button
+                        onClick={() => setClubCreationData(prev => ({ ...prev, isPrivate: false }))}
+                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${!clubCreationData.isPrivate ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white' : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+                      >
+                        Public
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Privacy Setting
-              </label>
-              <div className="flex space-x-2">
-                <button type="button" onClick={() => setClubCreationData(prev => ({
-                  ...prev,
-                  isPrivate: false
-                }))} className={`flex-1 py-3 px-4 rounded-lg text-lg font-medium transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.02] ${!clubCreationData.isPrivate ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-600 border-2 border-gray-200'}`}>
-                  Public
+            )}
+            
+            {/* Phase 2 Settings (shown when template is selected) */}
+            {selectedTemplate && (
+              <div className="px-6 pb-4 animate-fade-up">
+                <div className="border-t border-white/10 pt-4">
+                  <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    Phase 2 Trigger Settings
+                  </h4>
+                  <p className="text-white/50 text-xs mb-4">
+                    Phase 2 transitions your strategy to wealth preservation. Set when this happens.
+                  </p>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* Time-based trigger */}
+                    <div className="bg-white/5 rounded-xl p-4">
+                      <label className="text-sm text-white/70 mb-2 block">Time-Based</label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="range"
+                          min="20"
+                          max="80"
+                          value={clubCreationData.phase2TimePercent}
+                          onChange={(e) => setClubCreationData(prev => ({ ...prev, phase2TimePercent: Number(e.target.value) }))}
+                          className="flex-1 accent-blue-500"
+                        />
+                        <span className="text-white font-medium text-sm w-12 text-right">{clubCreationData.phase2TimePercent}%</span>
+                      </div>
+                      <p className="text-white/40 text-xs mt-2">Trigger at {clubCreationData.phase2TimePercent}% completion</p>
+                    </div>
+                    
+                    {/* Value-based trigger */}
+                    <div className="bg-white/5 rounded-xl p-4">
+                      <label className="text-sm text-white/70 mb-2 block">Value-Based</label>
+                      <div className="flex items-center gap-2">
+                        <span className="text-white/50">$</span>
+                        <input
+                          type="number"
+                          min="10000"
+                          max="10000000"
+                          step="50000"
+                          value={clubCreationData.phase2ValueThreshold}
+                          onChange={(e) => setClubCreationData(prev => ({ ...prev, phase2ValueThreshold: Number(e.target.value) }))}
+                          className="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      <p className="text-white/40 text-xs mt-2">Trigger when vault reaches this value</p>
+                    </div>
+                  </div>
+                  
+                  <p className="text-white/50 text-xs mt-3 text-center">
+                    Phase 2 triggers when <span className="text-white">either</span> condition is met (whichever comes first)
+                  </p>
+                </div>
+              </div>
+            )}
+            
+            {/* Summary & Deploy */}
+            {selectedTemplate && (
+              <div className="px-6 pb-6 animate-fade-up">
+                <div className="bg-white/5 rounded-xl p-4 mb-4">
+                  <div className="text-xs font-semibold text-white/50 mb-2 uppercase tracking-wider">Contract Summary</div>
+                  <div className="text-white text-sm space-y-1">
+                    <div className="flex justify-between">
+                      <span className="text-white/70">Template:</span>
+                      <span className="font-medium">{CONTRACT_TEMPLATES.find(t => t.id === selectedTemplate)?.name}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-white/70">Duration:</span>
+                      <span>{clubCreationData.lockupPeriod} {clubCreationData.isChargedContract ? 'month' : 'year'}{clubCreationData.lockupPeriod !== 1 ? 's' : ''}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-white/70">Contribution:</span>
+                      <span className="capitalize">{clubCreationData.rigorLevel}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-white/70">Risk:</span>
+                      <span className="capitalize">{clubCreationData.riskLevel}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-white/70">Members:</span>
+                      <span>{clubCreationData.maxMembers} (Private)</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-white/70">Phase 2:</span>
+                      <span>{clubCreationData.phase2TimePercent}% or ${(clubCreationData.phase2ValueThreshold / 1000).toFixed(0)}K</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <button 
+                  onClick={handleCreateClub} 
+                  className={`w-full bg-gradient-to-r ${CONTRACT_TEMPLATES.find(t => t.id === selectedTemplate)?.gradient || 'from-blue-600 to-indigo-600'} hover:opacity-90 text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2`}
+                >
+                  <Rocket className="w-5 h-5" />
+                  Deploy Contract
                 </button>
-                <button type="button" onClick={() => setClubCreationData(prev => ({
-                  ...prev,
-                  isPrivate: true
-                }))} className={`flex-1 py-3 px-4 rounded-lg text-lg font-medium transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.02] ${clubCreationData.isPrivate ? 'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-2 border-blue-300' : 'bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-600 border-2 border-gray-200'}`}>
-                  Private
-                </button>
               </div>
-              <div className="text-xs text-gray-500 mt-2">
-                {clubCreationData.isPrivate ? "Private contracts are invitation-only and won't appear in public listings" : "Public contracts are visible to all users and can be joined freely"}
+            )}
+            
+            {/* Prompt to select if none selected */}
+            {!selectedTemplate && (
+              <div className="px-6 pb-6 text-center">
+                <p className="text-white/50 text-sm">
+                  ↑ Swipe through templates and click one to select ↑
+                </p>
               </div>
-            </div>
-
-            <div className="pt-6 border-t space-y-4">
-              <div className="p-4 bg-white rounded-lg border border-gray-200">
-                <div className="text-xs font-semibold text-gray-700 mb-2">Contract Summary</div>
-                <div className="text-sm text-gray-700">
-                  {clubCreationData.isChargedContract ? 'Charged Contract' : 'Traditional Contract'} • {clubCreationData.lockupPeriod} {clubCreationData.isChargedContract ? 'Month' : 'Year'}{clubCreationData.lockupPeriod === 1 ? '' : 's'} • Max {clubCreationData.maxMembers} member{clubCreationData.maxMembers === 1 ? '' : 's'} • {clubCreationData.rigorLevel.charAt(0).toUpperCase() + clubCreationData.rigorLevel.slice(1)} Rigor{clubCreationData.rigorLevel === 'custom' ? ` (${clubCreationData.customDepositFrequency})` : ''} • {clubCreationData.riskLevel.charAt(0).toUpperCase() + clubCreationData.riskLevel.slice(1)} Risk • {clubCreationData.isPrivate ? 'Private' : 'Public'}
-                </div>
-              </div>
-
-              <button type="button" onClick={handleCreateClub} className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-4 rounded-lg font-medium text-lg transition-all duration-300 shadow-md hover:shadow-xl hover:scale-[1.02]">
-                Deploy Contract
-              </button>
-            </div>
-            </div>
+            )}
           </div>
         </div>
       </div>;
