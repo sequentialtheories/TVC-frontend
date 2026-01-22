@@ -3195,7 +3195,7 @@ Your contract is now live and ready for members to join!`);
               
               {/* Contribution Amount */}
               <div>
-                <label className="block text-sm font-semibold text-muted-foreground mb-2">Weekly Contribution</label>
+                <label className="block text-sm font-semibold text-muted-foreground mb-2">Contribution Plan</label>
                 <select value={simulationRigor} onChange={e => setSimulationRigor(e.target.value)} className="select-premium">
                   <option value="light">Light (~$25-60/week)</option>
                   <option value="medium">Medium ($50-250/week)</option>
@@ -3206,22 +3206,44 @@ Your contract is now live and ready for members to join!`);
                   {simulationRigor === 'light' && '~$150/month average'}
                   {simulationRigor === 'medium' && '~$600/month average'}
                   {simulationRigor === 'heavy' && '~$1,000/month average'}
-                  {simulationRigor === 'custom' && `$${customSimulationAmount}/week`}
+                  {simulationRigor === 'custom' && `$${customSimulationAmount}/${customDepositFrequency === 'daily' ? 'day' : customDepositFrequency === 'weekly' ? 'week' : customDepositFrequency === 'monthly' ? 'month' : 'year'}`}
                 </div>
                 
-                {/* Custom Amount Input */}
-                {simulationRigor === 'custom' && <div className="mt-3">
-                    <input 
-                      type="number" 
-                      min="1" 
-                      max="1000" 
-                      value={customSimulationAmount} 
-                      onChange={e => setCustomSimulationAmount(Number(e.target.value))} 
-                      className="input-premium text-sm w-full" 
-                      placeholder="Weekly amount ($)" 
-                    />
-                    <div className="text-xs text-muted-foreground mt-1 text-center">
-                      = ${(customSimulationAmount * 52).toLocaleString()}/year
+                {/* Custom Amount & Frequency */}
+                {simulationRigor === 'custom' && <div className="mt-3 space-y-3">
+                    {/* Frequency Selector */}
+                    <div>
+                      <label className="block text-xs font-semibold text-muted-foreground mb-1">Deposit Frequency</label>
+                      <select 
+                        value={customDepositFrequency} 
+                        onChange={e => setCustomDepositFrequency(e.target.value as 'daily' | 'weekly' | 'monthly' | 'yearly')} 
+                        className="select-premium text-sm w-full"
+                      >
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="yearly">Yearly</option>
+                      </select>
+                    </div>
+                    
+                    {/* Amount Input */}
+                    <div>
+                      <label className="block text-xs font-semibold text-muted-foreground mb-1">
+                        Amount per {customDepositFrequency === 'daily' ? 'Day' : customDepositFrequency === 'weekly' ? 'Week' : customDepositFrequency === 'monthly' ? 'Month' : 'Year'}
+                      </label>
+                      <input 
+                        type="number" 
+                        min="1" 
+                        max="10000" 
+                        value={customSimulationAmount} 
+                        onChange={e => setCustomSimulationAmount(Number(e.target.value))} 
+                        className="input-premium text-sm w-full" 
+                        placeholder={`Amount ($)`} 
+                      />
+                    </div>
+                    
+                    <div className="text-xs text-muted-foreground text-center bg-muted/30 rounded-lg py-2">
+                      = ${(customSimulationAmount * (customDepositFrequency === 'daily' ? 365 : customDepositFrequency === 'weekly' ? 52 : customDepositFrequency === 'monthly' ? 12 : 1)).toLocaleString()}/year
                     </div>
                   </div>}
               </div>
