@@ -3250,83 +3250,160 @@ Your contract is now live and ready for members to join!`);
             </div>
           </div>
 
-          {/* Growth Visualization - Simple Compound Chart */}
+          {/* Growth Visualization - Smooth Curve Chart */}
           <div className="glass-card p-6 animate-fade-up stagger-2">
-            <h2 className="text-xl font-bold text-foreground mb-5 flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
-              Growth Visualization
-            </h2>
-            
-            {/* Bar Chart Container */}
-            <div className="h-72 bg-background/30 backdrop-blur-sm rounded-2xl p-6 border border-border/20">
-              <div className="h-full flex items-end justify-around gap-2 relative">
-                {/* Y-axis labels */}
-                <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-muted-foreground -ml-2 pointer-events-none">
-                  <span className="bg-background/50 px-1 rounded">${compoundData.length > 0 ? (Math.max(...compoundData.map(d => d.total)) / 1000000).toFixed(1) : 0}M</span>
-                  <span className="bg-background/50 px-1 rounded">${compoundData.length > 0 ? (Math.max(...compoundData.map(d => d.total)) / 2000000).toFixed(1) : 0}M</span>
-                  <span className="bg-background/50 px-1 rounded">$0</span>
+            {/* Chart Header */}
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+                Growth Visualization
+              </h2>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-primary/80"></div>
+                  <span className="text-sm text-muted-foreground font-medium">Deposited</span>
                 </div>
-                
-                {/* Bars */}
-                {compoundData.length > 0 && compoundData.map((point, index) => {
-                  const maxTotal = Math.max(...compoundData.map(d => d.total));
-                  const heightPercent = maxTotal > 0 ? (point.total / maxTotal) * 100 : 10;
-                  
-                  return (
-                    <div key={index} className="flex flex-col items-center flex-1 h-full justify-end group">
-                      {/* Tooltip */}
-                      <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-foreground text-background text-xs px-3 py-2 rounded-xl shadow-xl whitespace-nowrap z-10 pointer-events-none">
-                        <div className="font-bold">${point.total.toLocaleString()}</div>
-                        <div className="text-background/70">Year {point.year}</div>
-                      </div>
-                      
-                      {/* Bar with gradient - single color */}
-                      <div 
-                        className="w-full rounded-t-2xl relative overflow-hidden transition-all duration-500 group-hover:shadow-lg"
-                        style={{ 
-                          height: `${Math.max(heightPercent, 5)}%`,
-                          background: 'linear-gradient(to top, rgba(139, 92, 246, 0.5), rgba(139, 92, 246, 0.9))',
-                          minHeight: '12px'
-                        }}
-                      >
-                        {/* Inner glow effect */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/10 to-white/20 rounded-t-2xl"></div>
-                      </div>
-                      
-                      {/* Year label */}
-                      <span className="text-xs text-muted-foreground mt-2 font-semibold">
-                        {point.year === 0 ? 'Start' : `Y${point.year}`}
-                      </span>
-                    </div>
-                  );
-                })}
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-secondary"></div>
+                  <span className="text-sm text-muted-foreground font-medium">Total Value</span>
+                </div>
               </div>
             </div>
             
-            {/* Chart Legend - Simple */}
-            <div className="mt-6 flex flex-wrap justify-center gap-6 text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 rounded-lg bg-gradient-to-t from-primary/50 to-primary"></div>
-                <span className="text-muted-foreground font-medium">Total Value</span>
+            {/* SVG Curve Chart */}
+            <div className="h-64 relative">
+              <svg viewBox="0 0 400 180" className="w-full h-full" preserveAspectRatio="none">
+                {/* Gradient definitions */}
+                <defs>
+                  <linearGradient id="depositedGradientFuture" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.35" />
+                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.05" />
+                  </linearGradient>
+                  <linearGradient id="totalGradientFuture" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="hsl(var(--secondary))" stopOpacity="0.35" />
+                    <stop offset="100%" stopColor="hsl(var(--secondary))" stopOpacity="0.05" />
+                  </linearGradient>
+                </defs>
+                
+                {/* Horizontal grid lines */}
+                {[0, 1, 2, 3].map(i => (
+                  <line key={i} x1="0" y1={i * 45} x2="400" y2={i * 45} stroke="hsl(var(--border))" strokeWidth="0.5" strokeDasharray="4,4" opacity="0.5" />
+                ))}
+                
+                {(() => {
+                  const points = compoundData.map((d, i) => ({
+                    x: compoundData.length > 1 ? (i / (compoundData.length - 1)) * 400 : 200,
+                    yDeposited: 160 - (d.deposited / maxValue) * 140,
+                    yTotal: 160 - (d.total / maxValue) * 140
+                  }));
+                  
+                  // Create smooth bezier curve path
+                  const createSmoothPath = (pts: {x: number, y: number}[]) => {
+                    if (pts.length < 2) return `M 0 160`;
+                    let path = `M ${pts[0].x} ${pts[0].y}`;
+                    
+                    for (let i = 0; i < pts.length - 1; i++) {
+                      const p0 = pts[i];
+                      const p1 = pts[i + 1];
+                      const cpX = (p0.x + p1.x) / 2;
+                      path += ` C ${cpX} ${p0.y}, ${cpX} ${p1.y}, ${p1.x} ${p1.y}`;
+                    }
+                    return path;
+                  };
+                  
+                  const depositedPoints = points.map(p => ({ x: p.x, y: p.yDeposited }));
+                  const totalPoints = points.map(p => ({ x: p.x, y: p.yTotal }));
+                  
+                  const depositedPath = createSmoothPath(depositedPoints);
+                  const totalPath = createSmoothPath(totalPoints);
+                  
+                  // Create fill area paths
+                  const depositedFillPath = depositedPath + ` L 400 160 L 0 160 Z`;
+                  const totalFillPath = totalPath + ` L 400 160 L 0 160 Z`;
+                  
+                  return (
+                    <>
+                      {/* Fill areas */}
+                      <path d={depositedFillPath} fill="url(#depositedGradientFuture)" />
+                      <path d={totalFillPath} fill="url(#totalGradientFuture)" />
+                      
+                      {/* Deposited line - thicker */}
+                      <path 
+                        d={depositedPath} 
+                        fill="none" 
+                        stroke="hsl(var(--primary))" 
+                        strokeWidth="3.5" 
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        opacity="0.8"
+                      />
+                      
+                      {/* Total value line - thicker, different shade */}
+                      <path 
+                        d={totalPath} 
+                        fill="none" 
+                        stroke="hsl(var(--secondary))" 
+                        strokeWidth="4" 
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      
+                      {/* End point indicators */}
+                      {points.length > 0 && (
+                        <>
+                          <circle cx={points[points.length - 1].x} cy={points[points.length - 1].yDeposited} r="6" fill="hsl(var(--primary))" opacity="0.8" />
+                          <circle cx={points[points.length - 1].x} cy={points[points.length - 1].yDeposited} r="3" fill="white" />
+                          <circle cx={points[points.length - 1].x} cy={points[points.length - 1].yTotal} r="7" fill="hsl(var(--secondary))" />
+                          <circle cx={points[points.length - 1].x} cy={points[points.length - 1].yTotal} r="3.5" fill="white" />
+                        </>
+                      )}
+                      
+                      {/* Data point dots along the curve */}
+                      {points.map((p, i) => (
+                        i > 0 && i < points.length - 1 && i % 3 === 0 && (
+                          <g key={i}>
+                            <circle cx={p.x} cy={p.yTotal} r="3" fill="hsl(var(--secondary))" opacity="0.6" />
+                          </g>
+                        )
+                      ))}
+                    </>
+                  );
+                })()}
+              </svg>
+              
+              {/* X-axis labels */}
+              <div className="absolute bottom-0 left-0 right-0 flex justify-between px-2 mt-2">
+                {compoundData.filter((_, i) => i === 0 || i === compoundData.length - 1 || i % Math.max(1, Math.floor(compoundData.length / 5)) === 0).map((point, i) => (
+                  <span key={i} className="text-xs text-muted-foreground font-medium">
+                    {point.year === 0 ? 'Start' : `Y${point.year}`}
+                  </span>
+                ))}
+              </div>
+              
+              {/* Y-axis labels */}
+              <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-muted-foreground pointer-events-none" style={{ marginTop: '10px', marginBottom: '30px' }}>
+                <span className="bg-background/70 px-1 rounded">${(maxValue / 1000000).toFixed(1)}M</span>
+                <span className="bg-background/70 px-1 rounded">${(maxValue / 2000000).toFixed(1)}M</span>
+                <span className="bg-background/70 px-1 rounded">$0</span>
               </div>
             </div>
             
             {/* Key metrics - Simple 3 cards */}
             {compoundData.length > 0 && <div className="mt-6 grid grid-cols-3 gap-4">
                 <div className="soft-card text-center p-4">
-                  <div className="text-xl font-black text-foreground">
+                  <div className="text-xl font-black text-secondary">
                     ${compoundData[compoundData.length - 1]?.total?.toLocaleString() || '0'}
                   </div>
                   <div className="text-sm text-muted-foreground font-medium">Final Value</div>
                 </div>
                 <div className="soft-card text-center p-4">
-                  <div className="text-xl font-black text-foreground">
+                  <div className="text-xl font-black text-primary">
                     ${compoundData[compoundData.length - 1]?.deposited?.toLocaleString() || '0'}
                   </div>
                   <div className="text-sm text-muted-foreground font-medium">Total Deposited</div>
                 </div>
                 <div className="soft-card text-center p-4">
-                  <div className="text-xl font-black text-secondary">
+                  <div className="text-xl font-black text-foreground">
                     ${compoundData[compoundData.length - 1]?.earnings?.toLocaleString() || '0'}
                   </div>
                   <div className="text-sm text-muted-foreground font-medium">Interest Earned</div>
