@@ -1251,7 +1251,8 @@ Your contract is now live and ready for members to join!`);
         phase2TimePercent: 60,
         phase2ValueThreshold: 300000
       },
-      highlights: ['7-year journey', '$100/month to start', 'Gentle increases over time']
+      highlights: ['7-year journey', '$100/month to start', 'Gentle increases over time'],
+      disabled: true
     },
     {
       id: 'extreme-wealth',
@@ -1273,7 +1274,8 @@ Your contract is now live and ready for members to join!`);
         phase2TimePercent: 50,
         phase2ValueThreshold: 1000000
       },
-      highlights: ['15-year commitment', '$100/week to start', 'Scales up significantly']
+      highlights: ['15-year commitment', '$100/week to start', 'Scales up significantly'],
+      disabled: true
     },
     {
       id: 'compounder',
