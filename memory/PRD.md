@@ -7,7 +7,9 @@ A DeFi investment platform that connects to Supabase for authentication and cont
 
 ### Authentication & Wallet
 - Supabase authentication (email/password)
-- Non-custodial wallet creation via Turnkey Edge Function
+- Non-custodial wallet creation via ethers.js (client-side)
+- Wallet synced with Sequence Theory account login
+- Full wallet details display with address copy and PolygonScan link
 - Terms of Service acceptance flow
 
 ### Contract Management  
@@ -15,43 +17,51 @@ A DeFi investment platform that connects to Supabase for authentication and cont
 - Template-based contract creation with 3D card carousel
 - Support for Light/Medium/Heavy investment rigor levels
 - Configurable lockup periods (1 month to 25 years)
+- **APY Validation**: Custom contracts blocked if APY < 1.5% (shows "Net Negative Return")
 
 ### Home Page
 - Large balance display
-- **"$X Earned" display with timeline tabs (1W, 1M, 1Y, All, Future+)**
-- **Beautiful bar chart showing daily earnings**
+- **"$X Earned" display with timeline tabs (1W, 1M, 1Y, All)** - Real data from contracts
+- **Beautiful smooth curve chart** showing deposits vs earnings (SVG bezier curves)
 - Contract progress bars with click-to-view details
 - **Strands Modal** - Opens when clicking on a contract to show DNA strand details
+- Empty state when no contracts selected
 
 ### Future Simulation Page
 - Interactive simulation parameters (APY sliders, BTC price, rigor level)
-- **Beautiful bar chart visualization** (replaced line chart)
+- **Beautiful bar chart visualization** with purple→orange gradient (Phase 1→Phase 2)
 - Year-by-year growth projection (Y1-Y15+)
-- Purple bars for Phase 1, orange bars for Phase 2 (wBTC)
 - Key metrics display (Total Value, ROI, wBTC Holdings)
-- **"More Details" dropdown** with Peak Strand Distribution
+- "More Details" dropdown with Peak Strand Distribution
 
 ### Data/Dataset Page
 - System metrics display
 - Strand balances visualization
 - Live API rate displays
+- **Averaged Earnings Rate** calculation (weighted by strand allocation)
+
+### Wallet Page
+- **Full non-custodial wallet details** with full address display
+- Copy address functionality
+- View on PolygonScan link
+- Network info (Polygon)
+- Security notice about non-custodial nature
 
 ## UI/UX Enhancements (Latest Session - Dec 2025)
 
-### Completed
-1. **Font Change**: Inter → Nunito (soft, rounded, consumer-friendly)
-2. **"$X Earned" Feature**: Added earnings display with timeline tabs on homepage
-3. **Bar Chart Visualization**: Replaced line charts with beautiful gradient bar charts
-4. **Light Mode Fix**: Fixed text contrast issues across all pages
-5. **Strands Modal**: Clicking on contracts opens a detailed modal with strand info
-6. **Softer Input Styling**: Updated simulation parameter inputs with premium styling
+### Completed This Session
+1. **Removed "Future+" from timeline** - Only 1W, 1M, 1Y, All tabs now
+2. **Replaced bar chart with smooth curves** - Real earnings data with deposits (purple) vs earnings (green)
+3. **Bigger bottom navigation** - p-3 padding, w-5 h-5 icons, text-xs font-semibold
+4. **APY validation for Custom contracts** - Blocks deployment if < 1.5% APY, shows "Net Negative Return"
+5. **Enhanced Wallet page** - Full address, copy button, explorer link, non-custodial notice
+6. **Removed ALL RRL references** - No more "Routed Reinvestment Logic" anywhere
 
-### Visual Style
-- "Bubbly" and consumer-friendly aesthetic
-- Soft gradient bars (purple → orange transition)
-- Glass-morphism cards with rounded corners (28px)
-- Smooth animations and transitions
-- Nunito font for friendly, approachable feel
+### Previous Session
+- Font changed from Inter to Nunito (soft, rounded)
+- Bar chart on Future page (purple→orange gradient)
+- Light mode text fixes
+- Strands modal on contract click
 
 ## Tech Stack
 - **Frontend**: React, TypeScript, Vite, TailwindCSS
@@ -59,16 +69,16 @@ A DeFi investment platform that connects to Supabase for authentication and cont
 - **External APIs**: 
   - DeFi Llama (yields.llama.fi) - APY data
   - CoinGecko - BTC price (fallback)
-- **Wallet**: Turnkey (non-custodial)
+- **Wallet**: ethers.js (client-side generation)
 
 ## Key Files
-- `/app/frontend/src/components/VaultClubWebsite.tsx` - Main monolithic component (needs refactoring)
+- `/app/frontend/src/components/VaultClubWebsite.tsx` - Main monolithic component
 - `/app/frontend/src/index.css` - Global styles, animations, theming
-- `/app/frontend/index.html` - Font imports
+- `/app/frontend/index.html` - Font imports (Nunito)
 - `/app/frontend/src/components/tutorial/` - Tutorial system
+- `/app/frontend/src/components/ToSAgreementModal.tsx` - Terms of Service
 
 ## Known Issues
-- Light mode timeline tabs could have slightly darker text (minor)
 - `VaultClubWebsite.tsx` is oversized (3000+ lines) - needs component breakdown
 
 ## Future Tasks / Backlog
@@ -82,7 +92,7 @@ A DeFi investment platform that connects to Supabase for authentication and cont
   - `StrandsModal.tsx`
 
 ### P1 - Important
-- Complete wallet integration for real deposits
+- Complete wallet integration for real blockchain deposits
 - Add actual contract deployment functionality
 - Implement contract joining via share links
 
