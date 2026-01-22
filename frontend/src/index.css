@@ -412,58 +412,63 @@
     transform: translateY(-2px) scale(1.01);
   }
 
-  /* Strand button - pill style with glow */
+  /* Strand button - pill style with soft glow */
   .btn-strand {
-    @apply relative overflow-hidden rounded-full px-8 py-4 font-bold transition-all duration-300;
+    @apply relative overflow-hidden px-8 py-4 font-bold transition-all duration-400;
+    border-radius: 50px;
     box-shadow: 
-      0 10px 30px -5px hsl(0 0% 0% / 0.4),
-      inset 0 1px 0 0 hsl(0 0% 100% / 0.2);
+      0 12px 36px -8px hsl(0 0% 0% / 0.35),
+      0 4px 12px -4px hsl(0 0% 0% / 0.2),
+      inset 0 1px 1px 0 hsl(0 0% 100% / 0.25);
   }
 
   .btn-strand::before {
     content: '';
     position: absolute;
-    inset: -2px;
+    inset: -3px;
     background: inherit;
-    filter: blur(15px);
+    filter: blur(18px);
     opacity: 0;
     z-index: -1;
-    transition: opacity 0.3s;
+    border-radius: 50px;
+    transition: opacity 0.4s ease;
   }
 
   .btn-strand:hover {
-    transform: translateY(-4px) scale(1.05);
+    transform: translateY(-5px) scale(1.04);
     box-shadow: 
-      0 20px 50px -10px hsl(0 0% 0% / 0.5),
-      inset 0 1px 0 0 hsl(0 0% 100% / 0.25);
+      0 20px 48px -10px hsl(0 0% 0% / 0.45),
+      0 8px 20px -6px hsl(0 0% 0% / 0.25),
+      inset 0 1px 1px 0 hsl(0 0% 100% / 0.3);
   }
 
   .btn-strand:hover::before {
-    opacity: 0.6;
+    opacity: 0.5;
   }
 
   .btn-strand:active {
     transform: translateY(-2px) scale(1.02);
   }
 
-  /* Secondary button - glass style */
+  /* Secondary button - soft glass style */
   .btn-glass {
-    @apply relative overflow-hidden rounded-xl px-6 py-3 font-medium transition-all duration-300;
-    background: hsl(var(--card) / 0.6);
-    border: 1px solid hsl(var(--border) / 0.5);
+    @apply relative overflow-hidden px-6 py-3 font-medium transition-all duration-400;
+    border-radius: 16px;
+    background: linear-gradient(145deg, hsl(var(--card) / 0.65), hsl(var(--card) / 0.5));
+    border: 1px solid hsl(var(--border) / 0.4);
     box-shadow: 
-      inset 0 1px 0 0 hsl(0 0% 100% / 0.05),
-      0 4px 16px -4px hsl(0 0% 0% / 0.3);
+      inset 0 1px 1px 0 hsl(0 0% 100% / 0.06),
+      0 6px 20px -6px hsl(0 0% 0% / 0.25);
   }
 
   .btn-glass:hover {
-    background: hsl(var(--card) / 0.8);
-    border-color: hsl(var(--primary) / 0.4);
-    transform: translateY(-2px);
+    background: linear-gradient(145deg, hsl(var(--card) / 0.8), hsl(var(--card) / 0.65));
+    border-color: hsl(var(--primary) / 0.35);
+    transform: translateY(-3px);
     box-shadow: 
-      inset 0 1px 0 0 hsl(0 0% 100% / 0.08),
-      0 8px 24px -4px hsl(0 0% 0% / 0.4),
-      0 0 0 1px hsl(var(--primary) / 0.1);
+      inset 0 1px 1px 0 hsl(0 0% 100% / 0.1),
+      0 12px 28px -8px hsl(0 0% 0% / 0.35),
+      0 0 0 1px hsl(var(--primary) / 0.08);
   }
 
   /* Mesh gradient background */
