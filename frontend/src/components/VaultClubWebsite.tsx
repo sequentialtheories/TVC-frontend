@@ -148,48 +148,47 @@ async function getVaultStats(): Promise<VaultStats> {
 async function getAaveRates(): Promise<AaveRates> {
   try {
     const response = await fetch('https://yields.llama.fi/pools');
-    if (response.ok) {
-      const data = await response.json();
-      
-      // Spark Protocol USDC lending on Ethereum
-      const sparkPool = data.data.find((pool: {
-        project: string;
-        chain: string;
-        symbol: string;
-        apy: number;
-      }) => pool.project === 'sparklend' && pool.chain === 'Ethereum' && pool.symbol.includes('USDC'));
-      
-      // AAVE V3 on Polygon - USDC Supply rate
-      const aaveUsdcPolygon = data.data.find((pool: {
-        project: string;
-        chain: string;
-        symbol: string;
-        apy: number;
-      }) => pool.project === 'aave-v3' && pool.chain === 'Polygon' && pool.symbol === 'USDC');
-      
-      // AAVE V3 on Polygon - DAI Supply rate (for reference in re-deposit strategy)
-      const aaveDaiPolygon = data.data.find((pool: {
-        project: string;
-        chain: string;
-        symbol: string;
-        apy: number;
-      }) => pool.project === 'aave-v3' && pool.chain === 'Polygon' && pool.symbol === 'DAI');
-      
-      const usdcSupplyRate = aaveUsdcPolygon ? aaveUsdcPolygon.apy : 3.0;
-      const daiSupplyRate = aaveDaiPolygon ? aaveDaiPolygon.apy : 3.7;
-      
-      // Calculate combined rate: USDC supply + DAI supply averaged (simulating re-deposit strategy)
-      // This represents supplying USDC, and the potential of re-depositing into DAI
-      const combinedRate = (usdcSupplyRate + daiSupplyRate) / 2 * 1.2; // 1.2x for yield optimization
-      
-      console.log(`AAVE Polygon rates - USDC: ${usdcSupplyRate}%, DAI: ${daiSupplyRate}%, Combined: ${combinedRate}%`);
-      
-      return {
-        liquidityRate: sparkPool ? sparkPool.apy : 3.5,
-        aavePolygonRate: combinedRate
-      };
+    if (!response.ok) {
+      throw new Error('API response not ok');
     }
-    throw new Error('API call failed');
+    
+    const data = await response.json();
+    
+    // Spark Protocol USDC lending on Ethereum
+    const sparkPool = data.data.find((pool: {
+      project: string;
+      chain: string;
+      symbol: string;
+      apy: number;
+    }) => pool.project === 'sparklend' && pool.chain === 'Ethereum' && pool.symbol.includes('USDC'));
+    
+    // AAVE V3 on Polygon - USDC Supply rate
+    const aaveUsdcPolygon = data.data.find((pool: {
+      project: string;
+      chain: string;
+      symbol: string;
+      apy: number;
+    }) => pool.project === 'aave-v3' && pool.chain === 'Polygon' && pool.symbol === 'USDC');
+    
+    // AAVE V3 on Polygon - DAI Supply rate (for reference in re-deposit strategy)
+    const aaveDaiPolygon = data.data.find((pool: {
+      project: string;
+      chain: string;
+      symbol: string;
+      apy: number;
+    }) => pool.project === 'aave-v3' && pool.chain === 'Polygon' && pool.symbol === 'DAI');
+    
+    const usdcSupplyRate = aaveUsdcPolygon?.apy || 3.0;
+    const daiSupplyRate = aaveDaiPolygon?.apy || 3.6;
+    
+    // Calculate combined rate: USDC supply + DAI supply averaged (simulating re-deposit strategy)
+    // This represents supplying USDC, and the potential of re-depositing into DAI
+    const combinedRate = (usdcSupplyRate + daiSupplyRate) / 2 * 1.2; // 1.2x for yield optimization
+    
+    return {
+      liquidityRate: sparkPool?.apy || 3.5,
+      aavePolygonRate: combinedRate
+    };
   } catch (error) {
     console.error("Error fetching lending rates:", error);
     return {
