@@ -2014,50 +2014,99 @@ Your contract is now live and ready for members to join!`);
       </div>;
   };
   
-  // Calculate earnings for different time periods
-  const calculateEarnings = (period: '1W' | '1M' | '1Y' | 'All' | 'Future') => {
-    if (!selectedContract) return 0;
+  // Calculate earnings for different time periods (real data from contracts)
+  const calculateEarnings = (period: '1W' | '1M' | '1Y' | 'All') => {
+    if (!selectedContract) return { deposits: 0, earnings: 0 };
     const balance = parseFloat(selectedContract.totalContractBalance || "0");
     const avgAPY = (apyStrand1 + apyStrand2 + apyStrand3) / 3 / 100;
     
+    // Calculate actual time elapsed since contract creation
+    const startDate = new Date(selectedContract.createdAt);
+    const now = new Date();
+    const msElapsed = now.getTime() - startDate.getTime();
+    const daysElapsed = msElapsed / (1000 * 60 * 60 * 24);
+    
+    // Calculate deposits and earnings based on period
     switch (period) {
-      case '1W': return balance * avgAPY / 52;
-      case '1M': return balance * avgAPY / 12;
-      case '1Y': return balance * avgAPY;
+      case '1W': {
+        const daysInPeriod = Math.min(daysElapsed, 7);
+        const periodDeposits = balance * (daysInPeriod / Math.max(daysElapsed, 1));
+        const periodEarnings = periodDeposits * avgAPY * (daysInPeriod / 365);
+        return { deposits: periodDeposits, earnings: periodEarnings };
+      }
+      case '1M': {
+        const daysInPeriod = Math.min(daysElapsed, 30);
+        const periodDeposits = balance * (daysInPeriod / Math.max(daysElapsed, 1));
+        const periodEarnings = periodDeposits * avgAPY * (daysInPeriod / 365);
+        return { deposits: periodDeposits, earnings: periodEarnings };
+      }
+      case '1Y': {
+        const daysInPeriod = Math.min(daysElapsed, 365);
+        const periodDeposits = balance * (daysInPeriod / Math.max(daysElapsed, 1));
+        const periodEarnings = periodDeposits * avgAPY * (daysInPeriod / 365);
+        return { deposits: periodDeposits, earnings: periodEarnings };
+      }
       case 'All': {
-        const startDate = new Date(selectedContract.createdAt);
-        const now = new Date();
-        const yearsElapsed = (now.getTime() - startDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000);
-        return balance * avgAPY * Math.max(yearsElapsed, 0.1);
+        const totalEarnings = balance * avgAPY * (daysElapsed / 365);
+        return { deposits: balance, earnings: totalEarnings };
       }
-      case 'Future': {
-        const years = selectedContract.lockupPeriod || 5;
-        return balance * Math.pow(1 + avgAPY, years) - balance;
-      }
-      default: return 0;
+      default: return { deposits: 0, earnings: 0 };
     }
   };
   
-  // Generate bar chart data for homepage
-  const generateBarChartData = () => {
+  // Generate curve chart data for homepage (real data based on contract)
+  const generateCurveChartData = () => {
+    const dataPoints = 12;
+    const data = [];
+    
     if (!selectedContract) {
-      return Array(7).fill(0).map((_, i) => ({
-        value: Math.random() * 100 + 50,
-        label: `Day ${i + 1}`
-      }));
+      // Return empty data when no contract
+      for (let i = 0; i < dataPoints; i++) {
+        data.push({ deposits: 0, earnings: 0, label: '' });
+      }
+      return data;
     }
+    
     const balance = parseFloat(selectedContract.totalContractBalance || "0");
     const avgAPY = (apyStrand1 + apyStrand2 + apyStrand3) / 3 / 100;
-    const weeklyReturn = avgAPY / 52;
+    const startDate = new Date(selectedContract.createdAt);
+    const now = new Date();
+    const totalDays = Math.max((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24), 1);
     
-    return Array(7).fill(0).map((_, i) => ({
-      value: balance * weeklyReturn * (0.8 + Math.random() * 0.4) / 7,
-      label: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i]
-    }));
+    // Generate data points based on timeline
+    const periodDays = earningsTimeline === '1W' ? 7 : earningsTimeline === '1M' ? 30 : earningsTimeline === '1Y' ? 365 : totalDays;
+    const relevantDays = Math.min(totalDays, periodDays);
+    
+    for (let i = 0; i < dataPoints; i++) {
+      const dayFraction = (i + 1) / dataPoints;
+      const daysAtPoint = relevantDays * dayFraction;
+      const depositsAtPoint = balance * (daysAtPoint / Math.max(totalDays, 1));
+      const earningsAtPoint = depositsAtPoint * avgAPY * (daysAtPoint / 365);
+      
+      // Generate label based on period
+      let label = '';
+      if (earningsTimeline === '1W') {
+        label = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', '', '', '', '', ''][i] || '';
+      } else if (earningsTimeline === '1M') {
+        label = i % 3 === 0 ? `W${Math.floor(i / 3) + 1}` : '';
+      } else if (earningsTimeline === '1Y') {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        label = months[i] || '';
+      } else {
+        label = i === 0 ? 'Start' : i === dataPoints - 1 ? 'Now' : '';
+      }
+      
+      data.push({
+        deposits: depositsAtPoint,
+        earnings: earningsAtPoint,
+        label
+      });
+    }
+    
+    return data;
   };
   
-  const barChartData = generateBarChartData();
-  const maxBarValue = Math.max(...barChartData.map(d => d.value), 1);
+  const curveChartData = generateCurveChartData();
   
   const HomePage = () => <div className="relative z-10 px-6 py-10 pb-36 max-w-7xl mx-auto">
       {/* Hero Section - Clean Fintech Style */}
