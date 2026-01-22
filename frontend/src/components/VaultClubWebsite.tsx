@@ -409,6 +409,9 @@ const VaultClubWebsiteInner: React.FC<{
   
   // More Details dropdown state for Future page
   const [showMoreDetails, setShowMoreDetails] = useState(false);
+  
+  // Earnings timeline state
+  const [earningsTimeline, setEarningsTimeline] = useState<'1W' | '1M' | '1Y' | 'All' | 'Future'>('1W');
 
   // Dynamic data states - accurate initial values reflecting empty state
   const [vaultStats, setVaultStats] = useState({
