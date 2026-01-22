@@ -2874,56 +2874,66 @@ Your contract is now live and ready for members to join!`);
               </div>}
           </div>
 
-          {/* Peak Strand Distribution */}
+          {/* More Details Dropdown - Peak Strand Distribution */}
           <div className="glass-card p-6 animate-fade-up stagger-3">
-            <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
-              Peak Strand Distribution
-            </h2>
-            <div className="text-sm text-muted-foreground mb-4">
-              Maximum strand values during Phase 1 before Phase 2 transition to wBTC
-            </div>
-            {chartData.length > 0 && <div className="space-y-4">
-                <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-pink/30 hover:border-defi-pink/50 transition-colors">
-                  <h3 className="font-semibold text-defi-pink mb-1">Capital Strand (Spark) - {apyStrand1.toFixed(1)}% APY</h3>
-                  <div className="text-2xl font-bold text-foreground">
-                    ${Math.max(...chartData.map(d => d.strand1)).toLocaleString()}
+            <button 
+              onClick={() => setShowMoreDetails(!showMoreDetails)}
+              className="w-full flex items-center justify-between text-left"
+            >
+              <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
+                More Details
+              </h2>
+              <ChevronRight className={`w-5 h-5 text-muted-foreground transition-transform duration-300 ${showMoreDetails ? 'rotate-90' : ''}`} />
+            </button>
+            
+            {showMoreDetails && <div className="mt-5 pt-5 border-t border-border/30 animate-fade-up">
+              <h3 className="text-lg font-medium text-foreground mb-3">Peak Strand Distribution</h3>
+              <div className="text-sm text-muted-foreground mb-4">
+                Maximum strand values during Phase 1 before Phase 2 transition to wBTC
+              </div>
+              {chartData.length > 0 && <div className="space-y-4">
+                  <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-pink/30 hover:border-defi-pink/50 transition-colors">
+                    <h3 className="font-semibold text-defi-pink mb-1">Capital Strand (Spark) - {apyStrand1.toFixed(1)}% APY</h3>
+                    <div className="text-2xl font-bold text-foreground">
+                      ${Math.max(...chartData.map(d => d.strand1)).toLocaleString()}
+                    </div>
+                    <div className="text-muted-foreground text-sm">
+                      Peak value during Phase 1 accumulation
+                    </div>
                   </div>
-                  <div className="text-muted-foreground text-sm">
-                    Peak value during Phase 1 accumulation
+                  
+                  <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-purple/30 hover:border-defi-purple/50 transition-colors">
+                    <h3 className="font-semibold text-defi-purple mb-1">Yield Strand (AAVE Polygon) - {apyStrand2.toFixed(1)}% APY</h3>
+                    <div className="text-2xl font-bold text-foreground">
+                      ${Math.max(...chartData.map(d => d.strand2)).toLocaleString()}
+                    </div>
+                    <div className="text-muted-foreground text-sm">
+                      Peak value during Phase 1 accumulation
+                    </div>
                   </div>
-                </div>
-                
-                <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-purple/30 hover:border-defi-purple/50 transition-colors">
-                  <h3 className="font-semibold text-defi-purple mb-1">Yield Strand (AAVE Polygon) - {apyStrand2.toFixed(1)}% APY</h3>
-                  <div className="text-2xl font-bold text-foreground">
-                    ${Math.max(...chartData.map(d => d.strand2)).toLocaleString()}
+                  
+                  <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-cyan/30 hover:border-defi-cyan/50 transition-colors">
+                    <h3 className="font-semibold text-defi-cyan mb-1">Momentum Strand (QuickSwap V3) - {apyStrand3.toFixed(1)}% APY</h3>
+                    <div className="text-2xl font-bold text-foreground">
+                      ${Math.max(...chartData.map(d => d.strand3)).toLocaleString()}
+                    </div>
+                    <div className="text-muted-foreground text-sm">
+                      Peak value during Phase 1 accumulation
+                    </div>
                   </div>
-                  <div className="text-muted-foreground text-sm">
-                    Peak value during Phase 1 accumulation
+                  
+                  <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-orange/30 hover:border-defi-orange/50 transition-colors">
+                    <h3 className="font-semibold text-defi-orange mb-1">wBTC Accumulation - Phase 2</h3>
+                    <div className="text-2xl font-bold text-foreground">
+                      {chartData[chartData.length - 1]?.wbtc ? (chartData[chartData.length - 1].wbtc / btcPrice).toFixed(3) : 0}₿
+                    </div>
+                    <div className="text-muted-foreground text-sm">
+                      Final Bitcoin holdings (${chartData[chartData.length - 1]?.wbtc?.toLocaleString() || 0})
+                    </div>
                   </div>
-                </div>
-                
-                <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-cyan/30 hover:border-defi-cyan/50 transition-colors">
-                  <h3 className="font-semibold text-defi-cyan mb-1">Momentum Strand (QuickSwap V3) - {apyStrand3.toFixed(1)}% APY</h3>
-                  <div className="text-2xl font-bold text-foreground">
-                    ${Math.max(...chartData.map(d => d.strand3)).toLocaleString()}
-                  </div>
-                  <div className="text-muted-foreground text-sm">
-                    Peak value during Phase 1 accumulation
-                  </div>
-                </div>
-                
-                <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-orange/30 hover:border-defi-orange/50 transition-colors">
-                  <h3 className="font-semibold text-defi-orange mb-1">wBTC Accumulation - Phase 2</h3>
-                  <div className="text-2xl font-bold text-foreground">
-                    {chartData[chartData.length - 1]?.wbtc ? (chartData[chartData.length - 1].wbtc / btcPrice).toFixed(3) : 0}₿
-                  </div>
-                  <div className="text-muted-foreground text-sm">
-                    Final Bitcoin holdings (${chartData[chartData.length - 1]?.wbtc?.toLocaleString() || 0})
-                  </div>
-                </div>
-              </div>}
+                </div>}
+            </div>}
           </div>
         </div>
       </div>;
