@@ -2936,9 +2936,9 @@ Your contract is now live and ready for members to join!`);
                 </svg>
               </div>
               <div>
-                <div className="text-xl font-bold text-gradient-hero flex items-center gap-2">
+                <div className="text-xl font-bold text-gradient-hero flex items-center gap-1.5">
                   The Vault Club
-                  <span className="px-2 py-1 text-[11px] font-bold bg-yellow-400 text-black rounded uppercase tracking-wide shadow-sm">Beta</span>
+                  <span className="px-1.5 py-0.5 text-[9px] font-semibold bg-primary/20 text-primary border border-primary/30 rounded uppercase tracking-wide">Beta</span>
                 </div>
                 <div className="text-xs text-secondary/80 font-medium tracking-wide">Investment Contracts into Digital Assets</div>
               </div>
