@@ -3053,66 +3053,116 @@ Your contract is now live and ready for members to join!`);
       </div>
     </div>;
   const FutureSimulationPage = () => {
+    // Simple compound interest calculation
+    const simpleAPY = calculateAveragedAPY(apyStrand1, apyStrand2, apyStrand3);
+    
+    // Calculate simple compound growth data
+    const calculateSimpleCompound = () => {
+      const data = [];
+      const weeksPerYear = 52;
+      const totalWeeks = simulationYears * weeksPerYear;
+      let totalValue = 0;
+      let totalDeposited = 0;
+      const weeklyRate = Math.pow(1 + simpleAPY / 100, 1 / weeksPerYear) - 1;
+      
+      // Calculate weekly deposit based on rigor
+      const getWeeklyDeposit = (year: number) => {
+        if (simulationRigor === 'light') {
+          if (year <= 1) return 100 / 4.33;
+          else if (year <= 2) return 150 / 4.33;
+          else return 250 / 4.33;
+        } else if (simulationRigor === 'medium') {
+          if (year <= 3) return 50;
+          else if (year <= 6) return 100;
+          else if (year <= 10) return 200;
+          else return 250;
+        } else if (simulationRigor === 'heavy') {
+          if (year <= 3) return 100;
+          else if (year <= 6) return 200;
+          else if (year <= 10) return 300;
+          else return 400;
+        } else {
+          return customSimulationAmount;
+        }
+      };
+      
+      for (let week = 0; week <= totalWeeks; week++) {
+        const year = Math.floor(week / weeksPerYear) + 1;
+        const weeklyDeposit = getWeeklyDeposit(year);
+        
+        if (week > 0) {
+          totalValue = totalValue * (1 + weeklyRate) + weeklyDeposit;
+          totalDeposited += weeklyDeposit;
+        }
+        
+        // Add data point for each year
+        if (week % weeksPerYear === 0) {
+          data.push({
+            year: Math.floor(week / weeksPerYear),
+            total: Math.round(totalValue),
+            deposited: Math.round(totalDeposited),
+            earnings: Math.round(totalValue - totalDeposited)
+          });
+        }
+      }
+      
+      return data;
+    };
+    
+    const compoundData = calculateSimpleCompound();
+    
     return <div className="relative z-10 px-6 py-8 pb-32">
         <div ref={futurePageIntroRef} className={`flex items-center mb-8 animate-fade-up ${tutorial.currentStepData?.target === 'future-page-intro' ? 'tutorial-highlight' : ''}`}>
           <button onClick={goHome} className="mr-4 p-2.5 glass-card hover:border-primary/30 rounded-xl transition-all duration-300 group">
             <ArrowLeft className="w-5 h-5 text-foreground/70 group-hover:text-primary transition-colors" />
           </button>
           <div>
-            <h1 className="text-3xl font-bold text-foreground">Future Projections</h1>
-            <p className="text-muted-foreground text-sm mt-1">Simulate your investment growth</p>
+            <h1 className="text-3xl font-bold text-foreground">Compound Calculator</h1>
+            <p className="text-muted-foreground text-sm mt-1">See how your money can grow over time</p>
           </div>
         </div>
         
         <div className="space-y-6">
-          {/* Interactive Controls */}
+          {/* Simple Calculator Controls */}
           <div className="glass-card p-6 animate-fade-up stagger-1">
             <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-              Simulation Parameters
+              Calculator Settings
             </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-6">
+              {/* APY Slider */}
               <div>
                 <label className="block text-sm font-semibold text-muted-foreground mb-2">
-                  Strand 1 APY (%) - Spark Protocol: {aaveRates.liquidityRate.toFixed(2)}%
+                  Annual Interest Rate (APY)
                 </label>
-                <input type="range" min="1" max="20" value={apyStrand1} onChange={e => setApyStrand1(Number(e.target.value))} className="w-full" />
-                <div className="text-center text-foreground font-bold">{apyStrand1.toFixed(1)}%</div>
+                <input 
+                  type="range" 
+                  min="1" 
+                  max="25" 
+                  step="0.5"
+                  value={simpleAPY} 
+                  onChange={e => {
+                    const val = Number(e.target.value);
+                    setApyStrand1(val * 0.3);
+                    setApyStrand2(val * 0.6);
+                    setApyStrand3(val * 1.5);
+                  }} 
+                  className="w-full" 
+                />
+                <div className="text-center text-2xl font-black text-secondary mt-2">{simpleAPY.toFixed(1)}%</div>
               </div>
+              
+              {/* Time Period */}
               <div>
-                <label className="block text-sm font-semibold text-muted-foreground mb-2">
-                  Strand 2 APY (%) - AAVE Polygon Lending
-                </label>
-                <input type="range" min="1" max="25" value={apyStrand2} onChange={e => setApyStrand2(Number(e.target.value))} className="w-full" />
-                <div className="text-center text-foreground font-bold">{apyStrand2.toFixed(1)}%</div>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-muted-foreground mb-2">
-                  Strand 3 APY (%) - QuickSwap V3 LP: {quickSwapAPY.toFixed(2)}%
-                </label>
-                <input type="range" min="1" max="30" value={apyStrand3} onChange={e => setApyStrand3(Number(e.target.value))} className="w-full" />
-                <div className="text-center text-foreground font-bold">{apyStrand3.toFixed(1)}%</div>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-muted-foreground mb-2">
-                  wBTC Price ($) - Live: ${btcPrice.toLocaleString()}
-                </label>
-                <input type="number" min="10000" max="500000" step="1000" value={btcPrice} onChange={e => setBtcPrice(Number(e.target.value))} className="input-premium" placeholder="Enter BTC price" />
-                <div className="text-center text-foreground font-bold text-sm mt-1">${btcPrice.toLocaleString()}</div>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-muted-foreground mb-2">Simulation Length</label>
+                <label className="block text-sm font-semibold text-muted-foreground mb-2">Time Period</label>
                 <select value={simulationYears >= 1 ? simulationYears : 'months'} onChange={e => {
                 const value = e.target.value;
                 if (value === 'months') {
-                  setSimulationYears(0.5); // 6 months
+                  setSimulationYears(0.5);
                 } else {
                   setSimulationYears(Number(value));
                 }
               }} className="select-premium">
-                  <option value="0.083">1 month</option>
-                  <option value="0.25">3 months</option>
-                  <option value="0.5">6 months</option>
                   <option value="1">1 year</option>
                   <option value="2">2 years</option>
                   <option value="3">3 years</option>
@@ -3122,48 +3172,47 @@ Your contract is now live and ready for members to join!`);
                   <option value="20">20 years</option>
                   <option value="25">25 years</option>
                 </select>
-                <div className="text-center text-foreground font-bold text-sm mt-1">
-                  {simulationYears < 1 ? `${Math.round(simulationYears * 12)} month${Math.round(simulationYears * 12) === 1 ? '' : 's'}` : `${simulationYears} year${simulationYears === 1 ? '' : 's'}`}
+                <div className="text-center text-foreground font-bold text-sm mt-2">
+                  {simulationYears} year{simulationYears === 1 ? '' : 's'}
                 </div>
               </div>
+              
+              {/* Contribution Amount */}
               <div>
-                <label className="block text-sm font-semibold text-muted-foreground mb-2">Investment Rigor</label>
+                <label className="block text-sm font-semibold text-muted-foreground mb-2">Weekly Contribution</label>
                 <select value={simulationRigor} onChange={e => setSimulationRigor(e.target.value)} className="select-premium">
-                  <option value="light">Light</option>
-                  <option value="medium">Medium</option>
-                  <option value="heavy">Heavy</option>
-                  <option value="custom">Custom</option>
+                  <option value="light">Light (~$25-60/week)</option>
+                  <option value="medium">Medium ($50-250/week)</option>
+                  <option value="heavy">Heavy ($100-400/week)</option>
+                  <option value="custom">Custom Amount</option>
                 </select>
-                <div className="text-center text-foreground font-bold text-sm mt-1">
-                  {simulationRigor === 'light' && '$100-250/month scaling'}
-                  {simulationRigor === 'medium' && '$50-250/week scaling'}
-                  {simulationRigor === 'heavy' && '$100-400/week scaling'}
-                  {simulationRigor === 'custom' && `Fixed ${customSimulationAmount}/week`}
+                <div className="text-center text-foreground font-bold text-sm mt-2">
+                  {simulationRigor === 'light' && '~$150/month average'}
+                  {simulationRigor === 'medium' && '~$600/month average'}
+                  {simulationRigor === 'heavy' && '~$1,000/month average'}
+                  {simulationRigor === 'custom' && `$${customSimulationAmount}/week`}
                 </div>
                 
                 {/* Custom Amount Input */}
                 {simulationRigor === 'custom' && <div className="mt-3">
-                    <label className="block text-xs font-semibold text-muted-foreground mb-1">
-                      Weekly Deposit Amount ($)
-                    </label>
-                    <input type="number" min="1" max="1000" value={customSimulationAmount} onChange={e => setCustomSimulationAmount(Number(e.target.value))} className="input-premium text-sm" placeholder="Enter weekly amount" />
-                    <div className="text-xs text-muted-foreground mt-1">
-                      Annual total: ${(customSimulationAmount * 52).toLocaleString()}
+                    <input 
+                      type="number" 
+                      min="1" 
+                      max="1000" 
+                      value={customSimulationAmount} 
+                      onChange={e => setCustomSimulationAmount(Number(e.target.value))} 
+                      className="input-premium text-sm w-full" 
+                      placeholder="Weekly amount ($)" 
+                    />
+                    <div className="text-xs text-muted-foreground mt-1 text-center">
+                      = ${(customSimulationAmount * 52).toLocaleString()}/year
                     </div>
                   </div>}
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-muted-foreground mb-2">Participants</label>
-                <input type="range" min="1" max="8" value={vaultStats.totalMembers || 1} onChange={e => setVaultStats(prev => ({
-                ...prev,
-                totalMembers: Number(e.target.value)
-              }))} className="w-full" />
-                <div className="text-center text-foreground font-bold">{vaultStats.totalMembers || 1} members</div>
               </div>
             </div>
           </div>
 
-          {/* Interactive Growth Chart - Beautiful Bar Chart Style */}
+          {/* Growth Visualization - Simple Compound Chart */}
           <div className="glass-card p-6 animate-fade-up stagger-2">
             <h2 className="text-xl font-bold text-foreground mb-5 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
@@ -3175,16 +3224,15 @@ Your contract is now live and ready for members to join!`);
               <div className="h-full flex items-end justify-around gap-2 relative">
                 {/* Y-axis labels */}
                 <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-muted-foreground -ml-2 pointer-events-none">
-                  <span className="bg-background/50 px-1 rounded">${chartData.length > 0 ? (Math.max(...chartData.map(d => d.total)) / 1000000).toFixed(1) : 0}M</span>
-                  <span className="bg-background/50 px-1 rounded">${chartData.length > 0 ? (Math.max(...chartData.map(d => d.total)) / 2000000).toFixed(1) : 0}M</span>
+                  <span className="bg-background/50 px-1 rounded">${compoundData.length > 0 ? (Math.max(...compoundData.map(d => d.total)) / 1000000).toFixed(1) : 0}M</span>
+                  <span className="bg-background/50 px-1 rounded">${compoundData.length > 0 ? (Math.max(...compoundData.map(d => d.total)) / 2000000).toFixed(1) : 0}M</span>
                   <span className="bg-background/50 px-1 rounded">$0</span>
                 </div>
                 
                 {/* Bars */}
-                {chartData.length > 0 && chartData.map((point, index) => {
-                  const maxTotal = Math.max(...chartData.map(d => d.total));
+                {compoundData.length > 0 && compoundData.map((point, index) => {
+                  const maxTotal = Math.max(...compoundData.map(d => d.total));
                   const heightPercent = maxTotal > 0 ? (point.total / maxTotal) * 100 : 10;
-                  const wbtcPercent = maxTotal > 0 ? (point.wbtc / maxTotal) * 100 : 0;
                   
                   return (
                     <div key={index} className="flex flex-col items-center flex-1 h-full justify-end group">
@@ -3194,27 +3242,17 @@ Your contract is now live and ready for members to join!`);
                         <div className="text-background/70">Year {point.year}</div>
                       </div>
                       
-                      {/* Bar with gradient */}
+                      {/* Bar with gradient - single color */}
                       <div 
                         className="w-full rounded-t-2xl relative overflow-hidden transition-all duration-500 group-hover:shadow-lg"
                         style={{ 
                           height: `${Math.max(heightPercent, 5)}%`,
-                          background: point.phase === 2 
-                            ? 'linear-gradient(to top, rgba(249, 115, 22, 0.6), rgba(249, 115, 22, 0.9))' 
-                            : 'linear-gradient(to top, rgba(139, 92, 246, 0.5), rgba(139, 92, 246, 0.9))',
+                          background: 'linear-gradient(to top, rgba(139, 92, 246, 0.5), rgba(139, 92, 246, 0.9))',
                           minHeight: '12px'
                         }}
                       >
                         {/* Inner glow effect */}
                         <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/10 to-white/20 rounded-t-2xl"></div>
-                        
-                        {/* wBTC overlay for Phase 2 */}
-                        {wbtcPercent > 5 && (
-                          <div 
-                            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-orange-500/80 to-orange-400/60 rounded-t-xl"
-                            style={{ height: `${(wbtcPercent / heightPercent) * 100}%` }}
-                          ></div>
-                        )}
                       </div>
                       
                       {/* Year label */}
@@ -3227,60 +3265,38 @@ Your contract is now live and ready for members to join!`);
               </div>
             </div>
             
-            {/* Chart Legend - Cleaner */}
+            {/* Chart Legend - Simple */}
             <div className="mt-6 flex flex-wrap justify-center gap-6 text-sm">
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 rounded-lg bg-gradient-to-t from-primary/50 to-primary"></div>
                 <span className="text-muted-foreground font-medium">Total Value</span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 rounded-lg bg-gradient-to-t from-orange-500/50 to-orange-400"></div>
-                <span className="text-muted-foreground font-medium">wBTC Holdings</span>
-              </div>
             </div>
             
-            {/* Key metrics - Softer cards */}
-            {chartData.length > 0 && <div className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-4">
+            {/* Key metrics - Simple 3 cards */}
+            {compoundData.length > 0 && <div className="mt-6 grid grid-cols-3 gap-4">
                 <div className="soft-card text-center p-4">
                   <div className="text-xl font-black text-foreground">
-                    ${chartData.length > 0 && chartData[chartData.length - 1]?.total ? chartData[chartData.length - 1].total.toLocaleString() : '0'}
+                    ${compoundData[compoundData.length - 1]?.total?.toLocaleString() || '0'}
                   </div>
-                  <div className="text-sm text-muted-foreground font-medium">Total Value</div>
+                  <div className="text-sm text-muted-foreground font-medium">Final Value</div>
                 </div>
                 <div className="soft-card text-center p-4">
                   <div className="text-xl font-black text-foreground">
-                    ${chartData.length > 0 && chartData[chartData.length - 1]?.initialDeposits ? chartData[chartData.length - 1].initialDeposits.toLocaleString() : '0'}
+                    ${compoundData[compoundData.length - 1]?.deposited?.toLocaleString() || '0'}
                   </div>
-                  <div className="text-sm text-muted-foreground font-medium">Deposited</div>
+                  <div className="text-sm text-muted-foreground font-medium">Total Deposited</div>
                 </div>
                 <div className="soft-card text-center p-4">
                   <div className="text-xl font-black text-secondary">
-                    {chartData.length > 0 && chartData[chartData.length - 1]?.total && chartData[chartData.length - 1]?.initialDeposits ? ((chartData[chartData.length - 1].total / chartData[chartData.length - 1].initialDeposits - 1) * 100).toFixed(0) : 0}%
+                    ${compoundData[compoundData.length - 1]?.earnings?.toLocaleString() || '0'}
                   </div>
-                  <div className="text-sm text-muted-foreground font-medium">ROI</div>
-                </div>
-                <div className="soft-card text-center p-4">
-                  <div className="text-xl font-black text-orange-500">
-                    {chartData.length > 0 && chartData[chartData.length - 1]?.wbtc ? (chartData[chartData.length - 1].wbtc / btcPrice).toFixed(3) : 0}₿
-                  </div>
-                  <div className="text-sm text-muted-foreground font-medium">Final wBTC</div>
-                </div>
-                <div className="soft-card text-center p-4">
-                  <div className="text-xl font-black text-destructive">
-                    ${chartData.length > 0 && chartData[chartData.length - 1]?.cumulativeGasFees ? chartData[chartData.length - 1].cumulativeGasFees.toLocaleString() : '0'}
-                  </div>
-                  <div className="text-sm text-muted-foreground font-medium">Gas Fees</div>
-                </div>
-                <div className="soft-card text-center p-4">
-                  <div className="text-xl font-black text-primary">
-                    ${chartData.length > 0 && chartData[chartData.length - 1]?.cumulativeUtilityFees ? chartData[chartData.length - 1].cumulativeUtilityFees.toLocaleString() : '0'}
-                  </div>
-                  <div className="text-sm text-muted-foreground font-medium">Utility Fees</div>
+                  <div className="text-sm text-muted-foreground font-medium">Interest Earned</div>
                 </div>
               </div>}
           </div>
 
-          {/* More Details Dropdown - Peak Strand Distribution */}
+          {/* More Details Dropdown - Advanced Info */}
           <div className="glass-card p-6 animate-fade-up stagger-3">
             <button 
               onClick={() => setShowMoreDetails(!showMoreDetails)}
@@ -3294,51 +3310,42 @@ Your contract is now live and ready for members to join!`);
             </button>
             
             {showMoreDetails && <div className="mt-5 pt-5 border-t border-border/30 animate-fade-up">
-              <h3 className="text-lg font-medium text-foreground mb-3">Peak Strand Distribution</h3>
-              <div className="text-sm text-muted-foreground mb-4">
-                Maximum strand values during Phase 1 before Phase 2 transition to wBTC
+              {/* Calculation breakdown */}
+              <div className="space-y-4 mb-6">
+                <h3 className="text-lg font-medium text-foreground">Calculation Breakdown</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-border/30">
+                    <div className="text-sm text-muted-foreground mb-1">APY Used</div>
+                    <div className="text-xl font-bold text-foreground">{simpleAPY.toFixed(2)}%</div>
+                  </div>
+                  <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-border/30">
+                    <div className="text-sm text-muted-foreground mb-1">Compounding</div>
+                    <div className="text-xl font-bold text-foreground">Weekly (52x/year)</div>
+                  </div>
+                </div>
               </div>
-              {chartData.length > 0 && <div className="space-y-4">
-                  <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-pink/30 hover:border-defi-pink/50 transition-colors">
-                    <h3 className="font-semibold text-defi-pink mb-1">Capital Strand (Spark) - {apyStrand1.toFixed(1)}% APY</h3>
-                    <div className="text-2xl font-bold text-foreground">
-                      ${Math.max(...chartData.map(d => d.strand1)).toLocaleString()}
-                    </div>
-                    <div className="text-muted-foreground text-sm">
-                      Peak value during Phase 1 accumulation
-                    </div>
+              
+              {/* Fee estimates */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium text-foreground">Estimated Fees (for reference)</h3>
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-orange-500/30">
+                    <div className="text-sm text-muted-foreground mb-1">wBTC Conversion</div>
+                    <div className="text-lg font-bold text-orange-500">Phase 2</div>
+                    <div className="text-xs text-muted-foreground mt-1">Activates after 50% completion</div>
                   </div>
-                  
-                  <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-purple/30 hover:border-defi-purple/50 transition-colors">
-                    <h3 className="font-semibold text-defi-purple mb-1">Yield Strand (AAVE Polygon) - {apyStrand2.toFixed(1)}% APY</h3>
-                    <div className="text-2xl font-bold text-foreground">
-                      ${Math.max(...chartData.map(d => d.strand2)).toLocaleString()}
-                    </div>
-                    <div className="text-muted-foreground text-sm">
-                      Peak value during Phase 1 accumulation
-                    </div>
+                  <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-destructive/30">
+                    <div className="text-sm text-muted-foreground mb-1">Est. Gas Fees</div>
+                    <div className="text-lg font-bold text-destructive">~$0.58/week</div>
+                    <div className="text-xs text-muted-foreground mt-1">Network transaction costs</div>
                   </div>
-                  
-                  <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-cyan/30 hover:border-defi-cyan/50 transition-colors">
-                    <h3 className="font-semibold text-defi-cyan mb-1">Momentum Strand (QuickSwap V3) - {apyStrand3.toFixed(1)}% APY</h3>
-                    <div className="text-2xl font-bold text-foreground">
-                      ${Math.max(...chartData.map(d => d.strand3)).toLocaleString()}
-                    </div>
-                    <div className="text-muted-foreground text-sm">
-                      Peak value during Phase 1 accumulation
-                    </div>
+                  <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-primary/30">
+                    <div className="text-sm text-muted-foreground mb-1">Utility Fee</div>
+                    <div className="text-lg font-bold text-primary">$1.00/week</div>
+                    <div className="text-xs text-muted-foreground mt-1">Platform service fee</div>
                   </div>
-                  
-                  <div className="bg-background/30 backdrop-blur-sm p-4 rounded-xl border border-defi-orange/30 hover:border-defi-orange/50 transition-colors">
-                    <h3 className="font-semibold text-defi-orange mb-1">wBTC Accumulation - Phase 2</h3>
-                    <div className="text-2xl font-bold text-foreground">
-                      {chartData[chartData.length - 1]?.wbtc ? (chartData[chartData.length - 1].wbtc / btcPrice).toFixed(3) : 0}₿
-                    </div>
-                    <div className="text-muted-foreground text-sm">
-                      Final Bitcoin holdings (${chartData[chartData.length - 1]?.wbtc?.toLocaleString() || 0})
-                    </div>
-                  </div>
-                </div>}
+                </div>
+              </div>
             </div>}
           </div>
         </div>
