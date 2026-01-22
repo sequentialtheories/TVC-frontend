@@ -2013,40 +2013,141 @@ Your contract is now live and ready for members to join!`);
         </div>
       </div>;
   };
+  
+  // Calculate earnings for different time periods
+  const calculateEarnings = (period: '1W' | '1M' | '1Y' | 'All' | 'Future') => {
+    if (!selectedContract) return 0;
+    const balance = parseFloat(selectedContract.totalContractBalance || "0");
+    const avgAPY = (apyStrand1 + apyStrand2 + apyStrand3) / 3 / 100;
+    
+    switch (period) {
+      case '1W': return balance * avgAPY / 52;
+      case '1M': return balance * avgAPY / 12;
+      case '1Y': return balance * avgAPY;
+      case 'All': {
+        const startDate = new Date(selectedContract.createdAt);
+        const now = new Date();
+        const yearsElapsed = (now.getTime() - startDate.getTime()) / (365.25 * 24 * 60 * 60 * 1000);
+        return balance * avgAPY * Math.max(yearsElapsed, 0.1);
+      }
+      case 'Future': {
+        const years = selectedContract.lockupPeriod || 5;
+        return balance * Math.pow(1 + avgAPY, years) - balance;
+      }
+      default: return 0;
+    }
+  };
+  
+  // Generate bar chart data for homepage
+  const generateBarChartData = () => {
+    if (!selectedContract) {
+      return Array(7).fill(0).map((_, i) => ({
+        value: Math.random() * 100 + 50,
+        label: `Day ${i + 1}`
+      }));
+    }
+    const balance = parseFloat(selectedContract.totalContractBalance || "0");
+    const avgAPY = (apyStrand1 + apyStrand2 + apyStrand3) / 3 / 100;
+    const weeklyReturn = avgAPY / 52;
+    
+    return Array(7).fill(0).map((_, i) => ({
+      value: balance * weeklyReturn * (0.8 + Math.random() * 0.4) / 7,
+      label: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i]
+    }));
+  };
+  
+  const barChartData = generateBarChartData();
+  const maxBarValue = Math.max(...barChartData.map(d => d.value), 1);
+  
   const HomePage = () => <div className="relative z-10 px-6 py-10 pb-36 max-w-7xl mx-auto">
-      {/* Hero Section - Spark.fi inspired */}
-      <div ref={homeContractSectionRef} className={`text-center mb-16 animate-fade-up ${tutorial.currentStepData?.target === 'home-contract-section' ? 'tutorial-highlight' : ''}`}>
+      {/* Hero Section - Clean Fintech Style */}
+      <div ref={homeContractSectionRef} className={`text-center mb-12 animate-fade-up ${tutorial.currentStepData?.target === 'home-contract-section' ? 'tutorial-highlight' : ''}`}>
         {selectedContract && <div className="inline-flex items-center space-x-3 px-5 py-2.5 glass-card mb-6">
             <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
-            <div className="text-xs font-semibold text-secondary tracking-widest uppercase">
+            <div className="text-xs font-bold text-secondary tracking-widest uppercase">
               Active Contract
             </div>
           </div>}
         
-        {/* Giant stat display - Sky.money style */}
-        <div className="text-7xl md:text-8xl font-black text-white mb-6 tracking-tight hero-stat">
-          ${selectedContract ? parseFloat(selectedContract.totalContractBalance || "0").toLocaleString() : parseFloat(vaultStats.totalDeposits || "0").toLocaleString()}
+        {/* Giant stat display - Soft & Friendly */}
+        <div className="text-6xl md:text-7xl font-black text-foreground mb-4 tracking-tight">
+          ${selectedContract ? parseFloat(selectedContract.totalContractBalance || "0").toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : parseFloat(vaultStats.totalDeposits || "0").toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
         </div>
         
-        <div className="text-lg text-muted-foreground font-medium min-h-[60px]">
-          {selectedContract ? <div className="space-y-2">
-              <div className="text-foreground">
-                {selectedContract.lockupPeriod} {selectedContract.isChargedContract ? 'Month' : 'Year'} Contract 
-                <span className="mx-2 text-muted-foreground/50">•</span> 
-                <span className="text-secondary">{selectedContract.rigorLevel.charAt(0).toUpperCase() + selectedContract.rigorLevel.slice(1)} Rigor</span>
+        {/* Earnings Display with Timeline - Similar to reference image */}
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <div className="w-2 h-2 rounded-full bg-secondary"></div>
+          <span className="text-secondary font-bold text-lg">
+            ${calculateEarnings(earningsTimeline).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Earned
+          </span>
+          <span className="text-muted-foreground">
+            {earningsTimeline === '1W' ? 'This Week' : 
+             earningsTimeline === '1M' ? 'This Month' : 
+             earningsTimeline === '1Y' ? 'This Year' : 
+             earningsTimeline === 'All' ? 'All Time' : 'Projected'}
+          </span>
+        </div>
+        
+        {selectedContract && <div className="text-base text-muted-foreground font-medium">
+            <span className="text-foreground">
+              {selectedContract.lockupPeriod} {selectedContract.isChargedContract ? 'Month' : 'Year'} Contract 
+            </span>
+            <span className="mx-2 text-muted-foreground/50">•</span> 
+            <span className="text-secondary">{selectedContract.rigorLevel.charAt(0).toUpperCase() + selectedContract.rigorLevel.slice(1)} Rigor</span>
+          </div>}
+      </div>
+      
+      {/* Bar Chart Visualization - Like reference image */}
+      <div className="glass-card p-6 mb-8 animate-fade-up stagger-1">
+        <div className="flex items-end justify-around h-48 gap-3 px-4 mb-6">
+          {barChartData.map((bar, index) => (
+            <div key={index} className="flex flex-col items-center flex-1 max-w-16">
+              <div 
+                className="w-full rounded-t-2xl bg-gradient-to-t from-primary/60 to-primary transition-all duration-500 hover:from-primary/80 hover:to-primary relative group"
+                style={{ 
+                  height: `${Math.max((bar.value / maxBarValue) * 100, 10)}%`,
+                  minHeight: '20px'
+                }}
+              >
+                {/* Tooltip on hover */}
+                <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-foreground text-background text-xs px-2 py-1 rounded-lg whitespace-nowrap">
+                  ${bar.value.toFixed(2)}
+                </div>
+                {/* Activity indicator dots */}
+                {index === 3 && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 flex gap-1">
+                    <div className="w-5 h-5 rounded-full bg-secondary flex items-center justify-center text-white text-xs font-bold shadow-lg">$</div>
+                  </div>
+                )}
               </div>
-              <div className="text-sm font-mono text-muted-foreground">
-                {selectedContract.contractAddress.slice(0, 10)}...{selectedContract.contractAddress.slice(-8)}
-              </div>
-            </div> : null}
+              <span className="text-xs text-muted-foreground mt-2 font-medium">{bar.label}</span>
+            </div>
+          ))}
+        </div>
+        
+        {/* Timeline Tabs */}
+        <div className="flex justify-center gap-2">
+          {(['1W', '1M', '1Y', 'All', 'Future'] as const).map((period) => (
+            <button
+              key={period}
+              onClick={() => setEarningsTimeline(period)}
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+                earningsTimeline === period 
+                  ? 'bg-foreground text-background shadow-lg' 
+                  : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'
+              }`}
+            >
+              {period === 'Future' ? 'Future⁺' : period}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Contract Progress Bars - Premium style */}
-      {walletConnected && deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).length > 0 && <div className="mb-16 animate-fade-up stagger-1">
-          <div className="text-center mb-8">
-            <h2 className="text-xl font-semibold text-foreground mb-2">Contract Progress</h2>
-            <p className="text-sm text-muted-foreground">Time remaining until lockup expires</p>
+      {/* Contract Progress Bars - Clicking opens modal */}
+      {walletConnected && deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).length > 0 && <div className="mb-12 animate-fade-up stagger-2">
+          <div className="text-center mb-6">
+            <h2 className="text-xl font-bold text-foreground mb-2">Your Contracts</h2>
+            <p className="text-sm text-muted-foreground">Tap a contract to view strand details</p>
           </div>
           <div className="space-y-4 max-w-3xl mx-auto">
             {deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).map(subclub => {
@@ -2060,12 +2161,19 @@ Your contract is now live and ready for members to join!`);
           const daysRemaining = Math.max(0, Math.ceil(timeRemaining / (1000 * 60 * 60 * 24)));
           const yearsRemaining = Math.floor(daysRemaining / 365);
           const remainingDays = daysRemaining % 365;
-          return <div key={subclub.id} className={`glass-card p-6 cursor-pointer border-l-4 ${getContractColor(subclub)} ${selectedContract?.id === subclub.id ? 'ring-2 ring-secondary/50 shadow-glow-emerald' : ''}`} onClick={() => setSelectedContract(subclub)} onDoubleClick={() => setSelectedContract(null)}>
+          return <div 
+                key={subclub.id} 
+                className={`glass-card p-6 cursor-pointer border-l-4 ${getContractColor(subclub)} ${selectedContract?.id === subclub.id ? 'ring-2 ring-secondary/50 shadow-glow-emerald' : ''} hover:scale-[1.01] active:scale-[0.99] transition-all duration-300`} 
+                onClick={() => {
+                  setSelectedContract(subclub);
+                  setShowStrandsModal(true);
+                }}
+              >
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <div className="font-semibold text-foreground text-lg">
+                      <div className="font-bold text-foreground text-lg">
                         {subclub.lockupPeriod} {subclub.isChargedContract ? 'Month' : 'Year'} Contract
-                        <span className="ml-2 text-sm font-normal text-secondary">
+                        <span className="ml-2 text-sm font-semibold text-secondary">
                           {subclub.rigorLevel.charAt(0).toUpperCase() + subclub.rigorLevel.slice(1)}
                         </span>
                       </div>
@@ -2074,12 +2182,12 @@ Your contract is now live and ready for members to join!`);
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-secondary">{progress.toFixed(1)}%</div>
-                      <div className="text-xs text-muted-foreground">Complete</div>
+                      <div className="text-2xl font-black text-secondary">{progress.toFixed(1)}%</div>
+                      <div className="text-xs text-muted-foreground font-medium">Complete</div>
                     </div>
                   </div>
                   
-                  {/* Progress Bar */}
+                  {/* Progress Bar - Softer */}
                   <div className="progress-premium h-3 mb-4">
                     <div className={`bar ${progress >= 100 ? 'bg-gradient-to-r from-secondary via-secondary/80 to-secondary' : 'bg-gradient-to-r from-primary via-accent to-secondary'}`} style={{
                 width: `${progress}%`
@@ -2087,85 +2195,160 @@ Your contract is now live and ready for members to join!`);
                   </div>
                   
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">{startDate.toLocaleDateString()}</span>
-                    <span className="text-secondary font-medium">
-                      {progress >= 100 ? 'Complete!' : yearsRemaining > 0 ? `${yearsRemaining}y ${remainingDays}d left` : `${remainingDays}d left`}
+                    <span className="text-muted-foreground font-medium">{startDate.toLocaleDateString()}</span>
+                    <span className="text-secondary font-bold">
+                      {progress >= 100 ? '✓ Complete!' : yearsRemaining > 0 ? `${yearsRemaining}y ${remainingDays}d left` : `${remainingDays}d left`}
                     </span>
-                    <span className="text-muted-foreground">{endDate.toLocaleDateString()}</span>
+                    <span className="text-muted-foreground font-medium">{endDate.toLocaleDateString()}</span>
                   </div>
                 </div>;
         })}
           </div>
         </div>}
 
-      {/* Message when no contract selected */}
-      {walletConnected && deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).length > 0 && !selectedContract && <div className="text-center mb-8">
-          <div className="text-white font-medium">Select a contract above to access strand details</div>
-          <div className="text-sm text-slate-300">Click on any progress bar to focus on that contract</div>
+      {/* Message when no contracts */}
+      {walletConnected && deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).length === 0 && <div className="text-center mb-8 glass-card p-8 max-w-md mx-auto animate-fade-up">
+          <div className="text-5xl mb-4">🚀</div>
+          <div className="text-foreground font-bold text-lg mb-2">Ready to Start?</div>
+          <div className="text-sm text-muted-foreground mb-4">Create your first contract to begin building wealth</div>
+          <button 
+            onClick={() => setActiveModal('createClub')}
+            className="btn-premium text-white"
+          >
+            Create Contract
+          </button>
         </div>}
-
-      {/* DNA Strand Visualization - Premium redesign */}
-      <div className="relative flex justify-center items-center gap-10 mb-16 animate-fade-up stagger-2">
-        {/* Locked overlay when no contract selected */}
-        {!selectedContract && walletConnected && deployedSubclubs.filter(club => club.creator === walletAddress || club.members && club.members.includes(walletAddress)).length > 0 && <div className="absolute inset-0 z-10 flex items-center justify-center">
-            <div className="glass-card px-6 py-4 text-center animate-pulse-slow">
-              <div className="text-sm font-medium text-foreground mb-1">Select a Contract Above</div>
-              <div className="text-xs text-muted-foreground">Click on a contract progress bar to unlock</div>
+      
+      {/* Strands Modal - Triggered by clicking on a contract */}
+      {showStrandsModal && selectedContract && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fade-up" onClick={() => setShowStrandsModal(false)}>
+          <div className="glass-card max-w-lg w-full p-6 space-y-6" onClick={(e) => e.stopPropagation()}>
+            {/* Modal Header */}
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-xl font-bold text-foreground">Contract Details</h3>
+                <p className="text-sm text-muted-foreground font-mono mt-1">
+                  {selectedContract.contractAddress.slice(0, 12)}...{selectedContract.contractAddress.slice(-8)}
+                </p>
+              </div>
+              <button 
+                onClick={() => setShowStrandsModal(false)}
+                className="p-2 rounded-xl hover:bg-muted transition-colors"
+              >
+                <X className="w-5 h-5 text-muted-foreground" />
+              </button>
             </div>
-          </div>}
-        
-        {/* Phase 1 - DNA Helix */}
-        <div className={`relative transition-all duration-300 ${!selectedContract ? 'opacity-40 pointer-events-none blur-[1px]' : ''}`}>
-          <div className="w-40 h-72 relative">
-            {/* Enhanced DNA SVG */}
-            <svg viewBox="0 0 100 200" className="w-full h-full" style={{
-            overflow: 'visible'
-          }}>
-              <path d="M20 0 Q50 25 20 50 Q-10 75 20 100 Q50 125 20 150 Q-10 175 20 200" className="dna-strand dna-strand-pink" strokeWidth="5" fill="none" />
-              <path d="M80 0 Q50 25 80 50 Q110 75 80 100 Q50 125 80 150 Q110 175 80 200" className="dna-strand dna-strand-cyan" strokeWidth="5" fill="none" />
-              {[0, 1, 2, 3, 4, 5, 6, 7].map(i => <line key={i} x1="20" y1={i * 25} x2="80" y2={i * 25} className="stroke-border/50" strokeWidth="2" />)}
-            </svg>
-          </div>
-          
-          {/* Strand Buttons - Premium pills */}
-          <div className="absolute inset-0 flex flex-col justify-around items-center py-4">
-            <button type="button" onClick={e => {
-            e.preventDefault();
-            if (selectedContract) setActiveStrand(1);
-          }} disabled={!selectedContract} className={`btn-strand text-white ${selectedContract ? 'bg-gradient-to-r from-pink-500 to-rose-600 glow-pink' : 'bg-muted text-muted-foreground cursor-not-allowed'}`}>
-              Capital
-            </button>
-            <button type="button" onClick={e => {
-            e.preventDefault();
-            if (selectedContract) setActiveStrand(2);
-          }} disabled={!selectedContract} className={`btn-strand text-white ${selectedContract ? 'bg-gradient-to-r from-primary to-indigo-600 glow-purple' : 'bg-muted text-muted-foreground cursor-not-allowed'}`}>
-              Yield
-            </button>
-            <button type="button" onClick={e => {
-            e.preventDefault();
-            if (selectedContract) setActiveStrand(3);
-          }} disabled={!selectedContract} className={`btn-strand text-white ${selectedContract ? 'bg-gradient-to-r from-accent to-blue-500 glow-cyan' : 'bg-muted text-muted-foreground cursor-not-allowed'}`}>
-              Momentum
-            </button>
+            
+            {/* Contract Info */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="soft-card p-4 text-center">
+                <div className="text-2xl font-black text-foreground">${parseFloat(selectedContract.totalContractBalance || "0").toLocaleString()}</div>
+                <div className="text-xs text-muted-foreground font-medium">Total Balance</div>
+              </div>
+              <div className="soft-card p-4 text-center">
+                <div className="text-2xl font-black text-secondary">{selectedContract.lockupPeriod}</div>
+                <div className="text-xs text-muted-foreground font-medium">{selectedContract.isChargedContract ? 'Month' : 'Year'} Lockup</div>
+              </div>
+            </div>
+            
+            {/* DNA Strand Section */}
+            <div className="space-y-4">
+              <h4 className="font-bold text-foreground flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+                DNA Strands
+              </h4>
+              
+              {/* Strand 1 - Capital */}
+              <button 
+                onClick={() => { setActiveStrand(1); setShowStrandsModal(false); }}
+                className="w-full soft-card p-4 hover:border-pink-500/50 transition-all duration-300 group text-left"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <Shield className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-foreground">Capital Strand</div>
+                      <div className="text-xs text-muted-foreground">Spark Protocol • {apyStrand1.toFixed(1)}% APY</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-foreground">${parseFloat(selectedContract.strand1Balance || "0").toLocaleString()}</div>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground inline" />
+                  </div>
+                </div>
+              </button>
+              
+              {/* Strand 2 - Yield */}
+              <button 
+                onClick={() => { setActiveStrand(2); setShowStrandsModal(false); }}
+                className="w-full soft-card p-4 hover:border-primary/50 transition-all duration-300 group text-left"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-indigo-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <TrendingUp className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-foreground">Yield Strand</div>
+                      <div className="text-xs text-muted-foreground">AAVE Polygon • {apyStrand2.toFixed(1)}% APY</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-foreground">${parseFloat(selectedContract.strand2Balance || "0").toLocaleString()}</div>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground inline" />
+                  </div>
+                </div>
+              </button>
+              
+              {/* Strand 3 - Momentum */}
+              <button 
+                onClick={() => { setActiveStrand(3); setShowStrandsModal(false); }}
+                className="w-full soft-card p-4 hover:border-accent/50 transition-all duration-300 group text-left"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-blue-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <Zap className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-foreground">Momentum Strand</div>
+                      <div className="text-xs text-muted-foreground">QuickSwap V3 • {apyStrand3.toFixed(1)}% APY</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-foreground">${parseFloat(selectedContract.strand3Balance || "0").toLocaleString()}</div>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground inline" />
+                  </div>
+                </div>
+              </button>
+              
+              {/* Phase 2 - wBTC */}
+              <button 
+                onClick={() => { setActiveStrand(4); setShowStrandsModal(false); }}
+                className="w-full soft-card p-4 hover:border-orange-500/50 transition-all duration-300 group text-left"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <Bitcoin className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-foreground">Phase 2 • wBTC</div>
+                      <div className="text-xs text-muted-foreground">Bitcoin accumulation</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-orange-500">Pending</div>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground inline" />
+                  </div>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
-
-        {/* Phase 2 - wBTC Card */}
-        <button type="button" onClick={e => {
-        e.preventDefault();
-        if (selectedContract) setActiveStrand(4);
-      }} disabled={!selectedContract} className={`glass-card-glow px-8 py-6 transition-all duration-400 ${selectedContract ? 'hover:glow-orange cursor-pointer group' : 'opacity-40 cursor-not-allowed blur-[1px]'}`}>
-          <div className="flex items-center space-x-4">
-            <div className={`p-3 rounded-2xl transition-all duration-300 ${selectedContract ? 'bg-gradient-to-br from-orange-400 to-orange-600 group-hover:scale-110' : 'bg-muted'}`}>
-              <Bitcoin className="w-8 h-8 text-white" />
-            </div>
-            <div className="text-left">
-              <div className={`font-bold text-xl ${selectedContract ? 'text-foreground' : 'text-muted-foreground'}`}>wBTC</div>
-              <div className={`text-sm ${selectedContract ? 'text-orange-400' : 'text-muted-foreground'}`}>Phase 2</div>
-            </div>
-          </div>
-        </button>
-      </div>
+      )}
     </div>;
   const DatasetPage = () => <div className="relative z-10 px-6 py-8 pb-32">
       <div className="flex items-center mb-8 animate-fade-up">
