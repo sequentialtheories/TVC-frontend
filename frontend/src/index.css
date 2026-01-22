@@ -698,14 +698,46 @@
   }
 
   /* Light mode text contrast */
+  :root {
+    /* Force all text to be dark in light mode */
+    color: hsl(var(--foreground));
+  }
+  
   :root .light-text-contrast {
     text-shadow: 0 0 1px hsl(var(--foreground) / 0.3);
+  }
+  
+  /* Force text-white to be dark in light mode */
+  :root .text-white {
+    color: hsl(225 25% 12%) !important;
+  }
+  
+  :root .text-slate-300,
+  :root .text-slate-200,
+  :root .text-slate-100 {
+    color: hsl(220 10% 35%) !important;
+  }
+  
+  :root .text-gray-300,
+  :root .text-gray-200,
+  :root .text-gray-100 {
+    color: hsl(220 10% 35%) !important;
+  }
+  
+  /* Ensure foreground text is properly dark in light mode */
+  :root .text-foreground {
+    color: hsl(225 25% 12%);
+  }
+  
+  :root .text-muted-foreground {
+    color: hsl(220 10% 45%);
   }
   
   :root h1,
   :root h2,
   :root h3,
   :root .hero-text {
+    color: hsl(225 25% 12%);
     text-shadow: 0 0 1px hsl(var(--foreground) / 0.2);
   }
 
