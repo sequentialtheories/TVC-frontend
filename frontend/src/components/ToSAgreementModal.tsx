@@ -21,7 +21,7 @@ const TOS_SECTIONS: ToSSection[] = [
   {
     id: 2,
     title: "Service Description: User-Deployed Templates",
-    content: `The Vault Club provides a suite of "Investment Templates" that users can deploy into private or public Safe{Core} Multisig Vaults (1–8 participants). These templates use Routed Reinvestment Logic (RRL) to automate yield compounding across established DeFi protocols (Aave, Spark, QuickSwap). Once your chosen template reaches its "Phase 2" trigger (determined by your selection of growth or timeline thresholds), the logic automatically transitions into wBTC accumulation and wealth preservation.`
+    content: `The Vault Club provides a suite of "Investment Templates" that users can deploy into private or public Safe{Core} Multisig Vaults (1–8 participants). These templates automate yield compounding across established DeFi protocols (Aave, Spark, QuickSwap). Once your chosen template reaches its "Phase 2" trigger (determined by your selection of growth or timeline thresholds), the logic automatically transitions into wBTC accumulation and wealth preservation.`
   },
   {
     id: 3,
