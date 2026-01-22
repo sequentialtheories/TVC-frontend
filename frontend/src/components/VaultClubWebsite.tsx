@@ -2498,7 +2498,7 @@ Your contract is now live and ready for members to join!`);
             </h2>
             <div className="text-sm text-muted-foreground">
               <span className="text-foreground/70">Averaged Earnings Rate: </span>
-              <span className="text-secondary font-semibold">{calculateRRLAveragedAPY(aaveRates.liquidityRate, apyStrand2, quickSwapAPY).toFixed(2)}%</span>
+              <span className="text-secondary font-semibold">{calculateAveragedAPY(aaveRates.liquidityRate, apyStrand2, quickSwapAPY).toFixed(2)}%</span>
             </div>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
