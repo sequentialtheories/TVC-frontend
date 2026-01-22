@@ -2949,116 +2949,119 @@ Your contract is now live and ready for members to join!`);
             </div>
           </div>
 
-          {/* Interactive Growth Chart */}
+          {/* Interactive Growth Chart - Beautiful Bar Chart Style */}
           <div className="glass-card p-6 animate-fade-up stagger-2">
-            <h2 className="text-xl font-semibold text-foreground mb-5 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-foreground mb-5 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
               Growth Visualization
             </h2>
-            <div className="h-80 bg-background/30 backdrop-blur-sm rounded-xl p-4 border border-border/20">
-              <div className="h-full relative">
-                {/* Simple chart visualization */}
-                <svg viewBox="0 0 800 300" className="w-full h-full">
-                  {/* Grid lines */}
-                  {[0, 1, 2, 3, 4, 5, 6].map(i => <line key={i} x1="0" y1={i * 42.86} x2="800" y2={i * 42.86} stroke="hsl(var(--border))" strokeWidth="1" opacity="0.3" />)}
-                  {/* Chart lines */}
-                  {chartData.length > 1 && <>
-                      {/* Initial Deposits Line (no compounding) */}
-                      <polyline points={chartData.map((point, index) => `${index / (chartData.length - 1) * 800},${300 - point.initialDeposits / Math.max(...chartData.map(d => d.total)) * 280}`).join(' ')} fill="none" stroke="#64748b" strokeWidth="2" strokeDasharray="3,3" />
-                      
-                      {/* Total Value Line */}
-                      <polyline points={chartData.map((point, index) => `${index / (chartData.length - 1) * 800},${300 - point.total / Math.max(...chartData.map(d => d.total)) * 280}`).join(' ')} fill="none" stroke="#3b82f6" strokeWidth="3" />
-                      
-                      {/* wBTC Line */}
-                      <polyline points={chartData.map((point, index) => `${index / (chartData.length - 1) * 800},${300 - point.wbtc / Math.max(...chartData.map(d => d.total)) * 280}`).join(' ')} fill="none" stroke="#f97316" strokeWidth="3" />
-                      
-                      {/* Strand 1 Line */}
-                      <polyline points={chartData.map((point, index) => `${index / (chartData.length - 1) * 800},${300 - point.strand1 / Math.max(...chartData.map(d => d.total)) * 280}`).join(' ')} fill="none" stroke="#ec4899" strokeWidth="2" strokeDasharray="5,5" />
-                      
-                      {/* Strand 2 Line */}
-                      <polyline points={chartData.map((point, index) => `${index / (chartData.length - 1) * 800},${300 - point.strand2 / Math.max(...chartData.map(d => d.total)) * 280}`).join(' ')} fill="none" stroke="#8b5cf6" strokeWidth="2" strokeDasharray="5,5" />
-                      
-                      {/* Strand 3 Line */}
-                      <polyline points={chartData.map((point, index) => `${index / (chartData.length - 1) * 800},${300 - point.strand3 / Math.max(...chartData.map(d => d.total)) * 280}`).join(' ')} fill="none" stroke="#06b6d4" strokeWidth="2" strokeDasharray="5,5" />
-                    </>}
-                  {/* Data points for total value */}
-                  {chartData.map((point, index) => <circle key={index} cx={index / (chartData.length - 1) * 800} cy={300 - point.total / Math.max(...chartData.map(d => d.total)) * 280} r="4" fill="#3b82f6" />)}
-                </svg>
-                
+            
+            {/* Bar Chart Container */}
+            <div className="h-72 bg-background/30 backdrop-blur-sm rounded-2xl p-6 border border-border/20">
+              <div className="h-full flex items-end justify-around gap-2 relative">
                 {/* Y-axis labels */}
-                <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-slate-300 -ml-16">
-                  <span>${chartData.length > 0 ? (Math.max(...chartData.map(d => d.total)) / 1000000).toFixed(1) : 0}M</span>
-                  <span>${chartData.length > 0 ? (Math.max(...chartData.map(d => d.total)) / 2000000).toFixed(1) : 0}M</span>
-                  <span>$0</span>
+                <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-muted-foreground -ml-2 pointer-events-none">
+                  <span className="bg-background/50 px-1 rounded">${chartData.length > 0 ? (Math.max(...chartData.map(d => d.total)) / 1000000).toFixed(1) : 0}M</span>
+                  <span className="bg-background/50 px-1 rounded">${chartData.length > 0 ? (Math.max(...chartData.map(d => d.total)) / 2000000).toFixed(1) : 0}M</span>
+                  <span className="bg-background/50 px-1 rounded">$0</span>
                 </div>
+                
+                {/* Bars */}
+                {chartData.length > 0 && chartData.map((point, index) => {
+                  const maxTotal = Math.max(...chartData.map(d => d.total));
+                  const heightPercent = maxTotal > 0 ? (point.total / maxTotal) * 100 : 10;
+                  const wbtcPercent = maxTotal > 0 ? (point.wbtc / maxTotal) * 100 : 0;
+                  
+                  return (
+                    <div key={index} className="flex flex-col items-center flex-1 h-full justify-end group">
+                      {/* Tooltip */}
+                      <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-foreground text-background text-xs px-3 py-2 rounded-xl shadow-xl whitespace-nowrap z-10 pointer-events-none">
+                        <div className="font-bold">${point.total.toLocaleString()}</div>
+                        <div className="text-background/70">Year {point.year}</div>
+                      </div>
+                      
+                      {/* Bar with gradient */}
+                      <div 
+                        className="w-full rounded-t-2xl relative overflow-hidden transition-all duration-500 group-hover:shadow-lg"
+                        style={{ 
+                          height: `${Math.max(heightPercent, 5)}%`,
+                          background: point.phase === 2 
+                            ? 'linear-gradient(to top, rgba(249, 115, 22, 0.6), rgba(249, 115, 22, 0.9))' 
+                            : 'linear-gradient(to top, rgba(139, 92, 246, 0.5), rgba(139, 92, 246, 0.9))',
+                          minHeight: '12px'
+                        }}
+                      >
+                        {/* Inner glow effect */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/10 to-white/20 rounded-t-2xl"></div>
+                        
+                        {/* wBTC overlay for Phase 2 */}
+                        {wbtcPercent > 5 && (
+                          <div 
+                            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-orange-500/80 to-orange-400/60 rounded-t-xl"
+                            style={{ height: `${(wbtcPercent / heightPercent) * 100}%` }}
+                          ></div>
+                        )}
+                      </div>
+                      
+                      {/* Year label */}
+                      <span className="text-xs text-muted-foreground mt-2 font-semibold">
+                        {point.year === 0 ? 'Start' : `Y${point.year}`}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
             
-            {/* Chart Legend */}
-            <div className="mt-4 flex flex-wrap justify-center gap-4 text-sm">
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-0.5 bg-muted-foreground border-dashed border-t-2"></div>
-                <span className="text-muted-foreground">Initial Deposits</span>
+            {/* Chart Legend - Cleaner */}
+            <div className="mt-6 flex flex-wrap justify-center gap-6 text-sm">
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 rounded-lg bg-gradient-to-t from-primary/50 to-primary"></div>
+                <span className="text-muted-foreground font-medium">Total Value</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-0.5 bg-primary"></div>
-                <span className="text-muted-foreground">Total Value</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-0.5 bg-defi-orange"></div>
-                <span className="text-muted-foreground">wBTC Holdings</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-0.5 bg-defi-pink border-dashed border-t-2"></div>
-                <span className="text-muted-foreground">Capital Strand</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-0.5 bg-defi-purple border-dashed border-t-2"></div>
-                <span className="text-muted-foreground">Yield Strand</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-0.5 bg-defi-cyan border-dashed border-t-2"></div>
-                <span className="text-muted-foreground">Momentum Strand</span>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 rounded-lg bg-gradient-to-t from-orange-500/50 to-orange-400"></div>
+                <span className="text-muted-foreground font-medium">wBTC Holdings</span>
               </div>
             </div>
             
-            {/* Key metrics */}
-            {chartData.length > 0 && <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div className="text-center p-3 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-primary/30 transition-colors">
-                  <div className="text-lg font-bold text-foreground">
+            {/* Key metrics - Softer cards */}
+            {chartData.length > 0 && <div className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="soft-card text-center p-4">
+                  <div className="text-xl font-black text-foreground">
                     ${chartData.length > 0 && chartData[chartData.length - 1]?.total ? chartData[chartData.length - 1].total.toLocaleString() : '0'}
                   </div>
-                  <div className="text-sm text-muted-foreground">Total Value</div>
+                  <div className="text-sm text-muted-foreground font-medium">Total Value</div>
                 </div>
-                <div className="text-center p-3 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-primary/30 transition-colors">
-                  <div className="text-lg font-bold text-foreground">
+                <div className="soft-card text-center p-4">
+                  <div className="text-xl font-black text-foreground">
                     ${chartData.length > 0 && chartData[chartData.length - 1]?.initialDeposits ? chartData[chartData.length - 1].initialDeposits.toLocaleString() : '0'}
                   </div>
-                  <div className="text-sm text-muted-foreground">Initial Deposits</div>
+                  <div className="text-sm text-muted-foreground font-medium">Deposited</div>
                 </div>
-                <div className="text-center p-3 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-primary/30 transition-colors">
-                  <div className="text-lg font-bold text-foreground">
+                <div className="soft-card text-center p-4">
+                  <div className="text-xl font-black text-secondary">
                     {chartData.length > 0 && chartData[chartData.length - 1]?.total && chartData[chartData.length - 1]?.initialDeposits ? ((chartData[chartData.length - 1].total / chartData[chartData.length - 1].initialDeposits - 1) * 100).toFixed(0) : 0}%
                   </div>
-                  <div className="text-sm text-muted-foreground">ROI</div>
+                  <div className="text-sm text-muted-foreground font-medium">ROI</div>
                 </div>
-                <div className="text-center p-3 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-defi-orange/30 transition-colors">
-                  <div className="text-lg font-bold text-defi-orange">
+                <div className="soft-card text-center p-4">
+                  <div className="text-xl font-black text-orange-500">
                     {chartData.length > 0 && chartData[chartData.length - 1]?.wbtc ? (chartData[chartData.length - 1].wbtc / btcPrice).toFixed(3) : 0}₿
                   </div>
-                  <div className="text-sm text-muted-foreground">Final wBTC Holdings</div>
+                  <div className="text-sm text-muted-foreground font-medium">Final wBTC</div>
                 </div>
-                <div className="text-center p-3 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-destructive/30 transition-colors">
-                  <div className="text-lg font-bold text-destructive">
+                <div className="soft-card text-center p-4">
+                  <div className="text-xl font-black text-destructive">
                     ${chartData.length > 0 && chartData[chartData.length - 1]?.cumulativeGasFees ? chartData[chartData.length - 1].cumulativeGasFees.toLocaleString() : '0'}
                   </div>
-                  <div className="text-sm text-muted-foreground">Total Gas Fees</div>
+                  <div className="text-sm text-muted-foreground font-medium">Gas Fees</div>
                 </div>
-                <div className="text-center p-3 bg-background/30 backdrop-blur-sm rounded-xl border border-border/20 hover:border-defi-purple/30 transition-colors">
-                  <div className="text-lg font-bold text-defi-purple">
+                <div className="soft-card text-center p-4">
+                  <div className="text-xl font-black text-primary">
                     ${chartData.length > 0 && chartData[chartData.length - 1]?.cumulativeUtilityFees ? chartData[chartData.length - 1].cumulativeUtilityFees.toLocaleString() : '0'}
                   </div>
-                  <div className="text-sm text-muted-foreground">Total Utility Fees</div>
+                  <div className="text-sm text-muted-foreground font-medium">Utility Fees</div>
                 </div>
               </div>}
           </div>
