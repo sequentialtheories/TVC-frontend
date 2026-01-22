@@ -588,7 +588,7 @@ const VaultClubWebsiteInner: React.FC<{
     // Gas fee estimates (in USD) - these could also be made dynamic
     const gasFeesPerWeek = {
       harvestYield: 0.175,
-      executeRRLCycle: 0.315,
+      strategyRebalance: 0.315,
       chainlinkUpkeep: 0.085,
       weeklyTotal: 0.575
     };
