@@ -1520,6 +1520,7 @@ Your contract is now live and ready for members to join!`);
                   const isActive = offset === 0;
                   const isPrev = offset === -1 || (templateCarouselIndex === 0 && idx === CONTRACT_TEMPLATES.length - 1);
                   const isNext = offset === 1 || (templateCarouselIndex === CONTRACT_TEMPLATES.length - 1 && idx === 0);
+                  const isDisabled = template.disabled;
                   
                   // Only render nearby cards for performance
                   if (Math.abs(offset) > 2 && !isPrev && !isNext) return null;
@@ -1527,7 +1528,7 @@ Your contract is now live and ready for members to join!`);
                   return (
                     <div
                       key={template.id}
-                      className={`absolute inset-0 transition-all duration-500 ease-out cursor-pointer`}
+                      className={`absolute inset-0 transition-all duration-500 ease-out ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                       style={{
                         transform: isActive 
                           ? 'translateX(0) rotateY(0deg) scale(1)' 
@@ -1542,13 +1543,23 @@ Your contract is now live and ready for members to join!`);
                         zIndex: isActive ? 30 : (isPrev || isNext) ? 20 : 10,
                         pointerEvents: isActive ? 'auto' : 'none',
                       }}
-                      onClick={() => isActive && applyTemplate(template)}
+                      onClick={() => isActive && !isDisabled && applyTemplate(template)}
                     >
                       <div 
-                        className={`h-full bg-gradient-to-br ${template.gradient} rounded-2xl p-6 text-white shadow-2xl ${selectedTemplate === template.id ? 'ring-4 ring-white/50' : ''}`}
+                        className={`h-full bg-gradient-to-br ${template.gradient} rounded-2xl p-6 text-white shadow-2xl relative overflow-hidden ${selectedTemplate === template.id ? 'ring-4 ring-white/50' : ''}`}
                       >
-                        {selectedTemplate === template.id && (
-                          <div className="absolute top-4 right-4 bg-white rounded-full p-1 shadow-lg">
+                        {/* Disabled Overlay */}
+                        {isDisabled && (
+                          <div className="absolute inset-0 bg-gray-900/70 backdrop-blur-[2px] rounded-2xl z-10 flex flex-col items-center justify-center">
+                            <div className="bg-gray-800/90 px-6 py-3 rounded-xl border border-gray-600/50 shadow-xl">
+                              <span className="text-xl font-bold text-gray-200">Coming Soon</span>
+                            </div>
+                            <p className="text-gray-400 text-sm mt-3">This template is not yet available</p>
+                          </div>
+                        )}
+                        
+                        {selectedTemplate === template.id && !isDisabled && (
+                          <div className="absolute top-4 right-4 bg-white rounded-full p-1 shadow-lg z-20">
                             <Check className="w-5 h-5 text-green-600" />
                           </div>
                         )}
@@ -1588,7 +1599,7 @@ Your contract is now live and ready for members to join!`);
                         {/* Selection hint */}
                         <div className="mt-4 text-center">
                           <span className={`text-xs transition-all duration-300 ${selectedTemplate === template.id ? 'text-white font-medium' : 'text-white/60'}`}>
-                            {selectedTemplate === template.id ? '✓ Selected' : 'Click to select'}
+                            {isDisabled ? '' : selectedTemplate === template.id ? '✓ Selected' : 'Click to select'}
                           </span>
                         </div>
                       </div>
