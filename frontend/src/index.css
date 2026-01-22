@@ -575,16 +575,22 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* Progress bar with shimmer */
+  /* Progress bar with shimmer - Soft & Bubbly */
   .progress-premium {
-    @apply relative overflow-hidden rounded-full;
-    background: hsl(var(--muted));
+    @apply relative overflow-hidden;
+    border-radius: 12px;
+    background: linear-gradient(145deg, hsl(var(--muted) / 0.6), hsl(var(--muted) / 0.4));
+    box-shadow: inset 0 2px 4px hsl(0 0% 0% / 0.1);
   }
 
   .progress-premium .bar {
-    @apply h-full rounded-full transition-all duration-500;
+    @apply h-full transition-all duration-700 ease-out;
+    border-radius: 12px;
     position: relative;
     overflow: hidden;
+    box-shadow: 
+      0 2px 8px -2px hsl(0 0% 0% / 0.3),
+      inset 0 1px 1px hsl(0 0% 100% / 0.2);
   }
 
   .progress-premium .bar::after {
@@ -594,60 +600,70 @@
     background: linear-gradient(
       90deg,
       transparent,
-      hsl(0 0% 100% / 0.3),
+      hsl(0 0% 100% / 0.35),
       transparent
     );
-    animation: shimmer 2.5s infinite;
+    animation: shimmer 2.5s ease-in-out infinite;
   }
 
-  /* Card sections */
+  /* Card sections - Softer feel */
   .section-card {
     @apply glass-card p-8 space-y-6;
   }
 
   .section-header {
     @apply text-xl font-semibold text-foreground;
+    letter-spacing: -0.01em;
   }
 
   .section-subtitle {
     @apply text-sm text-muted-foreground;
+    line-height: 1.6;
   }
 
-  /* Form inputs - premium style */
+  /* Form inputs - soft premium style */
   .input-premium {
-    @apply w-full px-4 py-3 rounded-xl transition-all duration-300;
-    background: hsl(var(--muted) / 0.5);
-    border: 1px solid hsl(var(--border));
+    @apply w-full px-5 py-4 transition-all duration-400;
+    border-radius: 16px;
+    background: linear-gradient(145deg, hsl(var(--muted) / 0.55), hsl(var(--muted) / 0.4));
+    border: 1px solid hsl(var(--border) / 0.4);
     color: hsl(var(--foreground));
+    box-shadow: inset 0 2px 4px hsl(0 0% 0% / 0.04);
   }
 
   .input-premium:focus {
     outline: none;
-    border-color: hsl(var(--primary) / 0.5);
+    border-color: hsl(var(--primary) / 0.45);
+    background: linear-gradient(145deg, hsl(var(--muted) / 0.65), hsl(var(--muted) / 0.5));
     box-shadow: 
-      0 0 0 3px hsl(var(--primary) / 0.1),
-      0 4px 12px -2px hsl(0 0% 0% / 0.2);
+      0 0 0 4px hsl(var(--primary) / 0.08),
+      0 6px 16px -4px hsl(0 0% 0% / 0.15),
+      inset 0 2px 4px hsl(0 0% 0% / 0.04);
   }
 
   .input-premium::placeholder {
-    color: hsl(var(--muted-foreground));
+    color: hsl(var(--muted-foreground) / 0.7);
   }
 
-  /* Select dropdown */
+  /* Select dropdown - soft style */
   .select-premium {
     @apply input-premium appearance-none cursor-pointer;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 12px center;
+    background-position: right 16px center;
     background-size: 16px;
-    padding-right: 40px;
+    padding-right: 44px;
   }
 
-  /* Metric cards */
+  /* Metric cards - Soft & Consumer-friendly */
   .metric-card {
-    @apply p-6 rounded-2xl transition-all duration-300;
-    background: hsl(var(--card) / 0.5);
-    border: 1px solid hsl(var(--border) / 0.3);
+    @apply p-6 transition-all duration-400;
+    border-radius: 22px;
+    background: linear-gradient(155deg, hsl(var(--card) / 0.6), hsl(var(--card) / 0.4));
+    border: 1px solid hsl(var(--border) / 0.25);
+    box-shadow: 
+      0 8px 24px -8px hsl(0 0% 0% / 0.15),
+      inset 0 1px 1px hsl(0 0% 100% / 0.05);
   }
 
   .metric-card:hover {
