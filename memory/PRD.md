@@ -27,12 +27,13 @@ A DeFi investment platform that connects to Supabase for authentication and cont
 - **Strands Modal** - Opens when clicking on a contract to show DNA strand details
 - Empty state when no contracts selected
 
-### Future Simulation Page
-- Interactive simulation parameters (APY sliders, BTC price, rigor level)
-- **Beautiful bar chart visualization** with purple→orange gradient (Phase 1→Phase 2)
-- Year-by-year growth projection (Y1-Y15+)
-- Key metrics display (Total Value, ROI, wBTC Holdings)
-- "More Details" dropdown with Peak Strand Distribution
+### Future Simulation Page → **Compound Calculator**
+- **Simplified to a basic compound interest calculator**
+- Only 3 settings: APY slider, Time Period, Weekly Contribution
+- Removed: 3 strand APYs, wBTC price, Participants
+- Chart shows only Total Value (no wBTC overlays)
+- Simple metrics: Final Value, Total Deposited, Interest Earned
+- **"More Details" dropdown** contains: wBTC conversion info, Gas Fees, Utility Fees
 
 ### Data/Dataset Page
 - System metrics display
