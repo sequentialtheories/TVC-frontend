@@ -1366,7 +1366,8 @@ Your contract is now live and ready for members to join!`);
         phase2TimePercent: 40,
         phase2ValueThreshold: 400000
       },
-      highlights: ['5-year accelerated', '$100/week to start', 'Faster wealth building']
+      highlights: ['5-year accelerated', '$100/week to start', 'Faster wealth building'],
+      disabled: true
     },
     {
       id: 'extreme-degen',
@@ -1388,7 +1389,8 @@ Your contract is now live and ready for members to join!`);
         phase2TimePercent: 35,
         phase2ValueThreshold: 500000
       },
-      highlights: ['5-year intense', 'Heavy contributions', 'Maximum growth mode']
+      highlights: ['5-year intense', 'Heavy contributions', 'Maximum growth mode'],
+      disabled: true
     },
     {
       id: 'yolo',
@@ -1410,7 +1412,8 @@ Your contract is now live and ready for members to join!`);
         phase2TimePercent: 30,
         phase2ValueThreshold: 750000
       },
-      highlights: ['10-year marathon', 'Maximum contributions', 'Highest growth potential']
+      highlights: ['10-year marathon', 'Maximum contributions', 'Highest growth potential'],
+      disabled: true
     },
     {
       id: 'custom',
@@ -1425,7 +1428,8 @@ Your contract is now live and ready for members to join!`);
         { label: 'Groups OK', color: 'bg-indigo-100 text-indigo-700' }
       ],
       settings: null, // Uses current clubCreationData
-      highlights: ['Any lockup period', 'Custom contributions', 'Multi-member groups']
+      highlights: ['Any lockup period', 'Custom contributions', 'Multi-member groups'],
+      disabled: true
     }
   ];
   
