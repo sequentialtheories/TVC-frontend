@@ -1174,6 +1174,20 @@ Your contract is now live and ready for members to join!`);
     setShowCustomControls(false);
   };
   
+  // Calculate effective APY to check for net negative returns
+  const calculateEffectiveAPY = () => {
+    // Use current market rates (weighted average)
+    const weightedAPY = calculateAveragedAPY(apyStrand1, apyStrand2, apyStrand3);
+    return weightedAPY;
+  };
+  
+  // Check if contract would result in net negative returns (APY < 1.5%)
+  const isNetNegativeReturn = () => {
+    if (selectedTemplate !== 'custom') return false;
+    const effectiveAPY = calculateEffectiveAPY();
+    return effectiveAPY < 1.5;
+  };
+  
   // Contract Templates Definition
   const CONTRACT_TEMPLATES = [
     {
