@@ -1865,11 +1865,30 @@ Your contract is now live and ready for members to join!`);
                 
                 <button 
                   onClick={handleCreateClub} 
-                  className={`w-full bg-gradient-to-r ${CONTRACT_TEMPLATES.find(t => t.id === selectedTemplate)?.gradient || 'from-blue-600 to-indigo-600'} hover:opacity-90 text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2`}
+                  disabled={isNetNegativeReturn()}
+                  className={`w-full py-4 rounded-xl font-semibold text-lg transition-all duration-300 shadow-lg flex items-center justify-center gap-2 ${
+                    isNetNegativeReturn()
+                      ? 'bg-destructive/80 text-white cursor-not-allowed opacity-75'
+                      : `bg-gradient-to-r ${CONTRACT_TEMPLATES.find(t => t.id === selectedTemplate)?.gradient || 'from-blue-600 to-indigo-600'} hover:opacity-90 text-white hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]`
+                  }`}
                 >
-                  <Rocket className="w-5 h-5" />
-                  Deploy Contract
+                  {isNetNegativeReturn() ? (
+                    <>
+                      <X className="w-5 h-5" />
+                      Net Negative Return
+                    </>
+                  ) : (
+                    <>
+                      <Rocket className="w-5 h-5" />
+                      Deploy Contract
+                    </>
+                  )}
                 </button>
+                {isNetNegativeReturn() && (
+                  <p className="text-center text-white/60 text-xs mt-2">
+                    Current APY ({calculateEffectiveAPY().toFixed(1)}%) is below 1.5% threshold
+                  </p>
+                )}
               </div>
             )}
             
