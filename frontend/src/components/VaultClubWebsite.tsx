@@ -2992,56 +2992,56 @@ Your contract is now live and ready for members to join!`);
       </header>
 
       {/* Mobile Bottom Navigation Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 glass-dark border-t border-border/30 px-4 py-3 safe-area-pb" aria-label="Main navigation">
-        <div className="flex justify-around items-center max-w-lg mx-auto">
+      <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 glass-dark border border-border/30 rounded-2xl px-2 py-2 safe-area-pb" aria-label="Main navigation">
+        <div className="flex items-center gap-1">
           <button ref={navHomeRef} onClick={() => {
           navigateTo('home');
           tutorial.checkAdvancement('navigation', 'home');
-        }} className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-home' ? 'tutorial-highlight' : ''}`}>
-            <div className={`p-2.5 rounded-xl transition-all duration-300 ${currentPage === 'home' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
-              <Home className="w-5 h-5" />
+        }} className={`flex flex-col items-center transition-all duration-300 py-1.5 px-3 rounded-xl group ${tutorial.currentStepData?.target === 'nav-home' ? 'tutorial-highlight' : ''}`}>
+            <div className={`p-2 rounded-xl transition-all duration-300 ${currentPage === 'home' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
+              <Home className="w-4 h-4" />
             </div>
-            <span className={`text-[11px] font-medium mt-1.5 transition-colors ${currentPage === 'home' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Home</span>
+            <span className={`text-[10px] font-medium mt-1 transition-colors ${currentPage === 'home' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Home</span>
           </button>
           
           <button ref={navWalletRef} onClick={() => {
           navigateTo('personal');
           tutorial.checkAdvancement('navigation', 'personal');
-        }} className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-wallet' ? 'tutorial-highlight' : ''}`}>
-            <div className={`p-2.5 rounded-xl transition-all duration-300 ${currentPage === 'personal' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
-              <User className="w-5 h-5" />
+        }} className={`flex flex-col items-center transition-all duration-300 py-1.5 px-3 rounded-xl group ${tutorial.currentStepData?.target === 'nav-wallet' ? 'tutorial-highlight' : ''}`}>
+            <div className={`p-2 rounded-xl transition-all duration-300 ${currentPage === 'personal' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
+              <User className="w-4 h-4" />
             </div>
-            <span className={`text-[11px] font-medium mt-1.5 transition-colors ${currentPage === 'personal' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Wallet</span>
+            <span className={`text-[10px] font-medium mt-1 transition-colors ${currentPage === 'personal' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Wallet</span>
           </button>
           
           <button ref={navContractsRef} onClick={() => {
           navigateTo('group');
           tutorial.checkAdvancement('navigation', 'group');
-        }} className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-contracts' ? 'tutorial-highlight' : ''}`}>
-            <div className={`p-2.5 rounded-xl transition-all duration-300 ${currentPage === 'group' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
-              <Users className="w-5 h-5" />
+        }} className={`flex flex-col items-center transition-all duration-300 py-1.5 px-3 rounded-xl group ${tutorial.currentStepData?.target === 'nav-contracts' ? 'tutorial-highlight' : ''}`}>
+            <div className={`p-2 rounded-xl transition-all duration-300 ${currentPage === 'group' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
+              <Users className="w-4 h-4" />
             </div>
-            <span className={`text-[11px] font-medium mt-1.5 transition-colors ${currentPage === 'group' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Contracts</span>
+            <span className={`text-[10px] font-medium mt-1 transition-colors ${currentPage === 'group' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Contracts</span>
           </button>
           
           <button ref={navDataRef} onClick={() => {
           navigateTo('dataset');
           tutorial.checkAdvancement('navigation', 'dataset');
-        }} className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-data' ? 'tutorial-highlight' : ''}`}>
-            <div className={`p-2.5 rounded-xl transition-all duration-300 ${currentPage === 'dataset' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
-              <Database className="w-5 h-5" />
+        }} className={`flex flex-col items-center transition-all duration-300 py-1.5 px-3 rounded-xl group ${tutorial.currentStepData?.target === 'nav-data' ? 'tutorial-highlight' : ''}`}>
+            <div className={`p-2 rounded-xl transition-all duration-300 ${currentPage === 'dataset' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
+              <Database className="w-4 h-4" />
             </div>
-            <span className={`text-[11px] font-medium mt-1.5 transition-colors ${currentPage === 'dataset' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Data</span>
+            <span className={`text-[10px] font-medium mt-1 transition-colors ${currentPage === 'dataset' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Data</span>
           </button>
 
           <button ref={navFutureRef} onClick={() => {
           navigateTo('simulation');
           tutorial.checkAdvancement('navigation', 'simulation');
-        }} className={`flex flex-col items-center transition-all duration-300 py-1.5 px-4 rounded-xl group ${tutorial.currentStepData?.target === 'nav-future' ? 'tutorial-highlight' : ''}`}>
-            <div className={`p-2.5 rounded-xl transition-all duration-300 ${currentPage === 'simulation' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
-              <TrendingUp className="w-5 h-5" />
+        }} className={`flex flex-col items-center transition-all duration-300 py-1.5 px-3 rounded-xl group ${tutorial.currentStepData?.target === 'nav-future' ? 'tutorial-highlight' : ''}`}>
+            <div className={`p-2 rounded-xl transition-all duration-300 ${currentPage === 'simulation' ? 'bg-gradient-to-br from-primary to-secondary text-white shadow-glow-purple' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
+              <TrendingUp className="w-4 h-4" />
             </div>
-            <span className={`text-[11px] font-medium mt-1.5 transition-colors ${currentPage === 'simulation' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Future</span>
+            <span className={`text-[10px] font-medium mt-1 transition-colors ${currentPage === 'simulation' ? 'text-secondary' : 'text-muted-foreground group-hover:text-foreground'}`}>Future</span>
           </button>
         </div>
       </nav>
