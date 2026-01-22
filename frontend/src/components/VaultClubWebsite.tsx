@@ -1934,8 +1934,8 @@ Your contract is now live and ready for members to join!`);
       title: "Yield Strand",
       subtitle: "AAVE Protocol Polygon • 60% Allocation",
       apy: `${apyStrand2.toFixed(1)}% APY`,
-      description: "AAVE Protocol lending with RRL yield boost and SBB mechanisms",
-      features: ["AAVE Protocol Polygon lending (≈7-10% APY)", "Supply APY enhanced by RRL yield boost", "Provides bedrock for Subscription Backed Borrowing", "Core compounding engine of the system"],
+      description: "AAVE Protocol lending with enhanced yield compounding",
+      features: ["AAVE Protocol Polygon lending (≈7-10% APY)", "Supply APY enhanced by smart compounding", "Core lending engine of the system", "Medium risk, optimized returns"],
       color: "from-purple-500 to-indigo-600",
       icon: <DollarSign className="w-6 h-6" />
     },
