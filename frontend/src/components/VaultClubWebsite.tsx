@@ -1186,6 +1186,29 @@ Your contract is now live and ready for members to join!`);
   // Contract Templates Definition
   const CONTRACT_TEMPLATES = [
     {
+      id: 'beta',
+      name: 'Beta',
+      tagline: 'Early access testing mode',
+      description: 'Designed for early stage usage and testing. Perfect for exploring the platform while we refine the experience.',
+      icon: <TestTube className="w-8 h-8" />,
+      gradient: 'from-yellow-500 to-amber-600',
+      tags: [
+        { label: 'Early Access', color: 'bg-yellow-100 text-yellow-700' },
+        { label: 'Testing', color: 'bg-amber-100 text-amber-700' },
+        { label: 'Active', color: 'bg-green-100 text-green-700' }
+      ],
+      settings: {
+        lockupPeriod: 1,
+        rigorLevel: 'light',
+        riskLevel: 'low',
+        isChargedContract: true,
+        phase2TimePercent: 50,
+        phase2ValueThreshold: 100000
+      },
+      highlights: ['1-month trial', 'Light commitment', 'Full feature access'],
+      disabled: false
+    },
+    {
       id: 'foundation',
       name: 'The Foundation',
       tagline: 'A balanced start for your wealth journey',
@@ -1205,7 +1228,8 @@ Your contract is now live and ready for members to join!`);
         phase2TimePercent: 50,
         phase2ValueThreshold: 500000
       },
-      highlights: ['5-year commitment', '$50/week to start', 'Grows with you over time']
+      highlights: ['5-year commitment', '$50/week to start', 'Grows with you over time'],
+      disabled: true
     },
     {
       id: 'steady-builder',
