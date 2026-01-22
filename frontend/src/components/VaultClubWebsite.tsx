@@ -406,6 +406,9 @@ const VaultClubWebsiteInner: React.FC<{
   
   // Strands modal state
   const [showStrandsModal, setShowStrandsModal] = useState(false);
+  
+  // More Details dropdown state for Future page
+  const [showMoreDetails, setShowMoreDetails] = useState(false);
 
   // Dynamic data states - accurate initial values reflecting empty state
   const [vaultStats, setVaultStats] = useState({
