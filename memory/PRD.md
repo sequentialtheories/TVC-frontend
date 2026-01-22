@@ -28,10 +28,9 @@ A DeFi investment platform that connects to Supabase for authentication and cont
 - Empty state when no contracts selected
 
 ### Future Simulation Page → **Compound Calculator**
-- **Simplified to a basic compound interest calculator**
-- Only 3 settings: APY slider, Time Period, Weekly Contribution
-- Removed: 3 strand APYs, wBTC price, Participants
-- Chart shows only Total Value (no wBTC overlays)
+- **Beautiful smooth curved line chart** showing Deposited vs Total Value with shaded areas
+- Only 3 settings: APY slider, Time Period, Contribution Plan
+- **Custom frequency option**: Daily, Weekly, Monthly, or Yearly deposits
 - Simple metrics: Final Value, Total Deposited, Interest Earned
 - **"More Details" dropdown** contains: wBTC conversion info, Gas Fees, Utility Fees
 
