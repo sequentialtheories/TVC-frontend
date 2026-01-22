@@ -2714,6 +2714,72 @@ Your contract is now live and ready for members to join!`);
                   <span className="font-bold text-lg">Connected</span>
                 </div>
               </div>
+              
+              {/* Full Wallet Details - Non-Custodial */}
+              <div className="bg-muted/30 rounded-2xl p-5 mb-6 border border-border/50">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold text-foreground flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-secondary" />
+                    Wallet Details
+                  </h3>
+                  <span className="text-xs bg-secondary/20 text-secondary px-2 py-1 rounded-full font-medium">Non-Custodial</span>
+                </div>
+                
+                {/* Wallet Address - Full with copy */}
+                <div className="mb-4">
+                  <label className="text-xs text-muted-foreground font-medium mb-1 block">Wallet Address</label>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 bg-background/50 rounded-xl px-4 py-3 font-mono text-sm text-foreground border border-border/50 overflow-hidden">
+                      <span className="break-all">{walletAddress || "N/A"}</span>
+                    </div>
+                    <button 
+                      onClick={() => {
+                        if (walletAddress) {
+                          navigator.clipboard.writeText(walletAddress);
+                          alert("Wallet address copied to clipboard!");
+                        }
+                      }}
+                      className="p-3 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
+                      title="Copy Address"
+                    >
+                      <Copy className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Network Info */}
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="text-xs text-muted-foreground font-medium mb-1 block">Network</label>
+                    <div className="bg-background/50 rounded-xl px-4 py-3 text-sm text-foreground border border-border/50 flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                      Polygon (MATIC)
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground font-medium mb-1 block">Wallet Type</label>
+                    <div className="bg-background/50 rounded-xl px-4 py-3 text-sm text-foreground border border-border/50">
+                      ethers.js (Client-Side)
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Account Email - synced */}
+                <div>
+                  <label className="text-xs text-muted-foreground font-medium mb-1 block">Linked Account</label>
+                  <div className="bg-background/50 rounded-xl px-4 py-3 text-sm text-foreground border border-border/50 flex items-center gap-2">
+                    <User className="w-4 h-4 text-muted-foreground" />
+                    <span>Synced with Sequence Theory login</span>
+                  </div>
+                </div>
+                
+                {/* Security Notice */}
+                <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+                  <p className="text-xs text-amber-600 dark:text-amber-400">
+                    <strong>🔐 Non-Custodial:</strong> You control your private keys. Sequence Theory cannot access or recover your funds.
+                  </p>
+                </div>
+              </div>
               <div className="text-sm text-muted-foreground mb-5">Turnkey • Polygon Network</div>
               
               <div className="flex flex-wrap justify-center gap-3 mt-6">
