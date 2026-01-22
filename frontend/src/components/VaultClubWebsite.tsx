@@ -143,7 +143,8 @@ async function getVaultStats(): Promise<VaultStats> {
   };
 }
 
-// Get Spark Protocol USDC and AAVE token lending rates on Polygon
+// Get Spark Protocol USDC and AAVE lending rates on Polygon
+// AAVE rate calculation: Supply USDC rate + (Supply USDC - Borrow DAI rate) for re-deposit strategy
 async function getAaveRates(): Promise<AaveRates> {
   try {
     const response = await fetch('https://yields.llama.fi/pools');
@@ -156,16 +157,62 @@ async function getAaveRates(): Promise<AaveRates> {
         symbol: string;
         apy: number;
       }) => pool.project === 'sparklend' && pool.chain === 'Ethereum' && pool.symbol.includes('USDC'));
-      // AAVE token lending on Polygon (lending out AAVE, not USDC)
-      const aavePolygonPool = data.data.find((pool: {
+      
+      // AAVE V3 on Polygon - USDC Supply rate
+      const aaveUsdcSupply = data.data.find((pool: {
         project: string;
         chain: string;
         symbol: string;
         apy: number;
-      }) => pool.project === 'aave-v3' && pool.chain === 'Polygon' && pool.symbol === 'AAVE');
+        apyBase: number;
+      }) => pool.project === 'aave-v3' && pool.chain === 'Polygon' && pool.symbol === 'USDC');
+      
+      // AAVE V3 on Polygon - DAI Borrow rate (from lendBorrow pools)
+      // We'll use the borrow endpoint for DAI
+      let daiBorrowRate = 5.0; // Default fallback
+      let usdcSupplyRate = aaveUsdcSupply ? aaveUsdcSupply.apy : 4.0;
+      
+      // Try to get borrow rates from the borrow endpoint
+      try {
+        const borrowResponse = await fetch('https://yields.llama.fi/lendBorrow');
+        if (borrowResponse.ok) {
+          const borrowData = await borrowResponse.json();
+          const aaveDaiBorrow = borrowData.find((pool: {
+            project: string;
+            chain: string;
+            symbol: string;
+            apyBaseBorrow: number;
+          }) => pool.project === 'aave-v3' && pool.chain === 'Polygon' && pool.symbol === 'DAI');
+          
+          if (aaveDaiBorrow && aaveDaiBorrow.apyBaseBorrow) {
+            daiBorrowRate = aaveDaiBorrow.apyBaseBorrow;
+          }
+          
+          // Also get USDC supply from this endpoint for consistency
+          const aaveUsdcLend = borrowData.find((pool: {
+            project: string;
+            chain: string;
+            symbol: string;
+            apyBase: number;
+          }) => pool.project === 'aave-v3' && pool.chain === 'Polygon' && pool.symbol === 'USDC');
+          
+          if (aaveUsdcLend && aaveUsdcLend.apyBase) {
+            usdcSupplyRate = aaveUsdcLend.apyBase;
+          }
+        }
+      } catch (borrowError) {
+        console.log("Using fallback borrow rates");
+      }
+      
+      // Calculate net APY: Supply USDC, borrow DAI at lower rate, re-deposit DAI
+      // Net APY = USDC Supply Rate + (USDC Supply Rate - DAI Borrow Rate) * leverage factor
+      // Simplified: Using a conservative 0.5x leverage on the spread
+      const spread = Math.max(0, usdcSupplyRate - daiBorrowRate);
+      const netAaveRate = usdcSupplyRate + (spread * 0.5);
+      
       return {
         liquidityRate: sparkPool ? sparkPool.apy : 3.5,
-        aavePolygonRate: aavePolygonPool ? aavePolygonPool.apy : 8.0
+        aavePolygonRate: Math.max(netAaveRate, usdcSupplyRate) // At minimum, return supply rate
       };
     }
     throw new Error('API call failed');
