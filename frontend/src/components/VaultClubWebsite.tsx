@@ -2783,9 +2783,18 @@ Your contract is now live and ready for members to join!`);
               <div className="text-sm text-muted-foreground mb-5">Turnkey • Polygon Network</div>
               
               <div className="flex flex-wrap justify-center gap-3 mt-6">
-                <button onClick={handleDeposit} disabled={!canDeposit() || calculateWeeklyDepositAmount() === 0} className={`px-5 py-3 rounded-xl font-medium transition-all duration-300 ${!canDeposit() || calculateWeeklyDepositAmount() === 0 ? 'bg-muted text-muted-foreground cursor-not-allowed' : 'bg-gradient-to-r from-secondary to-emerald-500 hover:shadow-lg hover:shadow-secondary/25 text-white hover:-translate-y-0.5'}`}>
+                <button onClick={handleDeposit} disabled={!canDeposit() || calculateWeeklyDepositAmount() === 0} className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${!canDeposit() || calculateWeeklyDepositAmount() === 0 ? 'bg-muted text-muted-foreground cursor-not-allowed' : 'bg-gradient-to-r from-secondary to-emerald-500 hover:shadow-lg hover:shadow-secondary/25 text-white hover:-translate-y-0.5'}`}>
                   {calculateWeeklyDepositAmount() === 0 ? 'Join/Create a Contract' : !canDeposit() ? `Deposit in ${getDaysUntilNextDeposit()}d` : `Deposit ${calculateWeeklyDepositAmount()}`}
                 </button>
+                <a 
+                  href={`https://polygonscan.com/address/${walletAddress}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="px-6 py-3 rounded-xl font-semibold transition-all duration-300 bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20 flex items-center gap-2"
+                >
+                  <Eye className="w-4 h-4" />
+                  View on Explorer
+                </a>
                 <button onClick={async () => {
               await supabase.auth.signOut();
               setWalletConnected(false);
