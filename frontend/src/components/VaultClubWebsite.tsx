@@ -2802,7 +2802,7 @@ Your contract is now live and ready for members to join!`);
               setVaultBalance("0");
               setSelectedContract(null);
               setActiveStrand(null);
-            }} className="px-5 py-3 rounded-xl font-medium transition-all duration-300 bg-destructive/10 text-destructive hover:bg-destructive/20 border border-destructive/20">
+            }} className="px-6 py-3 rounded-xl font-semibold transition-all duration-300 bg-destructive/10 text-destructive hover:bg-destructive/20 border border-destructive/20">
                   Sign Out
                 </button>
               </div>
