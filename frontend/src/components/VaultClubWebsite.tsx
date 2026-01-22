@@ -3057,49 +3057,63 @@ Your contract is now live and ready for members to join!`);
     // Simple compound interest calculation
     const simpleAPY = calculateAveragedAPY(apyStrand1, apyStrand2, apyStrand3);
     
-    // Calculate simple compound growth data
+    // Calculate simple compound growth data with frequency support
     const calculateSimpleCompound = () => {
       const data = [];
-      const weeksPerYear = 52;
-      const totalWeeks = simulationYears * weeksPerYear;
+      const periodsPerYear = customDepositFrequency === 'daily' ? 365 : 
+                              customDepositFrequency === 'weekly' ? 52 : 
+                              customDepositFrequency === 'monthly' ? 12 : 1;
+      const totalPeriods = Math.ceil(simulationYears * periodsPerYear);
       let totalValue = 0;
       let totalDeposited = 0;
-      const weeklyRate = Math.pow(1 + simpleAPY / 100, 1 / weeksPerYear) - 1;
+      const periodRate = Math.pow(1 + simpleAPY / 100, 1 / periodsPerYear) - 1;
       
-      // Calculate weekly deposit based on rigor
-      const getWeeklyDeposit = (year: number) => {
+      // Calculate deposit per period based on rigor and frequency
+      const getDepositPerPeriod = (year: number) => {
+        let weeklyAmount = 0;
         if (simulationRigor === 'light') {
-          if (year <= 1) return 100 / 4.33;
-          else if (year <= 2) return 150 / 4.33;
-          else return 250 / 4.33;
+          if (year <= 1) weeklyAmount = 100 / 4.33;
+          else if (year <= 2) weeklyAmount = 150 / 4.33;
+          else weeklyAmount = 250 / 4.33;
         } else if (simulationRigor === 'medium') {
-          if (year <= 3) return 50;
-          else if (year <= 6) return 100;
-          else if (year <= 10) return 200;
-          else return 250;
+          if (year <= 3) weeklyAmount = 50;
+          else if (year <= 6) weeklyAmount = 100;
+          else if (year <= 10) weeklyAmount = 200;
+          else weeklyAmount = 250;
         } else if (simulationRigor === 'heavy') {
-          if (year <= 3) return 100;
-          else if (year <= 6) return 200;
-          else if (year <= 10) return 300;
-          else return 400;
+          if (year <= 3) weeklyAmount = 100;
+          else if (year <= 6) weeklyAmount = 200;
+          else if (year <= 10) weeklyAmount = 300;
+          else weeklyAmount = 400;
         } else {
-          return customSimulationAmount;
+          // Custom amount - convert based on frequency
+          if (customDepositFrequency === 'daily') return customSimulationAmount;
+          if (customDepositFrequency === 'weekly') return customSimulationAmount;
+          if (customDepositFrequency === 'monthly') return customSimulationAmount;
+          if (customDepositFrequency === 'yearly') return customSimulationAmount;
         }
+        
+        // Convert weekly amount to the appropriate frequency
+        if (customDepositFrequency === 'daily') return weeklyAmount / 7;
+        if (customDepositFrequency === 'weekly') return weeklyAmount;
+        if (customDepositFrequency === 'monthly') return weeklyAmount * 4.33;
+        if (customDepositFrequency === 'yearly') return weeklyAmount * 52;
+        return weeklyAmount;
       };
       
-      for (let week = 0; week <= totalWeeks; week++) {
-        const year = Math.floor(week / weeksPerYear) + 1;
-        const weeklyDeposit = getWeeklyDeposit(year);
+      for (let period = 0; period <= totalPeriods; period++) {
+        const year = Math.floor(period / periodsPerYear) + 1;
+        const depositPerPeriod = getDepositPerPeriod(year);
         
-        if (week > 0) {
-          totalValue = totalValue * (1 + weeklyRate) + weeklyDeposit;
-          totalDeposited += weeklyDeposit;
+        if (period > 0) {
+          totalValue = totalValue * (1 + periodRate) + depositPerPeriod;
+          totalDeposited += depositPerPeriod;
         }
         
         // Add data point for each year
-        if (week % weeksPerYear === 0) {
+        if (period % periodsPerYear === 0) {
           data.push({
-            year: Math.floor(week / weeksPerYear),
+            year: Math.floor(period / periodsPerYear),
             total: Math.round(totalValue),
             deposited: Math.round(totalDeposited),
             earnings: Math.round(totalValue - totalDeposited)
@@ -3111,6 +3125,7 @@ Your contract is now live and ready for members to join!`);
     };
     
     const compoundData = calculateSimpleCompound();
+    const maxValue = Math.max(...compoundData.map(d => Math.max(d.total, d.deposited)), 1);
     
     return <div className="relative z-10 px-6 py-8 pb-32">
         <div ref={futurePageIntroRef} className={`flex items-center mb-8 animate-fade-up ${tutorial.currentStepData?.target === 'future-page-intro' ? 'tutorial-highlight' : ''}`}>
