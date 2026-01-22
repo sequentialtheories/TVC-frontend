@@ -697,7 +697,7 @@
     filter: drop-shadow(0 0 12px hsl(var(--strand-3) / 0.6));
   }
 
-  /* Light mode text contrast */
+  /* Light mode text contrast - Comprehensive Fix */
   :root {
     /* Force all text to be dark in light mode */
     color: hsl(var(--foreground));
@@ -707,38 +707,48 @@
     text-shadow: 0 0 1px hsl(var(--foreground) / 0.3);
   }
   
-  /* Force text-white to be dark in light mode */
-  :root .text-white {
+  /* Only override text-white in explicit light mode contexts */
+  :root:not(.dark) .text-white:not([class*="bg-gradient"]):not([class*="btn-"]):not([class*="glass"]) {
     color: hsl(225 25% 12%) !important;
   }
   
-  :root .text-slate-300,
-  :root .text-slate-200,
-  :root .text-slate-100 {
+  :root:not(.dark) .text-slate-300,
+  :root:not(.dark) .text-slate-200,
+  :root:not(.dark) .text-slate-100 {
     color: hsl(220 10% 35%) !important;
   }
   
-  :root .text-gray-300,
-  :root .text-gray-200,
-  :root .text-gray-100 {
+  :root:not(.dark) .text-gray-300,
+  :root:not(.dark) .text-gray-200,
+  :root:not(.dark) .text-gray-100 {
     color: hsl(220 10% 35%) !important;
   }
   
   /* Ensure foreground text is properly dark in light mode */
-  :root .text-foreground {
+  :root:not(.dark) .text-foreground {
     color: hsl(225 25% 12%);
   }
   
-  :root .text-muted-foreground {
+  :root:not(.dark) .text-muted-foreground {
     color: hsl(220 10% 45%);
   }
   
-  :root h1,
-  :root h2,
-  :root h3,
-  :root .hero-text {
+  :root:not(.dark) h1,
+  :root:not(.dark) h2,
+  :root:not(.dark) h3,
+  :root:not(.dark) .hero-text {
     color: hsl(225 25% 12%);
-    text-shadow: 0 0 1px hsl(var(--foreground) / 0.2);
+  }
+  
+  /* Dark mode - preserve white text */
+  .dark .text-white {
+    color: white !important;
+  }
+  
+  .dark .text-slate-300,
+  .dark .text-slate-200,
+  .dark .text-slate-100 {
+    color: inherit;
   }
 
   /* Hero stat black outline in light mode */
