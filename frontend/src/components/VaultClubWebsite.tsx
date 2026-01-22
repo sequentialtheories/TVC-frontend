@@ -2127,13 +2127,13 @@ Your contract is now live and ready for members to join!`);
         <div className="flex items-center justify-center gap-2 mb-6">
           <div className="w-2 h-2 rounded-full bg-secondary"></div>
           <span className="text-secondary font-bold text-lg">
-            ${calculateEarnings(earningsTimeline).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Earned
+            ${calculateEarnings(earningsTimeline).earnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Earned
           </span>
           <span className="text-muted-foreground">
             {earningsTimeline === '1W' ? 'This Week' : 
              earningsTimeline === '1M' ? 'This Month' : 
              earningsTimeline === '1Y' ? 'This Year' : 
-             earningsTimeline === 'All' ? 'All Time' : 'Projected'}
+             'All Time'}
           </span>
         </div>
         
