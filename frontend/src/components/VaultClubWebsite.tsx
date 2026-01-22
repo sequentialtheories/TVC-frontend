@@ -2691,7 +2691,7 @@ Your contract is now live and ready for members to join!`);
         </button>
         <div>
           <h1 className="text-3xl font-bold text-foreground">Personal Wallet</h1>
-          <p className="text-muted-foreground text-sm mt-1">Manage your connection & deposits</p>
+          <p className="text-muted-foreground text-sm mt-1">Manage your non-custodial wallet</p>
         </div>
       </div>
       
