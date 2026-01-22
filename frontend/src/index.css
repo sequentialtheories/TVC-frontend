@@ -178,14 +178,14 @@
     @apply bg-primary/30 text-foreground;
   }
 
-  /* Typography */
+  /* Typography - Softer & Friendlier */
   h1, h2, h3, h4, h5, h6 {
-    letter-spacing: -0.025em;
-    font-weight: 600;
+    letter-spacing: 0em;
+    font-weight: 700;
   }
 
-  h1 { @apply text-4xl md:text-5xl font-bold; }
-  h2 { @apply text-2xl md:text-3xl font-semibold; }
+  h1 { @apply text-4xl md:text-5xl font-extrabold; }
+  h2 { @apply text-2xl md:text-3xl font-bold; }
   h3 { @apply text-xl md:text-2xl font-semibold; }
 }
 
