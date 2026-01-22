@@ -2146,47 +2146,150 @@ Your contract is now live and ready for members to join!`);
           </div>}
       </div>
       
-      {/* Bar Chart Visualization - Like reference image */}
+      {/* Smooth Curve Chart Visualization - Real Earnings Data */}
       <div className="glass-card p-6 mb-8 animate-fade-up stagger-1">
-        <div className="flex items-end justify-around h-48 gap-3 px-4 mb-6">
-          {barChartData.map((bar, index) => (
-            <div key={index} className="flex flex-col items-center flex-1 max-w-16">
-              <div 
-                className="w-full rounded-t-2xl bg-gradient-to-t from-primary/60 to-primary transition-all duration-500 hover:from-primary/80 hover:to-primary relative group"
-                style={{ 
-                  height: `${Math.max((bar.value / maxBarValue) * 100, 10)}%`,
-                  minHeight: '20px'
-                }}
-              >
-                {/* Tooltip on hover */}
-                <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-foreground text-background text-xs px-2 py-1 rounded-lg whitespace-nowrap">
-                  ${bar.value.toFixed(2)}
-                </div>
-                {/* Activity indicator dots */}
-                {index === 3 && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 flex gap-1">
-                    <div className="w-5 h-5 rounded-full bg-secondary flex items-center justify-center text-white text-xs font-bold shadow-lg">$</div>
-                  </div>
-                )}
-              </div>
-              <span className="text-xs text-muted-foreground mt-2 font-medium">{bar.label}</span>
+        {/* Chart Header */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-primary/80"></div>
+              <span className="text-sm text-muted-foreground font-medium">Deposits</span>
             </div>
-          ))}
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-secondary"></div>
+              <span className="text-sm text-muted-foreground font-medium">Earnings</span>
+            </div>
+          </div>
+          {!selectedContract && (
+            <span className="text-xs text-muted-foreground bg-muted/50 px-3 py-1 rounded-full">No contract selected</span>
+          )}
+        </div>
+        
+        {/* SVG Curve Chart */}
+        <div className="h-48 relative">
+          <svg viewBox="0 0 400 150" className="w-full h-full" preserveAspectRatio="none">
+            {/* Grid lines */}
+            <defs>
+              <linearGradient id="depositGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.05" />
+              </linearGradient>
+              <linearGradient id="earningsGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="hsl(var(--secondary))" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="hsl(var(--secondary))" stopOpacity="0.05" />
+              </linearGradient>
+            </defs>
+            
+            {/* Horizontal grid lines */}
+            {[0, 1, 2, 3].map(i => (
+              <line key={i} x1="0" y1={i * 37.5} x2="400" y2={i * 37.5} stroke="hsl(var(--border))" strokeWidth="0.5" strokeDasharray="4,4" opacity="0.5" />
+            ))}
+            
+            {(() => {
+              const maxValue = Math.max(...curveChartData.map(d => Math.max(d.deposits, d.earnings)), 1);
+              const points = curveChartData.map((d, i) => ({
+                x: (i / (curveChartData.length - 1)) * 400,
+                yDeposits: 140 - (d.deposits / maxValue) * 120,
+                yEarnings: 140 - (d.earnings / maxValue) * 120
+              }));
+              
+              // Create smooth curve paths using quadratic bezier
+              const createSmoothPath = (pts: {x: number, y: number}[]) => {
+                if (pts.length < 2) return '';
+                let path = `M ${pts[0].x} ${pts[0].y}`;
+                for (let i = 1; i < pts.length; i++) {
+                  const prev = pts[i - 1];
+                  const curr = pts[i];
+                  const cpX = (prev.x + curr.x) / 2;
+                  path += ` Q ${prev.x + (curr.x - prev.x) * 0.5} ${prev.y}, ${cpX} ${(prev.y + curr.y) / 2}`;
+                  if (i === pts.length - 1) {
+                    path += ` T ${curr.x} ${curr.y}`;
+                  }
+                }
+                return path;
+              };
+              
+              const depositPoints = points.map(p => ({ x: p.x, y: p.yDeposits }));
+              const earningsPoints = points.map(p => ({ x: p.x, y: p.yEarnings }));
+              
+              const depositPath = createSmoothPath(depositPoints);
+              const earningsPath = createSmoothPath(earningsPoints);
+              
+              // Create fill area paths
+              const depositFillPath = depositPath + ` L 400 140 L 0 140 Z`;
+              const earningsFillPath = earningsPath + ` L 400 140 L 0 140 Z`;
+              
+              return (
+                <>
+                  {/* Fill areas */}
+                  <path d={depositFillPath} fill="url(#depositGradient)" />
+                  <path d={earningsFillPath} fill="url(#earningsGradient)" />
+                  
+                  {/* Deposit line - thicker, bold */}
+                  <path 
+                    d={depositPath} 
+                    fill="none" 
+                    stroke="hsl(var(--primary))" 
+                    strokeWidth="3" 
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.8"
+                  />
+                  
+                  {/* Earnings line - thicker, bold, different shade */}
+                  <path 
+                    d={earningsPath} 
+                    fill="none" 
+                    stroke="hsl(var(--secondary))" 
+                    strokeWidth="3.5" 
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  
+                  {/* End point indicators */}
+                  {points.length > 0 && (
+                    <>
+                      <circle cx={points[points.length - 1].x} cy={points[points.length - 1].yDeposits} r="5" fill="hsl(var(--primary))" opacity="0.8" />
+                      <circle cx={points[points.length - 1].x} cy={points[points.length - 1].yEarnings} r="6" fill="hsl(var(--secondary))" />
+                      <circle cx={points[points.length - 1].x} cy={points[points.length - 1].yEarnings} r="3" fill="white" />
+                    </>
+                  )}
+                </>
+              );
+            })()}
+          </svg>
+          
+          {/* X-axis labels */}
+          <div className="absolute bottom-0 left-0 right-0 flex justify-between px-2">
+            {curveChartData.filter((_, i) => i % 2 === 0 || i === curveChartData.length - 1).map((point, i) => (
+              point.label && <span key={i} className="text-xs text-muted-foreground font-medium">{point.label}</span>
+            ))}
+          </div>
+          
+          {/* Empty state overlay */}
+          {!selectedContract && (
+            <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-[2px] rounded-xl">
+              <div className="text-center">
+                <div className="text-3xl mb-2">📊</div>
+                <p className="text-muted-foreground text-sm font-medium">Select a contract to view earnings</p>
+              </div>
+            </div>
+          )}
         </div>
         
         {/* Timeline Tabs */}
-        <div className="flex justify-center gap-2">
-          {(['1W', '1M', '1Y', 'All', 'Future'] as const).map((period) => (
+        <div className="flex justify-center gap-2 mt-6">
+          {(['1W', '1M', '1Y', 'All'] as const).map((period) => (
             <button
               key={period}
               onClick={() => setEarningsTimeline(period)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+              className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${
                 earningsTimeline === period 
-                  ? 'bg-foreground text-background shadow-lg' 
+                  ? 'bg-foreground text-background shadow-lg scale-105' 
                   : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'
               }`}
             >
-              {period === 'Future' ? 'Future⁺' : period}
+              {period}
             </button>
           ))}
         </div>
