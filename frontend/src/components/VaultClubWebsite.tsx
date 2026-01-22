@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Database, User, Users, TrendingUp, X, Bitcoin, DollarSign, Zap, Shield, ArrowLeft, Wallet, Home, Share2, FileText, ChevronLeft, ChevronRight, Clock, Target, Sparkles, Flame, Rocket, Crown, TestTube, Settings, Check } from 'lucide-react';
+import { Database, User, Users, TrendingUp, X, Bitcoin, DollarSign, Zap, Shield, ArrowLeft, Wallet, Home, Share2, FileText, ChevronLeft, ChevronRight, Clock, Target, Sparkles, Flame, Rocket, Crown, TestTube, Settings, Check, Copy, Eye } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import type { Session } from '@supabase/supabase-js';
 import { ThemeToggle } from './ThemeToggle';
