@@ -1297,7 +1297,8 @@ Your contract is now live and ready for members to join!`);
         phase2TimePercent: 50,
         phase2ValueThreshold: 750000
       },
-      highlights: ['10-year horizon', '$50/week steady', 'Reliable growth path']
+      highlights: ['10-year horizon', '$50/week steady', 'Reliable growth path'],
+      disabled: true
     },
     {
       id: 'test-drive',
@@ -1319,7 +1320,8 @@ Your contract is now live and ready for members to join!`);
         phase2TimePercent: 70,
         phase2ValueThreshold: 50000
       },
-      highlights: ['3-month trial', 'Light commitments', 'Learn the ropes']
+      highlights: ['3-month trial', 'Light commitments', 'Learn the ropes'],
+      disabled: true
     },
     {
       id: 'sprinter',
@@ -1341,7 +1343,8 @@ Your contract is now live and ready for members to join!`);
         phase2TimePercent: 50,
         phase2ValueThreshold: 200000
       },
-      highlights: ['3-year focus', '$50/week consistent', 'Quick Phase 2 transition']
+      highlights: ['3-year focus', '$50/week consistent', 'Quick Phase 2 transition'],
+      disabled: true
     },
     {
       id: 'accelerator',
