@@ -389,6 +389,7 @@ const VaultClubWebsiteInner: React.FC<{
   const [simulationYears, setSimulationYears] = useState(15);
   const [simulationRigor, setSimulationRigor] = useState('heavy');
   const [customSimulationAmount, setCustomSimulationAmount] = useState(75);
+  const [customDepositFrequency, setCustomDepositFrequency] = useState<'daily' | 'weekly' | 'monthly' | 'yearly'>('weekly');
   const [chartData, setChartData] = useState([]);
 
   // Subclub management
