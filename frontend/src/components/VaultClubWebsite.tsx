@@ -403,6 +403,9 @@ const VaultClubWebsiteInner: React.FC<{
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [templateCarouselIndex, setTemplateCarouselIndex] = useState(0);
   const [showCustomControls, setShowCustomControls] = useState(false);
+  
+  // Strands modal state
+  const [showStrandsModal, setShowStrandsModal] = useState(false);
 
   // Dynamic data states - accurate initial values reflecting empty state
   const [vaultStats, setVaultStats] = useState({
