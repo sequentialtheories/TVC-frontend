@@ -2197,7 +2197,7 @@ Your contract is now live and ready for members to join!`);
             </div>
             
             <div className="p-5 bg-muted/40 rounded-2xl border border-border/40 hover:border-cyan-400/30 transition-all duration-300">
-              <div className="text-sm text-muted-foreground mb-2">QuickSwap LP APY</div>
+              <div className="text-sm text-muted-foreground mb-2">QuickSwap Rate</div>
               <div className="text-2xl font-bold text-cyan-400 mb-3">{quickSwapAPY.toFixed(2)}%</div>
               <div className="h-12 bg-gradient-to-r from-cyan-400/10 to-cyan-400/5 rounded-lg p-2">
                 <svg viewBox="0 0 200 40" className="w-full h-full">
