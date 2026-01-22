@@ -41,7 +41,7 @@ interface ClubCreationData {
   maxMembers: number;
   isPrivate: boolean;
   isChargedContract: boolean;
-  customDepositFrequency: 'daily' | 'weekly' | 'monthly';
+  customDepositFrequency: 'daily' | 'weekly' | 'monthly' | 'yearly';
   customWeeklyAmount: number;
   customSchedule: SchedulePeriod[];
   // Phase 2 trigger settings
@@ -65,7 +65,7 @@ interface Subclub {
   totalDeposits: number;
   members: string[];
   borderColor: string;
-  customDepositFrequency?: 'daily' | 'weekly' | 'monthly';
+  customDepositFrequency?: 'daily' | 'weekly' | 'monthly' | 'yearly';
   customWeeklyAmount?: number;
   customSchedule?: SchedulePeriod[];
   strand1Balance: string;
