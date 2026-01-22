@@ -2707,9 +2707,12 @@ Your contract is now live and ready for members to join!`);
                 Connect Account
               </button>
             </div> : <div className="py-4">
-              <div className="inline-flex items-center space-x-3 bg-secondary/15 text-secondary px-4 py-2.5 rounded-xl mb-4 border border-secondary/20">
-                <div className="w-2.5 h-2.5 bg-secondary rounded-full animate-pulse"></div>
-                <span className="font-medium">Connected: {walletAddress ? walletAddress.slice(0, 6) + "..." + walletAddress.slice(-4) : "N/A"}</span>
+              {/* Wallet Status Badge */}
+              <div className="flex justify-center mb-6">
+                <div className="inline-flex items-center space-x-3 bg-secondary/15 text-secondary px-5 py-3 rounded-2xl border border-secondary/20">
+                  <div className="w-3 h-3 bg-secondary rounded-full animate-pulse"></div>
+                  <span className="font-bold text-lg">Connected</span>
+                </div>
               </div>
               <div className="text-sm text-muted-foreground mb-5">Turnkey • Polygon Network</div>
               
