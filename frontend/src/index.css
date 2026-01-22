@@ -375,7 +375,7 @@
 
   /* Premium buttons - Soft & Friendly style */
   .btn-premium {
-    @apply relative overflow-hidden px-8 py-4 font-semibold transition-all duration-400;
+    @apply relative overflow-hidden px-8 py-4 font-semibold transition-all duration-300;
     border-radius: 18px;
     background: linear-gradient(145deg, hsl(var(--primary)), hsl(var(--primary) / 0.9));
     box-shadow: 
@@ -414,7 +414,7 @@
 
   /* Strand button - pill style with soft glow */
   .btn-strand {
-    @apply relative overflow-hidden px-8 py-4 font-bold transition-all duration-400;
+    @apply relative overflow-hidden px-8 py-4 font-bold transition-all duration-300;
     border-radius: 50px;
     box-shadow: 
       0 12px 36px -8px hsl(0 0% 0% / 0.35),
@@ -452,7 +452,7 @@
 
   /* Secondary button - soft glass style */
   .btn-glass {
-    @apply relative overflow-hidden px-6 py-3 font-medium transition-all duration-400;
+    @apply relative overflow-hidden px-6 py-3 font-medium transition-all duration-300;
     border-radius: 16px;
     background: linear-gradient(145deg, hsl(var(--card) / 0.65), hsl(var(--card) / 0.5));
     border: 1px solid hsl(var(--border) / 0.4);
@@ -623,7 +623,7 @@
 
   /* Form inputs - soft premium style */
   .input-premium {
-    @apply w-full px-5 py-4 transition-all duration-400;
+    @apply w-full px-5 py-4 transition-all duration-300;
     border-radius: 16px;
     background: linear-gradient(145deg, hsl(var(--muted) / 0.55), hsl(var(--muted) / 0.4));
     border: 1px solid hsl(var(--border) / 0.4);
@@ -657,7 +657,7 @@
 
   /* Metric cards - Soft & Consumer-friendly */
   .metric-card {
-    @apply p-6 transition-all duration-400;
+    @apply p-6 transition-all duration-300;
     border-radius: 22px;
     background: linear-gradient(155deg, hsl(var(--card) / 0.6), hsl(var(--card) / 0.4));
     border: 1px solid hsl(var(--border) / 0.25);
@@ -732,7 +732,7 @@
 
   /* Navigation pill - Soft & Bubbly */
   .nav-pill {
-    @apply relative flex flex-col items-center py-2.5 px-5 transition-all duration-400;
+    @apply relative flex flex-col items-center py-2.5 px-5 transition-all duration-300;
     border-radius: 18px;
   }
 
