@@ -2219,7 +2219,7 @@ Your contract is now live and ready for members to join!`);
             
             <div className="p-5 bg-muted/40 rounded-2xl border border-border/40 hover:border-violet-300/30 transition-all duration-300">
               <div className="text-sm text-muted-foreground mb-2">AAVE Lending Rate</div>
-              <div className="text-2xl font-bold text-violet-300 mb-3">8.00%</div>
+              <div className="text-2xl font-bold text-violet-300 mb-3">{apyStrand2.toFixed(2)}%</div>
               <div className="h-12 bg-gradient-to-r from-violet-300/10 to-violet-300/5 rounded-lg p-2">
                 <svg viewBox="0 0 200 40" className="w-full h-full">
                   <polyline points="10,20 30,18 50,22 70,19 90,21 110,17 130,20 150,16 170,19 190,15" fill="none" stroke="hsl(270 70% 75%)" strokeWidth="2.5" strokeLinecap="round" />
