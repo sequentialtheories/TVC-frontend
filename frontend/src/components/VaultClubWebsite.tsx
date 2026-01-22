@@ -2706,7 +2706,7 @@ Your contract is now live and ready for members to join!`);
               <button ref={connectAccountRef} onClick={handleConnectWallet} className={`btn-premium text-white ${tutorial.currentStepData?.target === 'connect-account' ? 'tutorial-highlight' : ''}`}>
                 Connect Account
               </button>
-            </div> : <div className="text-center py-4">
+            </div> : <div className="py-4">
               <div className="inline-flex items-center space-x-3 bg-secondary/15 text-secondary px-4 py-2.5 rounded-xl mb-4 border border-secondary/20">
                 <div className="w-2.5 h-2.5 bg-secondary rounded-full animate-pulse"></div>
                 <span className="font-medium">Connected: {walletAddress ? walletAddress.slice(0, 6) + "..." + walletAddress.slice(-4) : "N/A"}</span>
