@@ -2859,35 +2859,35 @@ Your contract is now live and ready for members to join!`);
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-semibold text-muted-foreground mb-2">
                   Strand 1 APY (%) - Spark Protocol: {aaveRates.liquidityRate.toFixed(2)}%
                 </label>
                 <input type="range" min="1" max="20" value={apyStrand1} onChange={e => setApyStrand1(Number(e.target.value))} className="w-full" />
-                <div className="text-center text-slate-200 font-medium">{apyStrand1.toFixed(1)}%</div>
+                <div className="text-center text-foreground font-bold">{apyStrand1.toFixed(1)}%</div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-semibold text-muted-foreground mb-2">
                   Strand 2 APY (%) - AAVE Polygon Lending
                 </label>
                 <input type="range" min="1" max="25" value={apyStrand2} onChange={e => setApyStrand2(Number(e.target.value))} className="w-full" />
-                <div className="text-center text-slate-200 font-medium">{apyStrand2.toFixed(1)}%</div>
+                <div className="text-center text-foreground font-bold">{apyStrand2.toFixed(1)}%</div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-semibold text-muted-foreground mb-2">
                   Strand 3 APY (%) - QuickSwap V3 LP: {quickSwapAPY.toFixed(2)}%
                 </label>
                 <input type="range" min="1" max="30" value={apyStrand3} onChange={e => setApyStrand3(Number(e.target.value))} className="w-full" />
-                <div className="text-center text-slate-200 font-medium">{apyStrand3.toFixed(1)}%</div>
+                <div className="text-center text-foreground font-bold">{apyStrand3.toFixed(1)}%</div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-semibold text-muted-foreground mb-2">
                   wBTC Price ($) - Live: ${btcPrice.toLocaleString()}
                 </label>
-                <input type="number" min="10000" max="500000" step="1000" value={btcPrice} onChange={e => setBtcPrice(Number(e.target.value))} className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white/50" placeholder="Enter BTC price" />
-                <div className="text-center text-slate-200 font-medium text-sm mt-1">${btcPrice.toLocaleString()}</div>
+                <input type="number" min="10000" max="500000" step="1000" value={btcPrice} onChange={e => setBtcPrice(Number(e.target.value))} className="input-premium" placeholder="Enter BTC price" />
+                <div className="text-center text-foreground font-bold text-sm mt-1">${btcPrice.toLocaleString()}</div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Simulation Length</label>
+                <label className="block text-sm font-semibold text-muted-foreground mb-2">Simulation Length</label>
                 <select value={simulationYears >= 1 ? simulationYears : 'months'} onChange={e => {
                 const value = e.target.value;
                 if (value === 'months') {
@@ -2895,7 +2895,7 @@ Your contract is now live and ready for members to join!`);
                 } else {
                   setSimulationYears(Number(value));
                 }
-              }} className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white/50">
+              }} className="select-premium">
                   <option value="0.083">1 month</option>
                   <option value="0.25">3 months</option>
                   <option value="0.5">6 months</option>
@@ -2908,19 +2908,19 @@ Your contract is now live and ready for members to join!`);
                   <option value="20">20 years</option>
                   <option value="25">25 years</option>
                 </select>
-                <div className="text-center text-slate-200 font-medium text-sm mt-1">
+                <div className="text-center text-foreground font-bold text-sm mt-1">
                   {simulationYears < 1 ? `${Math.round(simulationYears * 12)} month${Math.round(simulationYears * 12) === 1 ? '' : 's'}` : `${simulationYears} year${simulationYears === 1 ? '' : 's'}`}
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Investment Rigor</label>
-                <select value={simulationRigor} onChange={e => setSimulationRigor(e.target.value)} className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white/50">
+                <label className="block text-sm font-semibold text-muted-foreground mb-2">Investment Rigor</label>
+                <select value={simulationRigor} onChange={e => setSimulationRigor(e.target.value)} className="select-premium">
                   <option value="light">Light</option>
                   <option value="medium">Medium</option>
                   <option value="heavy">Heavy</option>
                   <option value="custom">Custom</option>
                 </select>
-                <div className="text-center text-slate-200 font-medium text-sm mt-1">
+                <div className="text-center text-foreground font-bold text-sm mt-1">
                   {simulationRigor === 'light' && '$100-250/month scaling'}
                   {simulationRigor === 'medium' && '$50-250/week scaling'}
                   {simulationRigor === 'heavy' && '$100-400/week scaling'}
@@ -2929,22 +2929,22 @@ Your contract is now live and ready for members to join!`);
                 
                 {/* Custom Amount Input */}
                 {simulationRigor === 'custom' && <div className="mt-3">
-                    <label className="block text-xs font-medium text-slate-300 mb-1">
+                    <label className="block text-xs font-semibold text-muted-foreground mb-1">
                       Weekly Deposit Amount ($)
                     </label>
-                    <input type="number" min="1" max="1000" value={customSimulationAmount} onChange={e => setCustomSimulationAmount(Number(e.target.value))} className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white/50 text-sm" placeholder="Enter weekly amount" />
-                    <div className="text-xs text-slate-300 mt-1">
+                    <input type="number" min="1" max="1000" value={customSimulationAmount} onChange={e => setCustomSimulationAmount(Number(e.target.value))} className="input-premium text-sm" placeholder="Enter weekly amount" />
+                    <div className="text-xs text-muted-foreground mt-1">
                       Annual total: ${(customSimulationAmount * 52).toLocaleString()}
                     </div>
                   </div>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Participants</label>
+                <label className="block text-sm font-semibold text-muted-foreground mb-2">Participants</label>
                 <input type="range" min="1" max="8" value={vaultStats.totalMembers || 1} onChange={e => setVaultStats(prev => ({
                 ...prev,
                 totalMembers: Number(e.target.value)
               }))} className="w-full" />
-                <div className="text-center text-slate-200 font-medium">{vaultStats.totalMembers || 1} members</div>
+                <div className="text-center text-foreground font-bold">{vaultStats.totalMembers || 1} members</div>
               </div>
             </div>
           </div>
