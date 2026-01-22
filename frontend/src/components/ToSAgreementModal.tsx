@@ -51,7 +51,7 @@ const TOS_SECTIONS: ToSSection[] = [
   {
     id: 6,
     title: "Emergency Withdrawal & Unanimous Governance",
-    content: `All structural changes to a live contract—including early termination, member removal, or switching RRL Strands—require a Unanimous Multisig Vote via the Safe{Core} interface.
+    content: `All structural changes to a live contract—including early termination, member removal, or switching Strands—require a Unanimous Multisig Vote via the Safe{Core} interface.
 
 • Individual Exit: An individual may initiate an emergency exit, but they will receive Principal Only; all accrued yield and profits are forfeited as a "Disruption Fee."
 
@@ -59,12 +59,12 @@ const TOS_SECTIONS: ToSSection[] = [
   },
   {
     id: 7,
-    title: "Weekly Engine Mechanics (RRL & SBB)",
+    title: "Weekly Engine Mechanics",
     content: `The TVC engine operates on a deterministic weekly cycle:
 
 • Monday (Front-Loading): For leveraged templates, capital is front-loaded via Aave to maximize the time-value of money.
 
-• Friday (The Harvest): Profits are collected and redistributed according to your template's specific Routed Reinvestment Logic. Sequence Theory provides "Indexes" that monitors market health, but the execution is performed by autonomous smart contracts on the Polygon network.`
+• Friday (The Harvest): Profits are collected and redistributed according to your template's specific reinvestment logic. Sequence Theory provides "Indexes" that monitors market health, but the execution is performed by autonomous smart contracts on the Polygon network.`
   },
   {
     id: 8,
