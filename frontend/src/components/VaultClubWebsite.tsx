@@ -560,7 +560,7 @@ const VaultClubWebsiteInner: React.FC<{
         setApyStrand1(aaveData.liquidityRate);
         setApyStrand2(aaveData.aavePolygonRate);
 
-        // Load QuickSwap APY for Strand 3
+        // Load QuickSwap Rate for Strand 3
         const quickSwapData = await getQuickSwapAPY();
         setQuickSwapAPY(quickSwapData);
         setApyStrand3(quickSwapData);
