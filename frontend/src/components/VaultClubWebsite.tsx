@@ -178,36 +178,47 @@ async function getAaveRates(): Promise<AaveRates> {
   }
 }
 
-// Get QuickSwap V3 USDC/WETH LP APY data on Polygon
+// Get QuickSwap top bond/pool rate on Polygon
 async function getQuickSwapAPY(): Promise<number> {
   try {
     const response = await fetch('https://yields.llama.fi/pools');
     if (response.ok) {
       const data = await response.json();
-      // QuickSwap V3 USDC/WETH liquidity pool on Polygon
-      const quickswapPool = data.data.find((pool: {
+      // Find all QuickSwap pools on Polygon and get the top APY
+      const quickswapPools = data.data.filter((pool: {
         project: string;
         chain: string;
         symbol: string;
         apy: number;
-      }) => pool.project === 'quickswap-v3' && pool.chain === 'Polygon' && 
-           ((pool.symbol.includes('WETH') || pool.symbol.includes('ETH')) && pool.symbol.includes('USDC')));
-      // Fallback: try alternative project name
-      if (!quickswapPool) {
-        const altPool = data.data.find((pool: {
-          project: string;
-          chain: string;
-          symbol: string;
-          apy: number;
-        }) => pool.project === 'quickswap-dex' && pool.chain === 'Polygon' && 
-             ((pool.symbol.includes('WETH') || pool.symbol.includes('ETH')) && pool.symbol.includes('USDC')));
-        return altPool ? altPool.apy : 12.5;
+        tvlUsd: number;
+      }) => (pool.project === 'quickswap-v3' || pool.project === 'quickswap-dex' || pool.project === 'quickswap') 
+           && pool.chain === 'Polygon' 
+           && pool.tvlUsd > 100000 // Only consider pools with decent TVL
+           && pool.apy > 0);
+      
+      if (quickswapPools.length > 0) {
+        // Sort by APY descending and get the top one
+        quickswapPools.sort((a: { apy: number }, b: { apy: number }) => b.apy - a.apy);
+        return quickswapPools[0].apy;
       }
-      return quickswapPool.apy;
+      
+      // Fallback: look for any high-yield Polygon pool
+      const polygonPools = data.data.filter((pool: {
+        chain: string;
+        apy: number;
+        tvlUsd: number;
+      }) => pool.chain === 'Polygon' && pool.tvlUsd > 500000 && pool.apy > 0);
+      
+      if (polygonPools.length > 0) {
+        polygonPools.sort((a: { apy: number }, b: { apy: number }) => b.apy - a.apy);
+        return Math.min(polygonPools[0].apy, 25); // Cap at 25% for reasonable display
+      }
+      
+      return 12.5; // Default fallback
     }
     throw new Error('API call failed');
   } catch (error) {
-    console.error("Error fetching QuickSwap APY:", error);
+    console.error("Error fetching QuickSwap Rate:", error);
     return 12.5;
   }
 }
