@@ -439,7 +439,7 @@ const VaultClubWebsiteInner: React.FC<{
         setTimeout(async () => {
           try {
             // First try to fetch existing wallet
-            const existingWallet = await fetchExistingWallet(session.user.id);
+            const existingWallet = await fetchExistingWallet(session.access_token);
             if (existingWallet.success && existingWallet.walletAddress) {
               setWalletAddress(existingWallet.walletAddress);
               console.log('[VaultClub] Existing wallet found:', existingWallet.walletAddress);
@@ -480,7 +480,7 @@ const VaultClubWebsiteInner: React.FC<{
       if (session?.user) {
         setWalletConnected(true);
         // Fetch wallet address using service
-        const walletResult = await fetchExistingWallet(session.user.id);
+        const walletResult = await fetchExistingWallet(session.access_token);
         if (walletResult.success && walletResult.walletAddress) {
           setWalletAddress(walletResult.walletAddress);
         } else {
